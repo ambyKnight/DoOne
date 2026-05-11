@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { check_conflicts } from '../ai-agent/tools'
+import { useAuth } from '../lib/authContext'
 
 const TAGS = ['ev-tag1', 'ev-tag2', 'ev-tag3', 'ev-tag4']
 
 export default function EventFormModal({ mode, defaultValues, onClose }) {
+  const { user } = useAuth()
   const [title, setTitle] = useState(defaultValues.title ?? '')
   const [allDay, setAllDay] = useState(defaultValues.allDay ?? false)
   const [startTime, setStartTime] = useState(defaultValues.startTime ?? '')
@@ -39,7 +41,7 @@ export default function EventFormModal({ mode, defaultValues, onClose }) {
       tag,
     }
     if (mode === 'create') {
-      await supabase.from('events').insert(payload)
+      await supabase.from('events').insert({ ...payload, user_id: user?.id })
     } else {
       await supabase.from('events').update(payload).eq('id', defaultValues.id)
     }

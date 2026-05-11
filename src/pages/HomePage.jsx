@@ -3,6 +3,7 @@ import MiniCalendar from '../components/MiniCalendar'
 import EventFormModal from '../components/EventFormModal'
 import AlgorithmicOrnament from '../components/AlgorithmicOrnament'
 import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../lib/authContext'
 
 const fmtTime = d => d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
 
@@ -13,6 +14,7 @@ function todayDateStr() {
 }
 
 export default function HomePage({ events, tasks, setTasks }) {
+  const { user } = useAuth()
   const now = new Date()
   const [newTask, setNewTask] = useState('')
   const [quickModal, setQuickModal] = useState(false)
@@ -35,8 +37,8 @@ export default function HomePage({ events, tasks, setTasks }) {
   }
 
   async function addTask() {
-    if (!newTask.trim()) return
-    await supabase.from('tasks').insert({ title: newTask.trim() })
+    if (!newTask.trim() || !user) return
+    await supabase.from('tasks').insert({ title: newTask.trim(), user_id: user.id })
     setNewTask('')
   }
 

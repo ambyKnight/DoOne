@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../lib/authContext'
 
 const ymd = d => d.toISOString().slice(0, 10)
 const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x }
@@ -10,17 +11,24 @@ function fmtEntryDate(dateStr) {
 }
 
 export default function JournalPage() {
+  const { user } = useAuth()
   const [entries, setEntries] = useState([])
   const [activeId, setActiveId] = useState(null)
   const saveTimer = useRef(null)
 
   useEffect(() => {
-    // Create today's entry if it doesn't exist, then load all
+    if (!user) return
     const today = ymd(new Date())
+    // Create today's entry if it doesn't exist, then load all for this user.
     supabase.from('journal_entries')
-      .upsert({ date: today, did: '', plan: '', mood: '' }, { onConflict: 'date', ignoreDuplicates: true })
+      .upsert(
+        { date: today, did: '', plan: '', mood: '', user_id: user.id },
+        { onConflict: 'user_id,date', ignoreDuplicates: true }
+      )
       .then(() => {
-        supabase.from('journal_entries').select('*').order('date', { ascending: false })
+        supabase.from('journal_entries').select('*')
+          .eq('user_id', user.id)
+          .order('date', { ascending: false })
           .then(({ data }) => {
             if (data) {
               setEntries(data)
@@ -29,17 +37,22 @@ export default function JournalPage() {
           })
       })
 
-    const channel = supabase.channel('journal-realtime')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'journal_entries' },
-        ({ new: row }) => setEntries(prev => [row, ...prev].sort((a, b) => b.date.localeCompare(a.date)))
-      )
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'journal_entries' },
-        ({ new: row }) => setEntries(prev => prev.map(e => e.id === row.id ? row : e))
+    // NOTE: no UPDATE listener. Postgres realtime echoes our own writes back,
+    // and the latency means the echoed row is stale — applying it overwrites
+    // characters the user typed during the roundtrip, looking like text
+    // randomly deletes itself. INSERT is safe to keep (new entries elsewhere).
+    const userFilter = `user_id=eq.${user.id}`
+    const channel = supabase.channel(`journal-realtime-${user.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'journal_entries', filter: userFilter },
+        ({ new: row }) => setEntries(prev => {
+          if (prev.some(e => e.id === row.id)) return prev
+          return [row, ...prev].sort((a, b) => b.date.localeCompare(a.date))
+        })
       )
       .subscribe()
 
     return () => supabase.removeChannel(channel)
-  }, [])
+  }, [user])
 
   const active = entries.find(e => e.id === activeId) || entries[0]
 
@@ -54,13 +67,14 @@ export default function JournalPage() {
   }
 
   async function newEntry() {
+    if (!user) return
     // Add entry for yesterday (or the next un-journaled day)
     const existingDates = new Set(entries.map(e => e.date))
     let d = new Date()
     d.setDate(d.getDate() - 1)
     while (existingDates.has(ymd(d))) d.setDate(d.getDate() - 1)
     const { data } = await supabase.from('journal_entries')
-      .insert({ date: ymd(d), did: '', plan: '', mood: '' })
+      .insert({ date: ymd(d), did: '', plan: '', mood: '', user_id: user.id })
       .select().single()
     if (data) { setEntries(prev => [data, ...prev]); setActiveId(data.id) }
   }

@@ -1,14 +1,21 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import { supabase } from './lib/supabaseClient'
-import { VIBE_PRESETS, SURFACE_PRESETS, DENSITY_PRESETS, FONTS, DEFAULT_PREFS } from './lib/constants'
+import { useAuth } from './lib/authContext'
+import { VIBE_PRESETS, SURFACE_PRESETS, DENSITY_PRESETS, FONTS, DEFAULT_PREFS, ensureFontLoaded } from './lib/constants'
 import { extractPalette, applyPalette } from './lib/palette'
 import NavRail from './components/NavRail'
 import MobileDock from './components/MobileDock'
-import HomePage from './pages/HomePage'
-import CalendarPage from './pages/CalendarPage'
-import JournalPage from './pages/JournalPage'
-import SettingsPage from './pages/SettingsPage'
-import defaultWallpaper from './assets/wallpaper.png'
+import ErrorBoundary from './components/ErrorBoundary'
+import HomePage from './pages/HomePage' // home is the landing; keep eager
+import AuthGate from './pages/AuthGate'
+import defaultWallpaper from './assets/wallpaper.webp'
+
+// Off-home pages are code-split. Calendar pulls in FullCalendar (heavy);
+// Settings pulls in lots of UI; Journal + Onboarding are also infrequent.
+const CalendarPage = lazy(() => import('./pages/CalendarPage'))
+const JournalPage  = lazy(() => import('./pages/JournalPage'))
+const SettingsPage = lazy(() => import('./pages/SettingsPage'))
+const Onboarding   = lazy(() => import('./pages/Onboarding'))
 
 const NAV_ORDER = ['home', 'calendar', 'journal', 'settings']
 
@@ -24,6 +31,7 @@ function toFCEvent(row) {
 }
 
 export default function App() {
+  const { user, loading: authLoading } = useAuth()
   const [page, setPage] = useState('home')
   const [calView, setCalView] = useState('dayGridMonth')
   const [isMobile, setIsMobile] = useState(window.innerWidth < 880)
@@ -51,6 +59,16 @@ export default function App() {
   const [prefId, setPrefId] = useState(null)
   const [lastPalette, setLastPalette] = useState(null)
   const [wallpaper, setWallpaper] = useState(defaultWallpaper)
+  // onboarding fields (kept for future use; auto-completed at signup for now)
+  const [displayName, setDisplayName] = useState('')
+  const [timezone, setTimezone] = useState('')
+  const [dayStartHour, setDayStartHour] = useState(7)
+  const [dayEndHour, setDayEndHour] = useState(22)
+  const [weekStartsMonday, setWeekStartsMonday] = useState(true)
+  const [notifyDigest, setNotifyDigest] = useState(false)
+  const [notifyReminders, setNotifyReminders] = useState(false)
+  const [notifyJournal, setNotifyJournal] = useState(false)
+  const [onboardedAt, setOnboardedAt] = useState(undefined)
 
   function setVibeDial(key, val) {
     setVibeDialsState(prev => ({ ...prev, [key]: val }))
@@ -75,8 +93,6 @@ export default function App() {
   }
 
   // Wallpaper change → update CSS var + re-extract palette.
-  // Lives in its own effect so swapping wallpapers (future drag/drop)
-  // re-runs everything that depends on the image.
   useEffect(() => {
     document.documentElement.style.setProperty('--wallpaper-url', `url(${wallpaper})`)
     extractPalette(wallpaper).then(p => {
@@ -85,15 +101,34 @@ export default function App() {
     }).catch(console.error)
   }, [wallpaper])
 
-  // Mount: data load, realtime subscriptions, resize
+  // Window resize — independent of session.
   useEffect(() => {
-    supabase.from('events').select('*').order('start_time')
+    const onResize = () => setIsMobile(window.innerWidth < 880)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  // Data load + realtime, scoped to the signed-in user.
+  useEffect(() => {
+    if (!user) {
+      setEvents([])
+      setTasks([])
+      prefsLoadedRef.current = false
+      prefIdRef.current = null
+      setPrefId(null)
+      setOnboardedAt(undefined)
+      return
+    }
+
+    const userFilter = `user_id=eq.${user.id}`
+
+    supabase.from('events').select('*').eq('user_id', user.id).order('start_time')
       .then(({ data }) => { if (data) setEvents(data.map(toFCEvent)) })
 
-    supabase.from('tasks').select('*').order('created_at')
+    supabase.from('tasks').select('*').eq('user_id', user.id).order('created_at')
       .then(({ data }) => { if (data) setTasks(data) })
 
-    supabase.from('user_preferences').select('*').limit(1).maybeSingle()
+    supabase.from('user_preferences').select('*').eq('user_id', user.id).maybeSingle()
       .then(async ({ data }) => {
         if (data) {
           prefIdRef.current = data.id
@@ -108,43 +143,54 @@ export default function App() {
           if (data.blur_amount != null) setBlurAmount(data.blur_amount)
           if (data.surface_alpha != null) setSurfaceAlpha(data.surface_alpha)
           if (data.panel_gap != null) setPanelGap(data.panel_gap)
+          if (data.display_name != null) setDisplayName(data.display_name)
+          if (data.timezone != null) setTimezone(data.timezone)
+          if (data.day_start_hour != null) setDayStartHour(data.day_start_hour)
+          if (data.day_end_hour != null) setDayEndHour(data.day_end_hour)
+          if (data.week_starts_monday != null) setWeekStartsMonday(data.week_starts_monday)
+          if (data.notify_digest != null) setNotifyDigest(data.notify_digest)
+          if (data.notify_reminders != null) setNotifyReminders(data.notify_reminders)
+          if (data.notify_journal != null) setNotifyJournal(data.notify_journal)
+          // Onboarding is skipped for now — auto-complete on first load if null
+          setOnboardedAt(data.onboarded_at ?? new Date().toISOString())
         } else {
-          const { data: created } = await supabase.from('user_preferences').insert({}).select().single()
+          // New user — auto-complete onboarding (skipped per current scope)
+          const nowIso = new Date().toISOString()
+          const { data: created } = await supabase.from('user_preferences')
+            .insert({ user_id: user.id, onboarded_at: nowIso })
+            .select().single()
           if (created) { prefIdRef.current = created.id; setPrefId(created.id) }
+          setOnboardedAt(nowIso)
         }
         prefsLoadedRef.current = true
       })
 
-    const ch = supabase.channel('app-realtime')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'events' },
+    const ch = supabase.channel(`app-realtime-${user.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'events', filter: userFilter },
         ({ new: r }) => setEvents(p => [...p, toFCEvent(r)]))
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'events' },
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'events', filter: userFilter },
         ({ new: r }) => setEvents(p => p.map(e => e.id === r.id ? toFCEvent(r) : e)))
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'events' },
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'events', filter: userFilter },
         ({ old: r }) => setEvents(p => p.filter(e => e.id !== r.id)))
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tasks' },
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tasks', filter: userFilter },
         ({ new: r }) => setTasks(p => [...p, r]))
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tasks' },
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tasks', filter: userFilter },
         ({ new: r }) => setTasks(p => p.map(t => t.id === r.id ? r : t)))
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks' },
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks', filter: userFilter },
         ({ old: r }) => setTasks(p => p.filter(t => t.id !== r.id)))
       .subscribe()
 
-    const onResize = () => setIsMobile(window.innerWidth < 880)
-    window.addEventListener('resize', onResize)
-    return () => {
-      supabase.removeChannel(ch)
-      window.removeEventListener('resize', onResize)
-    }
-  }, [])
+    return () => { supabase.removeChannel(ch) }
+  }, [user])
 
-  // Font → --font
+  // Font → --font. Lazily fetch the chosen font's woff2 from Google Fonts.
   useEffect(() => {
     const f = FONTS.find(x => x.id === font)
-    if (f) document.documentElement.style.setProperty('--font', f.stack)
+    if (!f) return
+    ensureFontLoaded(font)
+    document.documentElement.style.setProperty('--font', f.stack)
   }, [font])
 
-  // Vibe dials → CSS vars
   useEffect(() => {
     const r = document.documentElement
     r.style.setProperty('--vibe-sat-mult', vibeDials.satMult)
@@ -153,17 +199,17 @@ export default function App() {
     r.style.setProperty('--vibe-veil-alpha', vibeDials.veilAlpha)
   }, [vibeDials])
 
-  // Surface dials → CSS vars (blur set here, overridden by blurAmount below)
+  // Surface dials → CSS vars. NOTE: --surface-alpha-mult and --blur are
+  // deliberately NOT written here; blurAmount + surfaceAlpha overrides own them.
   useEffect(() => {
     const r = document.documentElement
-    r.style.setProperty('--surface-alpha-mult', surfaceDials.alphaMult)
-    r.style.setProperty('--blur', `${surfaceDials.blur}px`)
     r.style.setProperty('--stroke-mult', surfaceDials.strokeMult)
     r.style.setProperty('--shadow-mult', surfaceDials.shadowMult)
     r.style.setProperty('--panel-tint', surfaceDials.panelTint ?? 0)
+    r.style.setProperty('--surface-tint', surfaceDials.tint ?? 100)
+    r.style.setProperty('--surface-base', surfaceDials.baseColor ?? '#ffffff')
   }, [surfaceDials])
 
-  // Density → CSS vars
   useEffect(() => {
     const d = DENSITY_PRESETS[density]
     const r = document.documentElement
@@ -173,22 +219,18 @@ export default function App() {
     r.style.setProperty('--rad', `${d.radius}px`)
   }, [density])
 
-  // Accent boost
   useEffect(() => {
     document.documentElement.style.setProperty('--accent-boost', accentBoost)
   }, [accentBoost])
 
-  // Glass section blur override (wins over surfaceDials.blur)
   useEffect(() => {
     document.documentElement.style.setProperty('--blur', `${blurAmount}px`)
   }, [blurAmount])
 
-  // Glass section surface opacity override (wins over surfaceDials.alphaMult)
   useEffect(() => {
     document.documentElement.style.setProperty('--surface-alpha-mult', surfaceAlpha)
   }, [surfaceAlpha])
 
-  // Panel gap override
   useEffect(() => {
     document.documentElement.style.setProperty('--panel-gap', `${panelGap}px`)
   }, [panelGap])
@@ -204,11 +246,6 @@ export default function App() {
     const lastWheelRef = { current: 0 }
     const boundaryEnterRef = { current: 0 }
 
-    // Walk up from e.target looking for any internally scrollable ancestor
-    // that is NOT at its boundary in the current scroll direction. If we
-    // find one, the inner element should consume this wheel event and we
-    // must not navigate (protects against momentum-carry from inner scroll
-    // bleeding past its end into a tab switch).
     function innerScrollerBlocks(target, deltaY) {
       let el = target
       while (el && el !== document.body && el !== document.documentElement) {
@@ -227,28 +264,20 @@ export default function App() {
     function onWheel(e) {
       if (cooldownRef.current) return
       const now = performance.now()
-
-      // Decay accumulator if user stopped wheeling
       if (now - lastWheelRef.current > IDLE_RESET_MS) {
         deltaRef.current = 0
         boundaryEnterRef.current = 0
       }
       lastWheelRef.current = now
-
-      // Reset on direction change
       if (deltaRef.current !== 0 && Math.sign(e.deltaY) !== Math.sign(deltaRef.current)) {
         deltaRef.current = 0
         boundaryEnterRef.current = 0
       }
-
-      // Any nested scroller still in motion? absorb event.
       if (innerScrollerBlocks(e.target, e.deltaY)) {
         deltaRef.current = 0
         boundaryEnterRef.current = 0
         return
       }
-
-      // Main scroll boundary check + dwell
       const main = mainRef.current
       if (main && main.scrollHeight > main.clientHeight + 2) {
         const atBottom = main.scrollTop + main.clientHeight >= main.scrollHeight - 8
@@ -262,16 +291,13 @@ export default function App() {
         if (boundaryEnterRef.current === 0) boundaryEnterRef.current = now
         if (now - boundaryEnterRef.current < BOUNDARY_DWELL_MS) return
       }
-
       deltaRef.current += e.deltaY
       if (Math.abs(deltaRef.current) < THRESHOLD) return
-
       const dir = deltaRef.current > 0 ? 1 : -1
       deltaRef.current = 0
       boundaryEnterRef.current = 0
       cooldownRef.current = true
       setTimeout(() => { cooldownRef.current = false }, COOLDOWN)
-
       setPage(prev => {
         const idx = NAV_ORDER.indexOf(prev)
         const next = idx + dir
@@ -288,9 +314,9 @@ export default function App() {
   useEffect(() => {
     if (!isMobile) return
     let startX = 0, startY = 0, startT = 0, tracking = false
-    const SWIPE_MIN = 60        // px horizontal
-    const SWIPE_MAX_TIME = 600  // ms — quick swipes only
-    const VERTICAL_TOL = 0.6    // |dy| must be < this * |dx|
+    const SWIPE_MIN = 60
+    const SWIPE_MAX_TIME = 600
+    const VERTICAL_TOL = 0.6
 
     function onStart(e) {
       if (e.touches.length !== 1) { tracking = false; return }
@@ -310,7 +336,7 @@ export default function App() {
       if (dt > SWIPE_MAX_TIME) return
       if (Math.abs(dx) < SWIPE_MIN) return
       if (Math.abs(dy) > Math.abs(dx) * VERTICAL_TOL) return
-      const dir = dx < 0 ? 1 : -1 // swipe left = next, right = prev
+      const dir = dx < 0 ? 1 : -1
       setPage(prev => {
         const idx = NAV_ORDER.indexOf(prev)
         const next = idx + dir
@@ -327,7 +353,6 @@ export default function App() {
     }
   }, [isMobile])
 
-  // Accent boost adjustment
   useEffect(() => {
     if (!lastPalette) return
     const hslRegex = /hsla?\((\d+\.?\d*),\s*(\d+\.?\d*)%,\s*(\d+\.?\d*)%/
@@ -335,14 +360,14 @@ export default function App() {
     if (match) {
       const [, h, s, l] = match
       const newS = Math.min(100, Math.max(0, parseFloat(s) * accentBoost))
-      const adjustedAccent = `hsl(${h}, ${newS.toFixed(0)}%, ${l})`
+      const adjustedAccent = `hsl(${h}, ${newS.toFixed(0)}%, ${l}%)`
       document.documentElement.style.setProperty('--accent', adjustedAccent)
     }
   }, [accentBoost, lastPalette])
 
   // Auto-save preferences (debounced) — fires after initial load completes
   useEffect(() => {
-    if (!prefsLoadedRef.current) return
+    if (!prefsLoadedRef.current || !user) return
     clearTimeout(prefSaveTimer.current)
     prefSaveTimer.current = setTimeout(async () => {
       const payload = {
@@ -353,17 +378,40 @@ export default function App() {
         blur_amount: blurAmount,
         surface_alpha: surfaceAlpha,
         panel_gap: panelGap,
+        display_name: displayName || null,
+        timezone: timezone || null,
+        day_start_hour: dayStartHour,
+        day_end_hour: dayEndHour,
+        week_starts_monday: weekStartsMonday,
+        notify_digest: notifyDigest,
+        notify_reminders: notifyReminders,
+        notify_journal: notifyJournal,
         updated_at: new Date().toISOString(),
       }
       if (prefIdRef.current) {
         await supabase.from('user_preferences').update(payload).eq('id', prefIdRef.current)
       } else {
-        const { data } = await supabase.from('user_preferences').insert(payload).select().single()
+        const { data } = await supabase.from('user_preferences')
+          .insert({ ...payload, user_id: user.id }).select().single()
         if (data) { prefIdRef.current = data.id; setPrefId(data.id) }
       }
     }, 400)
     return () => clearTimeout(prefSaveTimer.current)
-  }, [font, vibe, surface, density, vibeDials, surfaceDials, accentBoost, blurAmount, surfaceAlpha, panelGap])
+  }, [user, font, vibe, surface, density, vibeDials, surfaceDials, accentBoost, blurAmount, surfaceAlpha, panelGap,
+      displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal])
+
+  if (authLoading) {
+    return (
+      <div className="app boot-splash">
+        <div className="wallpaper" style={{ backgroundImage: `url(${wallpaper})` }} />
+        <div className="wallpaper-veil" />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return <AuthGate wallpaper={wallpaper} />
+  }
 
   return (
     <div className={`app${isMobile ? ' is-mobile' : ''} vibe-${vibe} surface-${surface}`}>
@@ -377,6 +425,8 @@ export default function App() {
       {!isMobile && <NavRail page={page} setPage={setPage} />}
 
       <main className="app-main" ref={mainRef}>
+        <ErrorBoundary>
+        <Suspense fallback={<div className="page" />}>
         {page === 'home' && (
           <HomePage events={events} tasks={tasks} setTasks={setTasks} />
         )}
@@ -388,7 +438,13 @@ export default function App() {
           <SettingsPage
             font={font} setFont={setFont}
             vibe={vibe} setVibe={v => { setVibe(v); setVibeDialsState({ ...VIBE_PRESETS[v] }) }}
-            surface={surface} setSurface={s => { setSurface(s); setSurfaceDialsState({ ...SURFACE_PRESETS[s] }) }}
+            surface={surface} setSurface={s => {
+              const preset = SURFACE_PRESETS[s]
+              setSurface(s)
+              setSurfaceDialsState(prev => ({ ...preset, baseColor: prev.baseColor, tint: prev.tint }))
+              setBlurAmount(preset.blur)
+              setSurfaceAlpha(Math.min(1, preset.alphaMult * 0.55))
+            }}
             density={density} setDensity={setDensity}
             vibeDials={vibeDials} setVibeDial={setVibeDial} resetVibe={resetVibe}
             surfaceDials={surfaceDials} setSurfaceDial={setSurfaceDial} resetSurface={resetSurface}
@@ -399,8 +455,11 @@ export default function App() {
             repalette={repalette}
             prefId={prefId}
             wallpaper={wallpaper} setWallpaper={setWallpaper}
+            lastPalette={lastPalette}
           />
         )}
+        </Suspense>
+        </ErrorBoundary>
       </main>
 
       {isMobile && <MobileDock page={page} setPage={setPage} />}
