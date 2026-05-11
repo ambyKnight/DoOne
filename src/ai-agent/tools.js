@@ -116,7 +116,7 @@ export async function search_events(args) {
  * Check if a proposed time slot overlaps with any existing events.
  */
 export async function check_conflicts(args) {
-  const { start_time, end_time } = args;
+  const { start_time, end_time, exclude_id } = args;
 
   if (!start_time || !end_time) {
     return { error: 'Missing required fields: start_time, end_time' };
@@ -124,11 +124,15 @@ export async function check_conflicts(args) {
 
   // A conflict exists if an existing event starts before the new event ends
   // AND the existing event ends after the new event starts.
-  const { data, error } = await supabase
+  let query = supabase
     .from('events')
     .select('*')
     .lt('start_time', end_time)
     .gt('end_time', start_time);
+
+  if (exclude_id) query = query.neq('id', exclude_id);
+
+  const { data, error } = await query;
 
   if (error) return { error: error.message };
   

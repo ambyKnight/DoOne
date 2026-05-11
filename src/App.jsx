@@ -1,201 +1,271 @@
-import React, { useState, useEffect } from 'react'
-import Planner from './components/Planner'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from './lib/supabaseClient'
-import { 
-  Calendar as CalendarIcon, 
-  CheckSquare, 
-  Clock, 
-  Plus, 
-  FileText,
-  MoreHorizontal
-} from 'lucide-react'
-import './App.css'
+import { VIBE_PRESETS, SURFACE_PRESETS, DENSITY_PRESETS, FONTS, DEFAULT_PREFS } from './lib/constants'
+import { extractPalette, applyPalette } from './lib/palette'
+import NavRail from './components/NavRail'
+import MobileDock from './components/MobileDock'
+import HomePage from './pages/HomePage'
+import CalendarPage from './pages/CalendarPage'
+import JournalPage from './pages/JournalPage'
+import SettingsPage from './pages/SettingsPage'
+import wallpaper from './assets/wallpaper.png'
+
+const NAV_ORDER = ['home', 'calendar', 'journal', 'settings']
+
+function toFCEvent(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    start: row.start_time,
+    end: row.end_time ?? undefined,
+    allDay: row.all_day,
+    tag: row.tag || 'ev-tag1',
+  }
+}
 
 export default function App() {
-  const [tasks, setTasks] = useState([
-    { id: 1, text: 'Prepare presentation', done: false },
-    { id: 2, text: 'Reply to emails', done: true },
-    { id: 3, text: 'Update project doc', done: true },
-    { id: 4, text: 'Call with client', done: false },
-    { id: 5, text: 'Buy groceries', done: false },
-  ])
+  const [page, setPage] = useState('home')
+  const [calView, setCalView] = useState('dayGridMonth')
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 880)
 
-  const toggleTask = (id) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t))
+  const mainRef = useRef(null)
+  const deltaRef = useRef(0)
+  const cooldownRef = useRef(false)
+
+  const [events, setEvents] = useState([])
+  const [tasks, setTasks] = useState([])
+
+  const [font, setFont] = useState(DEFAULT_PREFS.font)
+  const [vibe, setVibe] = useState(DEFAULT_PREFS.vibe)
+  const [surface, setSurface] = useState(DEFAULT_PREFS.surface)
+  const [density, setDensity] = useState(DEFAULT_PREFS.density)
+  const [vibeDials, setVibeDialsState] = useState({ ...VIBE_PRESETS[DEFAULT_PREFS.vibe] })
+  const [surfaceDials, setSurfaceDialsState] = useState({ ...SURFACE_PRESETS[DEFAULT_PREFS.surface] })
+  const [accentBoost, setAccentBoost] = useState(DEFAULT_PREFS.accentBoost)
+  const [blurAmount, setBlurAmount] = useState(DEFAULT_PREFS.blurAmount)
+  const [surfaceAlpha, setSurfaceAlpha] = useState(DEFAULT_PREFS.surfaceAlpha)
+  const [panelGap, setPanelGap] = useState(DEFAULT_PREFS.panelGap)
+  const [prefId, setPrefId] = useState(null)
+  const [lastPalette, setLastPalette] = useState(null)
+
+  function setVibeDial(key, val) {
+    setVibeDialsState(prev => ({ ...prev, [key]: val }))
+  }
+  function resetVibe() {
+    setVibeDialsState({ ...VIBE_PRESETS[vibe] })
+  }
+  function setSurfaceDial(key, val) {
+    setSurfaceDialsState(prev => ({ ...prev, [key]: val }))
+  }
+  function resetSurface() {
+    setSurfaceDialsState({ ...SURFACE_PRESETS[surface] })
+  }
+  async function repalette() {
+    try {
+      const p = await extractPalette(wallpaper)
+      setLastPalette(p)
+      applyPalette(p)
+    } catch (e) {
+      console.error('palette error', e)
+    }
   }
 
-  const focusPercent = Math.round((tasks.filter(t => t.done).length / tasks.length) * 100) || 0
+  // Mount: data load, realtime subscriptions, palette, resize
+  useEffect(() => {
+    extractPalette(wallpaper).then(p => {
+      setLastPalette(p)
+      applyPalette(p)
+    }).catch(console.error)
+
+    supabase.from('events').select('*').order('start_time')
+      .then(({ data }) => { if (data) setEvents(data.map(toFCEvent)) })
+
+    supabase.from('tasks').select('*').order('created_at')
+      .then(({ data }) => { if (data) setTasks(data) })
+
+    supabase.from('user_preferences').select('*').limit(1).single()
+      .then(({ data }) => {
+        if (!data) return
+        setPrefId(data.id)
+        if (data.font) setFont(data.font)
+        if (data.vibe) { setVibe(data.vibe); setVibeDialsState({ ...VIBE_PRESETS[data.vibe] }) }
+        if (data.surface) { setSurface(data.surface); setSurfaceDialsState({ ...SURFACE_PRESETS[data.surface] }) }
+        if (data.density) setDensity(data.density)
+        if (data.vibe_dials) setVibeDialsState(data.vibe_dials)
+        if (data.surface_dials) setSurfaceDialsState(data.surface_dials)
+        if (data.accent_boost != null) setAccentBoost(data.accent_boost)
+        if (data.blur_amount != null) setBlurAmount(data.blur_amount)
+        if (data.surface_alpha != null) setSurfaceAlpha(data.surface_alpha)
+        if (data.panel_gap != null) setPanelGap(data.panel_gap)
+      })
+
+    const ch = supabase.channel('app-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'events' },
+        ({ new: r }) => setEvents(p => [...p, toFCEvent(r)]))
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'events' },
+        ({ new: r }) => setEvents(p => p.map(e => e.id === r.id ? toFCEvent(r) : e)))
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'events' },
+        ({ old: r }) => setEvents(p => p.filter(e => e.id !== r.id)))
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'tasks' },
+        ({ new: r }) => setTasks(p => [...p, r]))
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'tasks' },
+        ({ new: r }) => setTasks(p => p.map(t => t.id === r.id ? r : t)))
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks' },
+        ({ old: r }) => setTasks(p => p.filter(t => t.id !== r.id)))
+      .subscribe()
+
+    const onResize = () => setIsMobile(window.innerWidth < 880)
+    window.addEventListener('resize', onResize)
+    return () => {
+      supabase.removeChannel(ch)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
+
+  // Font → --font
+  useEffect(() => {
+    const f = FONTS.find(x => x.id === font)
+    if (f) document.documentElement.style.setProperty('--font', f.stack)
+  }, [font])
+
+  // Vibe dials → CSS vars
+  useEffect(() => {
+    const r = document.documentElement
+    r.style.setProperty('--vibe-sat-mult', vibeDials.satMult)
+    r.style.setProperty('--vibe-glow-alpha', vibeDials.glowAlpha)
+    r.style.setProperty('--vibe-glow-blur', `${vibeDials.glowBlur}px`)
+    r.style.setProperty('--vibe-veil-alpha', vibeDials.veilAlpha)
+  }, [vibeDials])
+
+  // Surface dials → CSS vars (blur set here, overridden by blurAmount below)
+  useEffect(() => {
+    const r = document.documentElement
+    r.style.setProperty('--surface-alpha-mult', surfaceDials.alphaMult)
+    r.style.setProperty('--blur', `${surfaceDials.blur}px`)
+    r.style.setProperty('--stroke-mult', surfaceDials.strokeMult)
+    r.style.setProperty('--shadow-mult', surfaceDials.shadowMult)
+    r.style.setProperty('--panel-tint', surfaceDials.panelTint ?? 0)
+  }, [surfaceDials])
+
+  // Density → CSS vars
+  useEffect(() => {
+    const d = DENSITY_PRESETS[density]
+    const r = document.documentElement
+    r.style.setProperty('--panel-pad', `${d.pad}px`)
+    r.style.setProperty('--panel-gap', `${d.gap}px`)
+    r.style.setProperty('--type-scale', d.scale)
+    r.style.setProperty('--rad', `${d.radius}px`)
+  }, [density])
+
+  // Accent boost
+  useEffect(() => {
+    document.documentElement.style.setProperty('--accent-boost', accentBoost)
+  }, [accentBoost])
+
+  // Glass section blur override (wins over surfaceDials.blur)
+  useEffect(() => {
+    document.documentElement.style.setProperty('--blur', `${blurAmount}px`)
+  }, [blurAmount])
+
+  // Glass section surface opacity override (wins over surfaceDials.alphaMult)
+  useEffect(() => {
+    document.documentElement.style.setProperty('--surface-alpha-mult', surfaceAlpha)
+  }, [surfaceAlpha])
+
+  // Panel gap override
+  useEffect(() => {
+    document.documentElement.style.setProperty('--panel-gap', `${panelGap}px`)
+  }, [panelGap])
+
+  // Scroll-snap page navigation
+  useEffect(() => {
+    if (isMobile) return
+    const THRESHOLD = 250
+    const COOLDOWN = 700
+
+    function onWheel(e) {
+      if (cooldownRef.current) return
+
+      // If the main area is scrollable, only navigate at the boundary
+      const main = mainRef.current
+      if (main && main.scrollHeight > main.clientHeight + 2) {
+        const atBottom = main.scrollTop + main.clientHeight >= main.scrollHeight - 8
+        const atTop = main.scrollTop <= 8
+        if (e.deltaY > 0 && !atBottom) return
+        if (e.deltaY < 0 && !atTop) return
+      }
+
+      deltaRef.current += e.deltaY
+      if (Math.abs(deltaRef.current) < THRESHOLD) return
+
+      const dir = deltaRef.current > 0 ? 1 : -1
+      deltaRef.current = 0
+      cooldownRef.current = true
+      setTimeout(() => { cooldownRef.current = false }, COOLDOWN)
+
+      setPage(prev => {
+        const idx = NAV_ORDER.indexOf(prev)
+        const next = idx + dir
+        if (next < 0 || next >= NAV_ORDER.length) return prev
+        return NAV_ORDER[next]
+      })
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: true })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [isMobile])
+
+  // Accent boost adjustment
+  useEffect(() => {
+    if (!lastPalette) return
+    const hslRegex = /hsla?\((\d+\.?\d*),\s*(\d+\.?\d*)%,\s*(\d+\.?\d*)%/
+    const match = lastPalette.accent.match(hslRegex)
+    if (match) {
+      const [, h, s, l] = match
+      const newS = Math.min(100, Math.max(0, parseFloat(s) * accentBoost))
+      const adjustedAccent = `hsl(${h}, ${newS.toFixed(0)}%, ${l})`
+      document.documentElement.style.setProperty('--accent', adjustedAccent)
+    }
+  }, [accentBoost, lastPalette])
 
   return (
-    <div className="dayflow-app">
+    <div className={`app${isMobile ? ' is-mobile' : ''} vibe-${vibe} surface-${surface}`}>
+      <div
+        className="wallpaper"
+        style={{ backgroundImage: `url(${wallpaper})` }}
+      />
+      <div className="wallpaper-veil" />
+      <div className="vibe-glow" />
 
+      {!isMobile && <NavRail page={page} setPage={setPage} />}
 
-      {/* MAIN GRID */}
-      <main className="main-layout">
-        
-        {/* LEFT COLUMN */}
-        <aside className="col-left">
-          
-          {/* Greeting Card */}
-          <div className="glass-card greeting-card">
-            <p className="greeting-sub">Good evening, Mantu 👋</p>
-            <h1 className="greeting-title">Stay organized,<br/>stay inspired.</h1>
-            <p className="greeting-desc">You have <span className="highlight">3 events</span> today.</p>
-          </div>
-
-          {/* Upcoming Events */}
-          <div className="glass-card upcoming-events-card">
-            <div className="card-header">
-              <h2>Upcoming Events</h2>
-              <a href="#" className="view-all">View all</a>
-            </div>
-            <div className="event-list">
-              <div className="event-item">
-                <div className="event-time">09:00 AM</div>
-                <div className="event-details">
-                  <span className="event-title">Team Standup</span>
-                  <span className="event-tag tag-work">Work</span>
-                </div>
-              </div>
-              <div className="event-item">
-                <div className="event-time">11:00 AM</div>
-                <div className="event-details">
-                  <span className="event-title">Design Review</span>
-                  <span className="event-tag tag-work">Work</span>
-                </div>
-              </div>
-              <div className="event-item">
-                <div className="event-time">03:30 PM</div>
-                <div className="event-details">
-                  <span className="event-title">Gym Session</span>
-                  <span className="event-tag tag-personal">Personal</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="glass-card quick-actions-card">
-            <h2 className="card-title">Quick Actions</h2>
-            <div className="actions-grid">
-              <div className="action-btn-wrap">
-                <button className="round-btn"><Plus size={20} /></button>
-                <span>Add Event</span>
-              </div>
-              <div className="action-btn-wrap">
-                <button className="round-btn"><CheckSquare size={20} /></button>
-                <span>Add Task</span>
-              </div>
-              <div className="action-btn-wrap">
-                <button className="round-btn"><CalendarIcon size={20} /></button>
-                <span>Today</span>
-              </div>
-              <div className="action-btn-wrap">
-                <button className="round-btn"><FileText size={20} /></button>
-                <span>Notes</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quote Card */}
-          <div className="glass-card quote-card">
-            <span className="quote-mark">“</span>
-            <p className="quote-text">The best way to predict the future is to create it.</p>
-            <span className="quote-author">- Peter Drucker</span>
-          </div>
-
-        </aside>
-
-        {/* CENTER COLUMN (CALENDAR) */}
-        <section className="col-center">
-          <div className="calendar-glass-wrapper">
-            <Planner />
-          </div>
-        </section>
-
-        {/* RIGHT COLUMN */}
-        <aside className="col-right">
-          
-          {/* Agenda Card */}
-          <div className="glass-card agenda-card">
-            <div className="card-header">
-              <h2>May 20, 2026</h2>
-              <a href="#" className="view-all">Today</a>
-            </div>
-            <div className="agenda-list">
-              <div className="agenda-item">
-                <div className="agenda-time">09:00 AM</div>
-                <div className="agenda-details">
-                  <span className="agenda-title">Team Standup</span>
-                  <span className="agenda-dur">30 min</span>
-                </div>
-              </div>
-              <div className="agenda-item">
-                <div className="agenda-time">11:00 AM</div>
-                <div className="agenda-details">
-                  <span className="agenda-title">Design Review</span>
-                  <span className="agenda-dur">1 hr</span>
-                </div>
-              </div>
-              <div className="agenda-item">
-                <div className="agenda-time">03:30 PM</div>
-                <div className="agenda-details">
-                  <span className="agenda-title">Gym Session</span>
-                  <span className="agenda-dur">1 hr</span>
-                </div>
-              </div>
-            </div>
-            <button className="add-event-btn"><Plus size={16} /> Add Event</button>
-          </div>
-
-          {/* Tasks Card */}
-          <div className="glass-card tasks-card">
-            <div className="card-header">
-              <h2>Tasks</h2>
-              <a href="#" className="view-all">View all</a>
-            </div>
-            <div className="task-list">
-              {tasks.map(task => (
-                <label key={task.id} className="task-item">
-                  <input 
-                    type="checkbox" 
-                    checked={task.done} 
-                    onChange={() => toggleTask(task.id)}
-                  />
-                  <span className="custom-checkbox"></span>
-                  <span className={`task-text ${task.done ? 'done' : ''}`}>{task.text}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Focus Card */}
-          <div className="glass-card focus-card">
-            <div className="card-header">
-              <h2>Focus</h2>
-              <button className="icon-btn-small"><MoreHorizontal size={16} /></button>
-            </div>
-            <div className="focus-ring-container">
-              <svg className="progress-ring" viewBox="0 0 120 120">
-                <circle className="progress-ring-bg" cx="60" cy="60" r="50"></circle>
-                <circle 
-                  className="progress-ring-fill" 
-                  cx="60" cy="60" r="50"
-                  strokeDasharray="314"
-                  strokeDashoffset={314 - (314 * focusPercent) / 100}
-                ></circle>
-              </svg>
-              <div className="focus-percent">
-                <span className="percent-num">{focusPercent}%</span>
-                <span className="percent-label">of daily goal</span>
-              </div>
-            </div>
-            <p className="focus-msg">✨ Great progress today!</p>
-          </div>
-
-        </aside>
-
+      <main className="app-main" ref={mainRef}>
+        {page === 'home' && (
+          <HomePage events={events} tasks={tasks} setTasks={setTasks} />
+        )}
+        {page === 'calendar' && (
+          <CalendarPage events={events} calView={calView} setCalView={setCalView} />
+        )}
+        {page === 'journal' && <JournalPage />}
+        {page === 'settings' && (
+          <SettingsPage
+            font={font} setFont={setFont}
+            vibe={vibe} setVibe={v => { setVibe(v); setVibeDialsState({ ...VIBE_PRESETS[v] }) }}
+            surface={surface} setSurface={s => { setSurface(s); setSurfaceDialsState({ ...SURFACE_PRESETS[s] }) }}
+            density={density} setDensity={setDensity}
+            vibeDials={vibeDials} setVibeDial={setVibeDial} resetVibe={resetVibe}
+            surfaceDials={surfaceDials} setSurfaceDial={setSurfaceDial} resetSurface={resetSurface}
+            accentBoost={accentBoost} setAccentBoost={setAccentBoost}
+            blurAmount={blurAmount} setBlurAmount={setBlurAmount}
+            surfaceAlpha={surfaceAlpha} setSurfaceAlpha={setSurfaceAlpha}
+            panelGap={panelGap} setPanelGap={setPanelGap}
+            repalette={repalette}
+            prefId={prefId}
+          />
+        )}
       </main>
+
+      {isMobile && <MobileDock page={page} setPage={setPage} />}
     </div>
   )
 }
