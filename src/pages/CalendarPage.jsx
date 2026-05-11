@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 import EventFormModal from '../components/EventFormModal'
 import { supabase } from '../lib/supabaseClient'
@@ -15,14 +16,18 @@ function toDateInput(date) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
 }
 
-export default function CalendarPage({ events, calView, setCalView }) {
+export default function CalendarPage({ events, calView, setCalView, isMobile }) {
   const calRef = useRef(null)
   const [title, setTitle] = useState('')
   const [modal, setModal] = useState({ open: false, mode: 'create', defaultValues: {} })
 
+  // On mobile, month grid is unreadable; switch to listWeek by default the
+  // first time the mobile branch mounts (unless user explicitly chose a view).
+  const effectiveView = isMobile && calView === 'dayGridMonth' ? 'listWeek' : calView
+
   useEffect(() => {
-    if (calRef.current) calRef.current.getApi().changeView(calView)
-  }, [calView])
+    if (calRef.current) calRef.current.getApi().changeView(effectiveView)
+  }, [effectiveView])
 
   function handleDateClick(info) {
     const startDate = info.date
@@ -89,8 +94,11 @@ export default function CalendarPage({ events, calView, setCalView }) {
             <button onClick={() => calRef.current?.getApi().next()}>›</button>
           </div>
           <div className="seg">
-            {[['dayGridMonth','Month'],['timeGridWeek','Week'],['timeGridDay','Day']].map(([v, l]) => (
-              <button key={v} className={calView === v ? 'on' : ''} onClick={() => setCalView(v)}>{l}</button>
+            {(isMobile
+              ? [['listWeek','List'],['timeGridDay','Day']]
+              : [['dayGridMonth','Month'],['timeGridWeek','Week'],['timeGridDay','Day']]
+            ).map(([v, l]) => (
+              <button key={v} className={effectiveView === v ? 'on' : ''} onClick={() => setCalView(v)}>{l}</button>
             ))}
           </div>
           <button className="chip primary" onClick={() => setModal({ open: true, mode: 'create', defaultValues: { allDay: true, startTime: toDateInput(new Date()), endTime: '', tag: 'ev-tag1' } })}>
@@ -103,8 +111,8 @@ export default function CalendarPage({ events, calView, setCalView }) {
         <div className="fc-host">
           <FullCalendar
             ref={calRef}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView={calView}
+            plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+            initialView={effectiveView}
             headerToolbar={false}
             events={fcEvents}
             editable={true}

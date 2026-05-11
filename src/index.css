@@ -1384,3 +1384,230 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 }
 .chip.danger { background: hsl(0, 65%, 50%); color: #fff; border: 0; }
 .chip.danger:hover { background: hsl(0, 65%, 44%); }
+
+/* ─────────────────────────────────────────────────────────────
+   PERFORMANCE — Low-power mode toggle & overrides
+   ───────────────────────────────────────────────────────────── */
+.perf-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; padding: 6px 2px;
+}
+.perf-info { flex: 1; min-width: 0; }
+.perf-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
+
+/* Reusable switch (Notifications already uses .switch — extend with .on) */
+.switch {
+  width: 38px; height: 22px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  border: 1px solid var(--stroke);
+  position: relative; cursor: pointer; flex-shrink: 0;
+  transition: background .18s, border-color .18s;
+}
+.switch .dot {
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--ink); transition: transform .18s, background .18s;
+}
+.switch.on { background: var(--accent); border-color: transparent; }
+.switch.on .dot { background: white; transform: translateX(16px); }
+
+/* Low-perf overrides — kill expensive effects, keep functionality */
+.app.is-low-perf .glass::before { display: none !important; }
+.app.is-low-perf .glass {
+  background:
+    color-mix(in srgb,
+      color-mix(in srgb, var(--surface-base, white) 90%, var(--accent)) 100%,
+      transparent) !important;
+  backdrop-filter: none !important;
+}
+.app.is-low-perf .chip { backdrop-filter: none !important; }
+.app.is-low-perf .wallpaper { filter: none !important; }
+.app.is-low-perf .wallpaper-veil { display: none !important; }
+.app.is-low-perf .vibe-glow { display: none !important; }
+.app.is-low-perf .hero-orb { display: none !important; }
+.app.is-low-perf .home-page,
+.app.is-low-perf .calendar-page,
+.app.is-low-perf .journal-page,
+.app.is-low-perf .settings-page { animation: none !important; }
+.app.is-low-perf .page-header .eyebrow,
+.app.is-low-perf .page-header .page-sub,
+.app.is-low-perf .page-header .page-title {
+  background: var(--surface-1);
+  box-shadow: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE REVAMP — tighter spacing, sticky header collapse,
+   icon-only dock, full-height calendar, journal chip strip,
+   bottom-sheet modal
+   ───────────────────────────────────────────────────────────── */
+
+/* Shell padding tighten (overrides earlier 18/16/110) */
+.app.is-mobile .app-main {
+  padding: 14px 12px 84px;
+}
+
+/* Sticky page-header collapse on mobile.
+   Replaces the bigger pill treatment with a slim title. */
+.app.is-mobile .page-header {
+  position: sticky; top: 0; z-index: 30;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--surface-1) 92%, transparent) 70%,
+    transparent);
+  padding-top: 4px; padding-bottom: 8px;
+  margin-bottom: 8px;
+  gap: 8px;
+  transition: padding .18s;
+}
+.app.is-mobile .page-header .eyebrow { display: none; }
+.app.is-mobile .page-header .page-sub { display: none; }
+.app.is-mobile .page-header .page-title {
+  font-size: 22px;
+  padding: 4px 12px;
+  border-radius: 14px;
+}
+.app.is-mobile.is-header-shrunk .page-header { padding-top: 2px; padding-bottom: 4px; }
+.app.is-mobile.is-header-shrunk .page-header .page-title { font-size: 18px; padding: 2px 10px; }
+
+/* Mobile dock — icon-only pill, smaller, label appears on long-press */
+.app.is-mobile .mobile-dock {
+  bottom: 12px;
+  min-width: 0;
+  padding: 6px;
+  gap: 2px;
+}
+.app.is-mobile .dock-item {
+  padding: 9px 12px;
+  min-width: 0;
+}
+.app.is-mobile .dock-label { display: none; }
+.dock-tip {
+  position: absolute;
+  bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  padding: 4px 10px; border-radius: 8px;
+  background: var(--ink); color: color-mix(in srgb, var(--surface-1) 95%, white);
+  font-size: 11px; font-weight: 500; white-space: nowrap;
+  box-shadow: 0 6px 16px -4px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+.dock-item { position: relative; }
+
+/* Mobile home — tighten panels, drop hero-orb, cap timeline/tasks height */
+.app.is-mobile .panel { padding: 14px 16px; }
+.app.is-mobile .hero-panel { min-height: 130px; }
+.app.is-mobile .hero-title { font-size: 22px; margin-top: 4px; }
+.app.is-mobile .hero-eyebrow { font-size: 10px; }
+.app.is-mobile .hero-meta { font-size: 13px; margin-top: 4px; }
+.app.is-mobile .hero-actions { margin-top: 10px; }
+.app.is-mobile .hero-orb { display: none; }
+
+.app.is-mobile .home-grid > .panel .timeline { max-height: 280px; overflow-y: auto; }
+.app.is-mobile .home-grid > .panel .tasks { max-height: 240px; overflow-y: auto; }
+.app.is-mobile .home-grid > .panel { overflow: hidden; }
+
+/* Mobile calendar — full height, no fixed 600px */
+.app.is-mobile .calendar-page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.app.is-mobile .calendar-panel {
+  height: auto !important;
+  min-height: 0 !important;
+  flex: 1;
+  padding: 8px 8px 10px;
+}
+.app.is-mobile .calendar-panel .fc-host { height: 100%; }
+.app.is-mobile .seg { font-size: 12px; }
+.app.is-mobile .seg button { padding: 4px 8px; }
+
+/* Mobile journal — entries become horizontal chip strip on top */
+.app.is-mobile .journal-grid {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  gap: 8px;
+}
+.app.is-mobile .journal-list {
+  padding: 8px 10px;
+  overflow: hidden;
+}
+.app.is-mobile .journal-list .panel-head { display: none; }
+.app.is-mobile .entry-list {
+  display: flex; flex-direction: row;
+  gap: 6px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+.app.is-mobile .entry-row {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke);
+  background: var(--surface-3);
+  white-space: nowrap;
+}
+.app.is-mobile .entry-row.on {
+  background: var(--ink); color: #fff; border-color: transparent;
+}
+.app.is-mobile .entry-row.on .entry-date { color: #fff; }
+.app.is-mobile .entry-preview { display: none; }
+.app.is-mobile .entry-date { font-size: 12px; font-weight: 500; }
+.app.is-mobile .journal-editor { padding: 14px; }
+.app.is-mobile .journal-editor textarea { min-height: 100px; }
+
+/* Mobile settings — tighter grid, simpler heads */
+.app.is-mobile .settings-grid {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.app.is-mobile .preset-row { flex-wrap: wrap; gap: 6px; }
+.app.is-mobile .theme-grid { gap: 4px; }
+.app.is-mobile .atelier-grid { grid-template-columns: 1fr; gap: 12px; }
+.app.is-mobile .font-pick { grid-template-columns: 1fr; }
+
+/* Bottom-sheet modal on mobile */
+@media (max-width: 720px) {
+  .modal-back {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 92vh !important;
+    border-radius: 24px 24px 0 0 !important;
+    animation: sheet-up .26s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .sheet-handle {
+    width: 40px; height: 4px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 22%, transparent);
+    margin: 8px auto 4px;
+  }
+}
+.sheet-handle { display: none; }
+@media (max-width: 720px) { .sheet-handle { display: block; } }
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* Accordion section styles */
+.accordion-section { padding: 0; overflow: hidden; }
+.accordion-head {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 16px 20px;
+  background: transparent; border: 0; cursor: pointer;
+  font: inherit; text-align: left; color: var(--ink);
+}
+.accordion-title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.accordion-title h3 { font-size: 16px; font-weight: 600; }
+.accordion-chev {
+  display: inline-block; transition: transform .22s; opacity: 0.6;
+}
+.accordion-chev.is-open { transform: rotate(180deg); }
+.accordion-body { padding: 0 20px 18px; }
+
+/* Low-perf disables the sheet-up animation (already cheap, but consistent) */
+.app.is-low-perf .modal { animation: none !important; }

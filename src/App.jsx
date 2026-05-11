@@ -3,6 +3,7 @@ import { supabase } from './lib/supabaseClient'
 import { useAuth } from './lib/authContext'
 import { VIBE_PRESETS, SURFACE_PRESETS, DENSITY_PRESETS, FONTS, DEFAULT_PREFS, ensureFontLoaded } from './lib/constants'
 import { extractPalette, applyPalette } from './lib/palette'
+import { detectLowPerf } from './lib/perfDetect'
 import NavRail from './components/NavRail'
 import MobileDock from './components/MobileDock'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -74,6 +75,9 @@ export default function App() {
   const [notifyReminders, setNotifyReminders] = useState(false)
   const [notifyJournal, setNotifyJournal] = useState(false)
   const [onboardedAt, setOnboardedAt] = useState(undefined)
+  const [lowPerf, setLowPerf] = useState(DEFAULT_PREFS.lowPerf)
+  const [lowPerfUserSet, setLowPerfUserSet] = useState(DEFAULT_PREFS.lowPerfUserSet)
+  const [headerShrink, setHeaderShrink] = useState(false)
 
   // Fingerprint of the persistable subset of prefs. JSON-stable so we can
   // compare with === / strict equality on the resulting string.
@@ -89,6 +93,7 @@ export default function App() {
       week_starts_monday: p.week_starts_monday,
       notify_digest: p.notify_digest, notify_reminders: p.notify_reminders,
       notify_journal: p.notify_journal,
+      low_perf: p.low_perf, low_perf_user_set: p.low_perf_user_set,
     })
   }
 
@@ -119,6 +124,8 @@ export default function App() {
     if (row.notify_digest != null) setNotifyDigest(row.notify_digest)
     if (row.notify_reminders != null) setNotifyReminders(row.notify_reminders)
     if (row.notify_journal != null) setNotifyJournal(row.notify_journal)
+    if (row.low_perf != null) setLowPerf(row.low_perf)
+    if (row.low_perf_user_set != null) setLowPerfUserSet(row.low_perf_user_set)
     // Record fingerprint so the auto-save effect knows this state matches DB
     // and skips a redundant write (which would echo back via realtime).
     lastPrefFingerprintRef.current = prefFingerprint(row)
@@ -147,13 +154,15 @@ export default function App() {
   }
 
   // Wallpaper change → update CSS var + re-extract palette.
+  // In low-perf, skip palette extraction (canvas scan) — fallback hue from CSS.
   useEffect(() => {
     document.documentElement.style.setProperty('--wallpaper-url', `url(${wallpaper})`)
+    if (lowPerf) return
     extractPalette(wallpaper).then(p => {
       setLastPalette(p)
       applyPalette(p)
     }).catch(console.error)
-  }, [wallpaper])
+  }, [wallpaper, lowPerf])
 
   // Window resize — independent of session.
   useEffect(() => {
@@ -230,12 +239,32 @@ export default function App() {
   }, [user])
 
   // Font → --font. Lazily fetch the chosen font's woff2 from Google Fonts.
+  // In low-perf mode, skip eager fetch at boot — but still load on-demand when
+  // the chosen font changes (so realtime sync of font picks still applies live).
   useEffect(() => {
     const f = FONTS.find(x => x.id === font)
     if (!f) return
     ensureFontLoaded(font)
     document.documentElement.style.setProperty('--font', f.stack)
   }, [font])
+
+  // Auto-detect low-perf once prefs have loaded. Respects user override.
+  useEffect(() => {
+    if (!prefsLoadedRef.current || !user) return
+    if (lowPerfUserSet) return // manual choice wins forever
+    const detected = detectLowPerf()
+    if (detected && !lowPerf) setLowPerf(true)
+  }, [user, lowPerfUserSet, lowPerf, prefsLoadedRef.current])
+
+  // Mobile sticky-header collapse: shrink after ~60px of scroll inside main.
+  useEffect(() => {
+    if (!isMobile) { setHeaderShrink(false); return }
+    const main = mainRef.current
+    if (!main) return
+    const onScroll = () => setHeaderShrink(main.scrollTop > 60)
+    main.addEventListener('scroll', onScroll, { passive: true })
+    return () => main.removeEventListener('scroll', onScroll)
+  }, [isMobile, page])
 
   useEffect(() => {
     const r = document.documentElement
@@ -433,6 +462,8 @@ export default function App() {
         notify_digest: notifyDigest,
         notify_reminders: notifyReminders,
         notify_journal: notifyJournal,
+        low_perf: lowPerf,
+        low_perf_user_set: lowPerfUserSet,
       }
       const fp = prefFingerprint(payload)
       // Skip if nothing meaningful changed (avoids redundant writes echoing
@@ -451,7 +482,8 @@ export default function App() {
     }, 400)
     return () => clearTimeout(prefSaveTimer.current)
   }, [user, font, vibe, surface, density, vibeDials, surfaceDials, accentBoost, blurAmount, surfaceAlpha, panelGap,
-      calView, displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal])
+      calView, displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal,
+      lowPerf, lowPerfUserSet])
 
   if (authLoading) {
     return (
@@ -467,7 +499,7 @@ export default function App() {
   }
 
   return (
-    <div className={`app${isMobile ? ' is-mobile' : ''} vibe-${vibe} surface-${surface}`}>
+    <div className={`app${isMobile ? ' is-mobile' : ''}${lowPerf ? ' is-low-perf' : ''}${headerShrink ? ' is-header-shrunk' : ''} vibe-${vibe} surface-${surface}`}>
       <div
         className="wallpaper"
         style={{ backgroundImage: `url(${wallpaper})` }}
@@ -481,14 +513,17 @@ export default function App() {
         <ErrorBoundary>
         <Suspense fallback={<div className="page" />}>
         {page === 'home' && (
-          <HomePage events={events} tasks={tasks} setTasks={setTasks} />
+          <HomePage events={events} tasks={tasks} setTasks={setTasks} isMobile={isMobile} />
         )}
         {page === 'calendar' && (
-          <CalendarPage events={events} calView={calView} setCalView={setCalView} />
+          <CalendarPage events={events} calView={calView} setCalView={setCalView} isMobile={isMobile} />
         )}
-        {page === 'journal' && <JournalPage />}
+        {page === 'journal' && <JournalPage isMobile={isMobile} />}
         {page === 'settings' && (
           <SettingsPage
+            isMobile={isMobile}
+            lowPerf={lowPerf}
+            setLowPerf={v => { setLowPerf(v); setLowPerfUserSet(true) }}
             font={font} setFont={setFont}
             vibe={vibe} setVibe={v => { setVibe(v); setVibeDialsState({ ...VIBE_PRESETS[v] }) }}
             surface={surface} setSurface={s => {
