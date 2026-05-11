@@ -31,6 +31,9 @@ export default function App() {
   const mainRef = useRef(null)
   const deltaRef = useRef(0)
   const cooldownRef = useRef(false)
+  const prefsLoadedRef = useRef(false)
+  const prefSaveTimer = useRef(null)
+  const prefIdRef = useRef(null)
 
   const [events, setEvents] = useState([])
   const [tasks, setTasks] = useState([])
@@ -72,6 +75,8 @@ export default function App() {
 
   // Mount: data load, realtime subscriptions, palette, resize
   useEffect(() => {
+    document.documentElement.style.setProperty('--wallpaper-url', `url(${wallpaper})`)
+
     extractPalette(wallpaper).then(p => {
       setLastPalette(p)
       applyPalette(p)
@@ -83,20 +88,26 @@ export default function App() {
     supabase.from('tasks').select('*').order('created_at')
       .then(({ data }) => { if (data) setTasks(data) })
 
-    supabase.from('user_preferences').select('*').limit(1).single()
-      .then(({ data }) => {
-        if (!data) return
-        setPrefId(data.id)
-        if (data.font) setFont(data.font)
-        if (data.vibe) { setVibe(data.vibe); setVibeDialsState({ ...VIBE_PRESETS[data.vibe] }) }
-        if (data.surface) { setSurface(data.surface); setSurfaceDialsState({ ...SURFACE_PRESETS[data.surface] }) }
-        if (data.density) setDensity(data.density)
-        if (data.vibe_dials) setVibeDialsState(data.vibe_dials)
-        if (data.surface_dials) setSurfaceDialsState(data.surface_dials)
-        if (data.accent_boost != null) setAccentBoost(data.accent_boost)
-        if (data.blur_amount != null) setBlurAmount(data.blur_amount)
-        if (data.surface_alpha != null) setSurfaceAlpha(data.surface_alpha)
-        if (data.panel_gap != null) setPanelGap(data.panel_gap)
+    supabase.from('user_preferences').select('*').limit(1).maybeSingle()
+      .then(async ({ data }) => {
+        if (data) {
+          prefIdRef.current = data.id
+          setPrefId(data.id)
+          if (data.font) setFont(data.font)
+          if (data.vibe) { setVibe(data.vibe); setVibeDialsState({ ...VIBE_PRESETS[data.vibe] }) }
+          if (data.surface) { setSurface(data.surface); setSurfaceDialsState({ ...SURFACE_PRESETS[data.surface] }) }
+          if (data.density) setDensity(data.density)
+          if (data.vibe_dials) setVibeDialsState(data.vibe_dials)
+          if (data.surface_dials) setSurfaceDialsState(data.surface_dials)
+          if (data.accent_boost != null) setAccentBoost(data.accent_boost)
+          if (data.blur_amount != null) setBlurAmount(data.blur_amount)
+          if (data.surface_alpha != null) setSurfaceAlpha(data.surface_alpha)
+          if (data.panel_gap != null) setPanelGap(data.panel_gap)
+        } else {
+          const { data: created } = await supabase.from('user_preferences').insert({}).select().single()
+          if (created) { prefIdRef.current = created.id; setPrefId(created.id) }
+        }
+        prefsLoadedRef.current = true
       })
 
     const ch = supabase.channel('app-realtime')
@@ -227,6 +238,31 @@ export default function App() {
       document.documentElement.style.setProperty('--accent', adjustedAccent)
     }
   }, [accentBoost, lastPalette])
+
+  // Auto-save preferences (debounced) — fires after initial load completes
+  useEffect(() => {
+    if (!prefsLoadedRef.current) return
+    clearTimeout(prefSaveTimer.current)
+    prefSaveTimer.current = setTimeout(async () => {
+      const payload = {
+        font, vibe, surface, density,
+        vibe_dials: vibeDials,
+        surface_dials: surfaceDials,
+        accent_boost: accentBoost,
+        blur_amount: blurAmount,
+        surface_alpha: surfaceAlpha,
+        panel_gap: panelGap,
+        updated_at: new Date().toISOString(),
+      }
+      if (prefIdRef.current) {
+        await supabase.from('user_preferences').update(payload).eq('id', prefIdRef.current)
+      } else {
+        const { data } = await supabase.from('user_preferences').insert(payload).select().single()
+        if (data) { prefIdRef.current = data.id; setPrefId(data.id) }
+      }
+    }, 400)
+    return () => clearTimeout(prefSaveTimer.current)
+  }, [font, vibe, surface, density, vibeDials, surfaceDials, accentBoost, blurAmount, surfaceAlpha, panelGap])
 
   return (
     <div className={`app${isMobile ? ' is-mobile' : ''} vibe-${vibe} surface-${surface}`}>

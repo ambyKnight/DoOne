@@ -41,7 +41,7 @@
 
 /* Vibe glow */
 .vibe-glow {
-  position: fixed; inset: 0; z-index: -1;
+  position: absolute; inset: 0; z-index: -1;
   pointer-events: none;
   background:
     radial-gradient(circle at 12% 18%, hsla(var(--hue), 70%, 65%, var(--vibe-glow-alpha)) 0%, transparent 45%),
@@ -75,17 +75,11 @@ button { cursor: pointer; border: 0; background: transparent; }
 
 /* ─── WALLPAPER ──────────────────────────────────────────── */
 .wallpaper {
-  position: fixed; inset: 0; z-index: -2;
+  position: absolute; inset: 0; z-index: -2;
   background-size: cover; background-position: center;
-  transform: scale(1.05);
-  animation: drift 60s ease-in-out infinite alternate;
-}
-@keyframes drift {
-  0%   { transform: scale(1.05) translate(0, 0); }
-  100% { transform: scale(1.08) translate(-10px, 8px); }
 }
 .wallpaper-veil {
-  position: fixed; inset: 0; z-index: -1;
+  position: absolute; inset: 0; z-index: -1;
   background:
     radial-gradient(ellipse at 20% 0%, hsla(var(--hue), 50%, 50%, 0.10) 0%, transparent 55%),
     radial-gradient(ellipse at 90% 100%, hsla(var(--hue), 40%, 30%, 0.15) 0%, transparent 50%),
@@ -97,6 +91,7 @@ button { cursor: pointer; border: 0; background: transparent; }
 /* ─── APP SHELL ──────────────────────────────────────────── */
 .app {
   position: relative;
+  isolation: isolate;
   height: 100vh; width: 100vw;
   display: grid;
   grid-template-columns: auto 1fr;
@@ -117,13 +112,14 @@ button { cursor: pointer; border: 0; background: transparent; }
 
 /* ─── GLASS PRIMITIVE ────────────────────────────────────── */
 .glass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background:
     linear-gradient(135deg,
       hsla(var(--hue), 60%, 60%, calc(var(--panel-tint) * 0.6)),
       hsla(calc(var(--hue) + 40), 60%, 60%, var(--panel-tint))),
     color-mix(in srgb, var(--surface-1) calc(var(--surface-alpha-mult) * 100%), transparent);
-  backdrop-filter: blur(var(--blur)) saturate(calc(140% * var(--vibe-sat-mult)));
-  -webkit-backdrop-filter: blur(var(--blur)) saturate(calc(140% * var(--vibe-sat-mult)));
   border: 1px solid color-mix(in srgb, var(--stroke) calc(var(--stroke-mult) * 100%), transparent);
   border-radius: var(--rad);
   box-shadow:
@@ -132,7 +128,25 @@ button { cursor: pointer; border: 0; background: transparent; }
     0 2px 8px -2px rgba(0,0,0,calc(0.08 * var(--shadow-mult)));
   transition: background .35s, border-radius .35s, padding .35s;
 }
+/* Pseudo-element holds a viewport-aligned blurred copy of the wallpaper.
+   background-attachment: fixed keeps the bg locked to the viewport, so each
+   card's pseudo-element shows the correct slice of wallpaper for its position.
+   Using filter (not backdrop-filter) avoids Chrome's compositor quirks that
+   broke blur after page navigation. */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--blur) * -2);
+  z-index: -1;
+  background-image: var(--wallpaper-url, none);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  filter: blur(var(--blur)) saturate(calc(140% * var(--vibe-sat-mult)));
+  pointer-events: none;
+}
 .surface-solid .glass { background: var(--surface-1); }
+.surface-solid .glass::before { display: none; }
 
 /* ─── NAV RAIL ───────────────────────────────────────────── */
 .nav-rail {
@@ -165,16 +179,10 @@ button { cursor: pointer; border: 0; background: transparent; }
 }
 .nav-item:hover { background: var(--surface-3); color: var(--ink); }
 .nav-item.is-active {
-  color: var(--ink);
-  background: color-mix(in srgb, var(--accent) 28%, transparent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent),
-              inset 0 1px 0 color-mix(in srgb, white 20%, transparent);
+  background: var(--ink);
+  color: color-mix(in srgb, var(--surface-1) 90%, white);
 }
-.nav-item.is-active::before {
-  content: ""; position: absolute; left: -14px; top: 10px; bottom: 10px; width: 4px;
-  border-radius: 3px; background: var(--accent);
-  box-shadow: 0 0 14px 2px color-mix(in srgb, var(--accent) 70%, transparent);
-}
+.nav-item.is-active:hover { background: var(--ink); color: white; }
 .nav-tip {
   position: absolute; left: 62px; top: 50%; transform: translateY(-50%);
   background: var(--ink); color: color-mix(in srgb, var(--surface-1) 95%, white);
@@ -222,6 +230,22 @@ button { cursor: pointer; border: 0; background: transparent; }
 }
 .app.is-mobile .page-title { font-size: 28px; }
 .page-sub { font-size: 16px; color: var(--ink-soft); font-weight: 500; margin-top: 6px; }
+
+/* Home page header — pill backgrounds for legibility on busy wallpapers */
+.home-page .page-header .eyebrow,
+.home-page .page-header .page-sub {
+  display: inline-block;
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--stroke);
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: var(--ink);
+  box-shadow: 0 2px 8px -3px rgba(0,0,0,0.18);
+}
+.home-page .page-header .eyebrow { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.home-page .page-header .page-sub { font-size: 13px; font-weight: 500; margin-top: 12px; }
 .accent-glyph { color: var(--accent); }
 .header-tools { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -274,8 +298,8 @@ button { cursor: pointer; border: 0; background: transparent; }
 
 /* ─── HOME GRID ──────────────────────────────────────────── */
 @keyframes page-in {
-  from { transform: translateY(14px); opacity: 0.4; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
 }
 .home-page, .calendar-page, .journal-page, .settings-page {
   animation: page-in .22s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -417,7 +441,13 @@ button { cursor: pointer; border: 0; background: transparent; }
 .mini-day:hover { background: var(--surface-3); }
 .mini-day.empty { cursor: default; }
 .mini-day.empty:hover { background: transparent; }
-.mini-day.today { background: var(--accent); color: white; font-weight: 600; }
+.mini-day.today {
+  background: var(--ink);
+  color: white;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px -2px rgba(0,0,0,0.35);
+}
 .mini-dot {
   position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
   width: 3px; height: 3px; border-radius: 50%; background: var(--accent);

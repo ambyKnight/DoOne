@@ -69,3 +69,4 @@ CREATE TABLE public.user_preferences (
 );
 ALTER TABLE public.user_preferences ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "allow all prefs" ON public.user_preferences FOR ALL USING (true) WITH CHECK (true);
+ALTER PUBLICATION supabase_realtime ADD TABLE public.user_preferences;
