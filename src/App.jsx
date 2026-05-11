@@ -472,12 +472,34 @@ export default function App() {
       if (fp === lastPrefFingerprintRef.current) return
       lastPrefFingerprintRef.current = fp
       const dbPayload = { ...payload, updated_at: new Date().toISOString() }
-      if (prefIdRef.current) {
-        await supabase.from('user_preferences').update(dbPayload).eq('id', prefIdRef.current)
-      } else {
-        const { data } = await supabase.from('user_preferences')
-          .insert({ ...dbPayload, user_id: user.id }).select().single()
-        if (data) { prefIdRef.current = data.id; setPrefId(data.id) }
+      // Resilient save — if a column doesn't exist yet (e.g. low_perf added in
+      // a schema migration the user hasn't run), strip the missing field and
+      // retry rather than letting every save fail silently.
+      async function tryWrite(body) {
+        if (prefIdRef.current) {
+          return supabase.from('user_preferences').update(body).eq('id', prefIdRef.current).select()
+        }
+        return supabase.from('user_preferences').insert({ ...body, user_id: user.id }).select().single()
+      }
+      let body = dbPayload
+      for (let i = 0; i < 4; i++) {
+        const r = await tryWrite(body)
+        if (!r.error) {
+          const created = r.data && !Array.isArray(r.data) ? r.data : null
+          if (created && !prefIdRef.current) { prefIdRef.current = created.id; setPrefId(created.id) }
+          break
+        }
+        const msg = r.error.message || ''
+        const m = msg.match(/column ['"]?[\w.]*?(\w+)['"]? .*does not exist/i)
+        if (m && body[m[1]] !== undefined) {
+          // strip the missing column and retry
+          const next = { ...body }
+          delete next[m[1]]
+          body = next
+          continue
+        }
+        console.error('[prefs save]', r.error)
+        break
       }
     }, 400)
     return () => clearTimeout(prefSaveTimer.current)
