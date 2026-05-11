@@ -8,7 +8,7 @@ import HomePage from './pages/HomePage'
 import CalendarPage from './pages/CalendarPage'
 import JournalPage from './pages/JournalPage'
 import SettingsPage from './pages/SettingsPage'
-import wallpaper from './assets/wallpaper.png'
+import defaultWallpaper from './assets/wallpaper.png'
 
 const NAV_ORDER = ['home', 'calendar', 'journal', 'settings']
 
@@ -50,6 +50,7 @@ export default function App() {
   const [panelGap, setPanelGap] = useState(DEFAULT_PREFS.panelGap)
   const [prefId, setPrefId] = useState(null)
   const [lastPalette, setLastPalette] = useState(null)
+  const [wallpaper, setWallpaper] = useState(defaultWallpaper)
 
   function setVibeDial(key, val) {
     setVibeDialsState(prev => ({ ...prev, [key]: val }))
@@ -73,15 +74,19 @@ export default function App() {
     }
   }
 
-  // Mount: data load, realtime subscriptions, palette, resize
+  // Wallpaper change → update CSS var + re-extract palette.
+  // Lives in its own effect so swapping wallpapers (future drag/drop)
+  // re-runs everything that depends on the image.
   useEffect(() => {
     document.documentElement.style.setProperty('--wallpaper-url', `url(${wallpaper})`)
-
     extractPalette(wallpaper).then(p => {
       setLastPalette(p)
       applyPalette(p)
     }).catch(console.error)
+  }, [wallpaper])
 
+  // Mount: data load, realtime subscriptions, resize
+  useEffect(() => {
     supabase.from('events').select('*').order('start_time')
       .then(({ data }) => { if (data) setEvents(data.map(toFCEvent)) })
 
@@ -188,22 +193,74 @@ export default function App() {
     document.documentElement.style.setProperty('--panel-gap', `${panelGap}px`)
   }, [panelGap])
 
-  // Scroll-snap page navigation
+  // Scroll-snap page navigation (desktop)
   useEffect(() => {
     if (isMobile) return
-    const THRESHOLD = 250
-    const COOLDOWN = 700
+    const THRESHOLD = 420
+    const COOLDOWN = 1100
+    const IDLE_RESET_MS = 140
+    const BOUNDARY_DWELL_MS = 220
+
+    const lastWheelRef = { current: 0 }
+    const boundaryEnterRef = { current: 0 }
+
+    // Walk up from e.target looking for any internally scrollable ancestor
+    // that is NOT at its boundary in the current scroll direction. If we
+    // find one, the inner element should consume this wheel event and we
+    // must not navigate (protects against momentum-carry from inner scroll
+    // bleeding past its end into a tab switch).
+    function innerScrollerBlocks(target, deltaY) {
+      let el = target
+      while (el && el !== document.body && el !== document.documentElement) {
+        const cs = getComputedStyle(el)
+        const oy = cs.overflowY
+        if ((oy === 'auto' || oy === 'scroll') && el.scrollHeight > el.clientHeight + 1) {
+          const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2
+          const atTop = el.scrollTop <= 2
+          if ((deltaY > 0 && !atBottom) || (deltaY < 0 && !atTop)) return el
+        }
+        el = el.parentElement
+      }
+      return null
+    }
 
     function onWheel(e) {
       if (cooldownRef.current) return
+      const now = performance.now()
 
-      // If the main area is scrollable, only navigate at the boundary
+      // Decay accumulator if user stopped wheeling
+      if (now - lastWheelRef.current > IDLE_RESET_MS) {
+        deltaRef.current = 0
+        boundaryEnterRef.current = 0
+      }
+      lastWheelRef.current = now
+
+      // Reset on direction change
+      if (deltaRef.current !== 0 && Math.sign(e.deltaY) !== Math.sign(deltaRef.current)) {
+        deltaRef.current = 0
+        boundaryEnterRef.current = 0
+      }
+
+      // Any nested scroller still in motion? absorb event.
+      if (innerScrollerBlocks(e.target, e.deltaY)) {
+        deltaRef.current = 0
+        boundaryEnterRef.current = 0
+        return
+      }
+
+      // Main scroll boundary check + dwell
       const main = mainRef.current
       if (main && main.scrollHeight > main.clientHeight + 2) {
         const atBottom = main.scrollTop + main.clientHeight >= main.scrollHeight - 8
         const atTop = main.scrollTop <= 8
-        if (e.deltaY > 0 && !atBottom) return
-        if (e.deltaY < 0 && !atTop) return
+        const atBoundary = (e.deltaY > 0 && atBottom) || (e.deltaY < 0 && atTop)
+        if (!atBoundary) {
+          deltaRef.current = 0
+          boundaryEnterRef.current = 0
+          return
+        }
+        if (boundaryEnterRef.current === 0) boundaryEnterRef.current = now
+        if (now - boundaryEnterRef.current < BOUNDARY_DWELL_MS) return
       }
 
       deltaRef.current += e.deltaY
@@ -211,6 +268,7 @@ export default function App() {
 
       const dir = deltaRef.current > 0 ? 1 : -1
       deltaRef.current = 0
+      boundaryEnterRef.current = 0
       cooldownRef.current = true
       setTimeout(() => { cooldownRef.current = false }, COOLDOWN)
 
@@ -224,6 +282,49 @@ export default function App() {
 
     window.addEventListener('wheel', onWheel, { passive: true })
     return () => window.removeEventListener('wheel', onWheel)
+  }, [isMobile])
+
+  // Touch-swipe page navigation (mobile)
+  useEffect(() => {
+    if (!isMobile) return
+    let startX = 0, startY = 0, startT = 0, tracking = false
+    const SWIPE_MIN = 60        // px horizontal
+    const SWIPE_MAX_TIME = 600  // ms — quick swipes only
+    const VERTICAL_TOL = 0.6    // |dy| must be < this * |dx|
+
+    function onStart(e) {
+      if (e.touches.length !== 1) { tracking = false; return }
+      const t = e.touches[0]
+      startX = t.clientX
+      startY = t.clientY
+      startT = performance.now()
+      tracking = true
+    }
+    function onEnd(e) {
+      if (!tracking) return
+      tracking = false
+      const t = e.changedTouches[0]
+      const dx = t.clientX - startX
+      const dy = t.clientY - startY
+      const dt = performance.now() - startT
+      if (dt > SWIPE_MAX_TIME) return
+      if (Math.abs(dx) < SWIPE_MIN) return
+      if (Math.abs(dy) > Math.abs(dx) * VERTICAL_TOL) return
+      const dir = dx < 0 ? 1 : -1 // swipe left = next, right = prev
+      setPage(prev => {
+        const idx = NAV_ORDER.indexOf(prev)
+        const next = idx + dir
+        if (next < 0 || next >= NAV_ORDER.length) return prev
+        return NAV_ORDER[next]
+      })
+    }
+
+    window.addEventListener('touchstart', onStart, { passive: true })
+    window.addEventListener('touchend', onEnd, { passive: true })
+    return () => {
+      window.removeEventListener('touchstart', onStart)
+      window.removeEventListener('touchend', onEnd)
+    }
   }, [isMobile])
 
   // Accent boost adjustment
@@ -297,6 +398,7 @@ export default function App() {
             panelGap={panelGap} setPanelGap={setPanelGap}
             repalette={repalette}
             prefId={prefId}
+            wallpaper={wallpaper} setWallpaper={setWallpaper}
           />
         )}
       </main>

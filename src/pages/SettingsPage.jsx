@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { FONTS, VIBE_PRESETS, SURFACE_PRESETS } from '../lib/constants'
 import { supabase } from '../lib/supabaseClient'
+import LowPolyWallpaper from '../components/LowPolyWallpaper'
+import VibeIcon from '../components/VibeIcon'
 
 export default function SettingsPage({
   font, setFont,
@@ -14,6 +16,7 @@ export default function SettingsPage({
   surfaceAlpha, setSurfaceAlpha,
   panelGap, setPanelGap,
   repalette, prefId,
+  wallpaper, setWallpaper,
 }) {
   const [showAdvVibe, setShowAdvVibe] = useState(false)
   const [showAdvSurface, setShowAdvSurface] = useState(false)
@@ -62,7 +65,7 @@ export default function SettingsPage({
           <div className="preset-row">
             {['calm','vivid','luminous','mono'].map(v => (
               <button key={v} className={`preset-card vibe-preview vibe-${v} ${vibe === v ? 'on' : ''}`} onClick={() => setVibe(v)}>
-                <span className="preset-orb" />
+                <VibeIcon variant={v} />
                 <span className="preset-name">{v}</span>
               </button>
             ))}
@@ -106,12 +109,19 @@ export default function SettingsPage({
         <section className="panel glass">
           <div className="panel-head"><h3>Density</h3><span className="muted">spacing &amp; scale</span></div>
           <div className="preset-row">
-            {[['airy','open + roomy'],['cozy','balanced'],['packed','compact']].map(([id, note]) => (
-              <button key={id} className={`preset-card ${density === id ? 'on' : ''}`} onClick={() => setDensity(id)}>
-                <span className="preset-name">{id}</span>
-                <span className="muted" style={{ fontSize: 10 }}>{note}</span>
-              </button>
-            ))}
+            {[['airy','open + roomy'],['cozy','balanced'],['packed','compact']].map(([id, note]) => {
+              // algorithmic dot field — count derives from grid columns squared
+              const cols = id === 'airy' ? 3 : id === 'cozy' ? 4 : 6
+              return (
+                <button key={id} className={`preset-card density-preview density-${id} ${density === id ? 'on' : ''}`} onClick={() => setDensity(id)}>
+                  <span className="density-art" aria-hidden="true">
+                    {Array.from({ length: cols * cols }).map((_, i) => <span key={i} />)}
+                  </span>
+                  <span className="preset-name">{id}</span>
+                  <span className="muted" style={{ fontSize: 10 }}>{note}</span>
+                </button>
+              )
+            })}
           </div>
         </section>
 
@@ -121,9 +131,11 @@ export default function SettingsPage({
           <div className="font-pick">
             {FONTS.map(f => (
               <button key={f.id} className={`font-card ${font === f.id ? 'on' : ''}`} onClick={() => setFont(f.id)} style={{ fontFamily: f.stack }}>
-                <div className="font-name">{f.name}</div>
-                <div className="font-note">{f.note}</div>
-                <div className="font-spec">Aa Bb 1 2 3</div>
+                <div>
+                  <div className="font-name">{f.name}</div>
+                  <div className="font-note">{f.note}</div>
+                </div>
+                <div className="font-spec">Aa 1 2 3</div>
               </button>
             ))}
           </div>
@@ -140,7 +152,9 @@ export default function SettingsPage({
         {/* Wallpaper */}
         <section className="panel glass">
           <div className="panel-head"><h3>Wallpaper</h3><span className="muted">cherry blossom</span></div>
-          <div className="wp-preview" style={{ backgroundImage: 'var(--wallpaper-url)' }} />
+          <div className="wp-preview">
+            <LowPolyWallpaper src={wallpaper} cols={48} rows={27} />
+          </div>
           <button className="btn ghost full" onClick={repalette}>↻ extract colour from wallpaper</button>
           <div className="muted small" style={{ marginTop: 8 }}>drag-and-drop your own wallpaper · coming soon</div>
         </section>

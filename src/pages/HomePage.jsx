@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import MiniCalendar from '../components/MiniCalendar'
 import EventFormModal from '../components/EventFormModal'
+import AlgorithmicOrnament from '../components/AlgorithmicOrnament'
 import { supabase } from '../lib/supabaseClient'
 
 const fmtTime = d => d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
@@ -63,6 +64,7 @@ export default function HomePage({ events, tasks, setTasks }) {
       <div className="home-grid">
         {/* Hero — next up */}
         <section className="panel glass hero-panel" style={{ gridArea: 'hero' }}>
+          <AlgorithmicOrnament variant="arc" seed={7} position="tr" size={140} />
           <div className="hero-eyebrow">
             {next ? `Next up · in ${minsUntil} min` : 'Nothing scheduled'}
           </div>
@@ -75,28 +77,40 @@ export default function HomePage({ events, tasks, setTasks }) {
 
         {/* Timeline */}
         <section className="panel glass" style={{ gridArea: 'timeline' }}>
+          <AlgorithmicOrnament variant="wave" seed={42} position="bl" size={130} />
           <div className="panel-head">
             <h3>Today's schedule</h3>
-            <span className="muted">{todays.length} events</span>
+            <span className="muted">{todays.length} event{todays.length === 1 ? '' : 's'}</span>
           </div>
+          {todays.length === 0 ? (
+            <ScheduleEmpty onAdd={() => setQuickModal(true)} />
+          ) : (
           <ul className="timeline">
-            {todays.length === 0 && (
-              <li className="tl-row free">
-                <span className="tl-time">—</span>
-                <span className="tl-bar ghost" />
-                <span className="tl-body"><span className="tl-title muted">Nothing scheduled today</span></span>
-              </li>
-            )}
-            {todays.map(e => (
-              <li key={e.id} className={`tl-row ${e._end < now ? 'past' : ''}`}>
-                <span className="tl-time">{fmtTime(e._start)}</span>
-                <span className={`tl-bar ${e.tag || 'ev-tag1'}`} />
-                <span className="tl-body">
-                  <span className="tl-title">{e.title}</span>
-                </span>
-              </li>
-            ))}
+            {todays.map(e => {
+              const isPast = e._end < now
+              const isNext = next && e.id === next.id && !isPast
+              const hasEnd = e.end && e._end > e._start
+              return (
+                <li key={e.id} className={`tl-row ${isPast ? 'past' : ''} ${isNext ? 'next' : ''}`}>
+                  <span className="tl-time">
+                    {fmtTime(e._start)}
+                    {hasEnd && <span className="tl-time-end">{fmtTime(e._end)}</span>}
+                  </span>
+                  <span className={`tl-bar ${e.tag || 'ev-tag1'}`} />
+                  <span className="tl-body">
+                    <span className="tl-title">{e.title}</span>
+                    <span className="tl-meta">
+                      {hasEnd
+                        ? `${Math.max(1, Math.round((e._end - e._start) / 60000))} min`
+                        : 'all day'}
+                    </span>
+                  </span>
+                  {isNext && <span className="tl-badge">next</span>}
+                </li>
+              )
+            })}
           </ul>
+          )}
         </section>
 
         {/* Tasks */}
@@ -144,4 +158,38 @@ export default function HomePage({ events, tasks, setTasks }) {
 
 function PlusIcon(p) {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...p}><path d="M12 5v14M5 12h14" /></svg>
+}
+
+// rotating empty-state copy — picked deterministically by date so it stays
+// consistent through the day instead of jittering between renders.
+const EMPTY_LINES = [
+  { eyebrow: 'wide open',       title: 'A day to yourself.',         hint: 'Block time before it blocks you.' },
+  { eyebrow: 'clean slate',     title: 'Nothing booked.',            hint: 'Make the first move.' },
+  { eyebrow: 'today',           title: 'Free as a bird.',            hint: 'Add something — or don’t.' },
+  { eyebrow: 'quiet hours',     title: 'Calendar is quiet.',         hint: 'Good day to do one thing well.' },
+  { eyebrow: 'unscheduled',     title: 'Your canvas is empty.',      hint: 'Sketch the day.' },
+  { eyebrow: 'open agenda',     title: 'No plans yet.',              hint: 'Pick a moment, claim it.' },
+  { eyebrow: 'breathing room',  title: 'Today is undecided.',        hint: 'Decide what matters.' },
+  { eyebrow: 'just today',      title: 'Infinite possibilities.',    hint: 'Or just one good one.' },
+]
+
+function ScheduleEmpty({ onAdd }) {
+  const idx = new Date().getDate() % EMPTY_LINES.length
+  const line = EMPTY_LINES[idx]
+  return (
+    <div className="tl-empty">
+      <svg className="tl-empty-glyph" viewBox="0 0 120 120" aria-hidden="true">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <circle key={i} cx="60" cy="60" r={14 + i * 8} />
+        ))}
+        <circle className="tl-empty-dot" cx="60" cy="60" r="4" />
+      </svg>
+      <div className="tl-empty-eyebrow">{line.eyebrow}</div>
+      <div className="tl-empty-title">{line.title}</div>
+      <div className="tl-empty-hint">{line.hint}</div>
+      <button className="chip primary" onClick={onAdd}>
+        <PlusIcon width="14" height="14" /> add event
+      </button>
+    </div>
+  )
 }

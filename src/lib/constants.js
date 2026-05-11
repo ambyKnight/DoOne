@@ -19,14 +19,28 @@ export const DENSITY_PRESETS = {
 }
 
 export const FONTS = [
-  { id: 'geist',      name: 'Geist',          stack: '"Geist", system-ui, sans-serif',              note: 'modern, neutral' },
+  // sans
+  { id: 'manrope',    name: 'Manrope',         stack: '"Manrope", system-ui, sans-serif',            note: 'clean sans · default' },
   { id: 'outfit',     name: 'Outfit',          stack: '"Outfit", system-ui, sans-serif',             note: 'rounded geometric' },
   { id: 'jakarta',    name: 'Plus Jakarta',    stack: '"Plus Jakarta Sans", system-ui, sans-serif',  note: 'friendly modern' },
-  { id: 'manrope',    name: 'Manrope',         stack: '"Manrope", system-ui, sans-serif',            note: 'clean, balanced' },
   { id: 'grotesk',    name: 'Space Grotesk',   stack: '"Space Grotesk", system-ui, sans-serif',      note: 'slightly techy' },
   { id: 'dm',         name: 'DM Sans',         stack: '"DM Sans", system-ui, sans-serif',            note: 'soft sans' },
-  { id: 'instrument', name: 'Instrument',      stack: '"Instrument Sans", system-ui, sans-serif',    note: 'editorial' },
-  { id: 'plex',       name: 'IBM Plex',        stack: '"IBM Plex Sans", system-ui, sans-serif',      note: 'precise' },
+  { id: 'instrument', name: 'Instrument',      stack: '"Instrument Sans", system-ui, sans-serif',    note: 'editorial sans' },
+  { id: 'plex',       name: 'IBM Plex',        stack: '"IBM Plex Sans", system-ui, sans-serif',      note: 'precise sans' },
+  { id: 'quicksand',  name: 'Quicksand',       stack: '"Quicksand", system-ui, sans-serif',          note: 'soft rounded' },
+  { id: 'bricolage',  name: 'Bricolage',       stack: '"Bricolage Grotesque", system-ui, sans-serif',note: 'expressive display' },
+  { id: 'syne',       name: 'Syne',            stack: '"Syne", system-ui, sans-serif',               note: 'experimental display' },
+  // serif
+  { id: 'fraunces',   name: 'Fraunces',        stack: '"Fraunces", Georgia, serif',                  note: 'warm editorial serif' },
+  { id: 'playfair',   name: 'Playfair',        stack: '"Playfair Display", Georgia, serif',          note: 'high-contrast serif' },
+  { id: 'lora',       name: 'Lora',            stack: '"Lora", Georgia, serif',                      note: 'calligraphic serif' },
+  { id: 'crimson',    name: 'Crimson',         stack: '"Crimson Pro", Georgia, serif',               note: 'classic book serif' },
+  { id: 'instser',    name: 'Instrument Serif',stack: '"Instrument Serif", Georgia, serif',          note: 'tall elegant serif' },
+  // mono
+  { id: 'jbmono',     name: 'JetBrains Mono',  stack: '"JetBrains Mono", ui-monospace, monospace',   note: 'engineering mono' },
+  { id: 'plexmono',   name: 'IBM Plex Mono',   stack: '"IBM Plex Mono", ui-monospace, monospace',    note: 'editorial mono' },
+  { id: 'spacemono',  name: 'Space Mono',      stack: '"Space Mono", ui-monospace, monospace',       note: 'retro-tech mono' },
+  { id: 'inconsolata',name: 'Inconsolata',     stack: '"Inconsolata", ui-monospace, monospace',      note: 'humanist mono' },
 ]
 
 export const ACCENT_FONT = '"Caveat", "Instrument Serif", serif'
