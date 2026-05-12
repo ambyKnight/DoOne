@@ -1,5 +1,4 @@
 import { useAuth } from '../lib/authContext'
-import { supabase } from '../lib/supabaseClient'
 import Avatar from './Avatar'
 
 export default function NavRail({ page, setPage }) {
@@ -28,17 +27,6 @@ export default function NavRail({ page, setPage }) {
           </button>
         ))}
       </div>
-      <div className="nav-foot">
-        <button
-          className="nav-item nav-logout"
-          onClick={() => supabase.auth.signOut()}
-          aria-label="Log out"
-          title="Log out"
-        >
-          <LogoutIcon width="22" height="22" />
-          <span className="nav-tip">Log out</span>
-        </button>
-      </div>
     </nav>
   )
 }
@@ -61,7 +49,4 @@ function JournalIcon(p) {
 }
 function SettingsIcon(p) {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
-}
-function LogoutIcon(p) {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
 }

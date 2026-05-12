@@ -33,7 +33,8 @@ function toFCEvent(row) {
 export default function App() {
   const { user, loading: authLoading } = useAuth()
   const [page, setPage] = useState('home')
-  const [calView, setCalView] = useState('dayGridMonth')
+  const [calView, setCalViewState] = useState('dayGridMonth')
+  function setCalView(v) { setCalViewState(v) }
   const [isMobile, setIsMobile] = useState(window.innerWidth < 880)
 
   const mainRef = useRef(null)
@@ -42,6 +43,14 @@ export default function App() {
   const prefsLoadedRef = useRef(false)
   const prefSaveTimer = useRef(null)
   const prefIdRef = useRef(null)
+  // Fingerprint of last payload sent OR last payload applied from DB. Used to
+  // (a) skip redundant auto-saves that would just echo back, and (b) ignore
+  // realtime UPDATEs that are echoes of our own writes.
+  const lastPrefFingerprintRef = useRef(null)
+  // Columns we've discovered are missing in this DB (schema not yet migrated).
+  // We exclude them from BOTH the save payload and the fingerprint computation,
+  // so local + remote fingerprints stay equal and we don't loop on echoes.
+  const missingPrefColsRef = useRef(new Set())
 
   const [events, setEvents] = useState([])
   const [tasks, setTasks] = useState([])
@@ -69,6 +78,67 @@ export default function App() {
   const [notifyReminders, setNotifyReminders] = useState(false)
   const [notifyJournal, setNotifyJournal] = useState(false)
   const [onboardedAt, setOnboardedAt] = useState(undefined)
+  const [headerShrink, setHeaderShrink] = useState(false)
+
+  // Fingerprint of the persistable subset of prefs. JSON-stable so we can
+  // compare with === / strict equality on the resulting string.
+  // Excludes columns we know don't exist in the DB yet — otherwise local
+  // (which has the value) and remote (where the column is absent) would
+  // produce different fingerprints, triggering an infinite save/echo loop.
+  function prefFingerprint(p) {
+    const all = {
+      font: p.font, vibe: p.vibe, surface: p.surface, density: p.density,
+      vibe_dials: p.vibe_dials, surface_dials: p.surface_dials,
+      accent_boost: p.accent_boost, blur_amount: p.blur_amount,
+      surface_alpha: p.surface_alpha, panel_gap: p.panel_gap,
+      cal_view: p.cal_view,
+      display_name: p.display_name, timezone: p.timezone,
+      day_start_hour: p.day_start_hour, day_end_hour: p.day_end_hour,
+      week_starts_monday: p.week_starts_monday,
+      notify_digest: p.notify_digest, notify_reminders: p.notify_reminders,
+      notify_journal: p.notify_journal,
+      wallpaper_url: p.wallpaper_url,
+    }
+    for (const k of missingPrefColsRef.current) delete all[k]
+    return JSON.stringify(all)
+  }
+
+  // Apply a user_preferences row from DB to local state. Used by both the
+  // initial load and the realtime UPDATE handler so client B reflects client
+  // A's changes live. Skips fields that are null/undefined so the row's
+  // partial updates don't clobber defaults.
+  function applyPrefRow(row) {
+    if (!row) return
+    if (row.font) setFont(row.font)
+    if (row.vibe) setVibe(row.vibe)
+    if (row.surface) setSurface(row.surface)
+    if (row.density) setDensity(row.density)
+    if (row.vibe_dials) setVibeDialsState(row.vibe_dials)
+    else if (row.vibe) setVibeDialsState({ ...VIBE_PRESETS[row.vibe] })
+    if (row.surface_dials) setSurfaceDialsState(row.surface_dials)
+    else if (row.surface) setSurfaceDialsState({ ...SURFACE_PRESETS[row.surface] })
+    if (row.accent_boost != null) setAccentBoost(row.accent_boost)
+    if (row.blur_amount != null) setBlurAmount(row.blur_amount)
+    if (row.surface_alpha != null) setSurfaceAlpha(row.surface_alpha)
+    if (row.panel_gap != null) setPanelGap(row.panel_gap)
+    if (row.cal_view) setCalViewState(row.cal_view)
+    if (row.display_name != null) setDisplayName(row.display_name)
+    if (row.timezone != null) setTimezone(row.timezone)
+    if (row.day_start_hour != null) setDayStartHour(row.day_start_hour)
+    if (row.day_end_hour != null) setDayEndHour(row.day_end_hour)
+    if (row.week_starts_monday != null) setWeekStartsMonday(row.week_starts_monday)
+    if (row.notify_digest != null) setNotifyDigest(row.notify_digest)
+    if (row.notify_reminders != null) setNotifyReminders(row.notify_reminders)
+    if (row.notify_journal != null) setNotifyJournal(row.notify_journal)
+    // wallpaper_url: only react if the column is present on the row. If the
+    // key is absent (schema not yet migrated), don't clobber local state.
+    if ('wallpaper_url' in row) {
+      setWallpaper(row.wallpaper_url || defaultWallpaper)
+    }
+    // Record fingerprint so the auto-save effect knows this state matches DB
+    // and skips a redundant write (which would echo back via realtime).
+    lastPrefFingerprintRef.current = prefFingerprint(row)
+  }
 
   function setVibeDial(key, val) {
     setVibeDialsState(prev => ({ ...prev, [key]: val }))
@@ -133,25 +203,7 @@ export default function App() {
         if (data) {
           prefIdRef.current = data.id
           setPrefId(data.id)
-          if (data.font) setFont(data.font)
-          if (data.vibe) { setVibe(data.vibe); setVibeDialsState({ ...VIBE_PRESETS[data.vibe] }) }
-          if (data.surface) { setSurface(data.surface); setSurfaceDialsState({ ...SURFACE_PRESETS[data.surface] }) }
-          if (data.density) setDensity(data.density)
-          if (data.vibe_dials) setVibeDialsState(data.vibe_dials)
-          if (data.surface_dials) setSurfaceDialsState(data.surface_dials)
-          if (data.accent_boost != null) setAccentBoost(data.accent_boost)
-          if (data.blur_amount != null) setBlurAmount(data.blur_amount)
-          if (data.surface_alpha != null) setSurfaceAlpha(data.surface_alpha)
-          if (data.panel_gap != null) setPanelGap(data.panel_gap)
-          if (data.display_name != null) setDisplayName(data.display_name)
-          if (data.timezone != null) setTimezone(data.timezone)
-          if (data.day_start_hour != null) setDayStartHour(data.day_start_hour)
-          if (data.day_end_hour != null) setDayEndHour(data.day_end_hour)
-          if (data.week_starts_monday != null) setWeekStartsMonday(data.week_starts_monday)
-          if (data.notify_digest != null) setNotifyDigest(data.notify_digest)
-          if (data.notify_reminders != null) setNotifyReminders(data.notify_reminders)
-          if (data.notify_journal != null) setNotifyJournal(data.notify_journal)
-          // Onboarding is skipped for now — auto-complete on first load if null
+          applyPrefRow(data)
           setOnboardedAt(data.onboarded_at ?? new Date().toISOString())
         } else {
           // New user — auto-complete onboarding (skipped per current scope)
@@ -159,7 +211,11 @@ export default function App() {
           const { data: created } = await supabase.from('user_preferences')
             .insert({ user_id: user.id, onboarded_at: nowIso })
             .select().single()
-          if (created) { prefIdRef.current = created.id; setPrefId(created.id) }
+          if (created) {
+            prefIdRef.current = created.id
+            setPrefId(created.id)
+            applyPrefRow(created)
+          }
           setOnboardedAt(nowIso)
         }
         prefsLoadedRef.current = true
@@ -178,6 +234,12 @@ export default function App() {
         ({ new: r }) => setTasks(p => p.map(t => t.id === r.id ? r : t)))
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'tasks', filter: userFilter },
         ({ old: r }) => setTasks(p => p.filter(t => t.id !== r.id)))
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'user_preferences', filter: userFilter },
+        ({ new: row }) => {
+          // Ignore our own echoes — fingerprint will match.
+          if (prefFingerprint(row) === lastPrefFingerprintRef.current) return
+          applyPrefRow(row)
+        })
       .subscribe()
 
     return () => { supabase.removeChannel(ch) }
@@ -190,6 +252,16 @@ export default function App() {
     ensureFontLoaded(font)
     document.documentElement.style.setProperty('--font', f.stack)
   }, [font])
+
+  // Mobile sticky-header collapse: shrink after ~60px of scroll inside main.
+  useEffect(() => {
+    if (!isMobile) { setHeaderShrink(false); return }
+    const main = mainRef.current
+    if (!main) return
+    const onScroll = () => setHeaderShrink(main.scrollTop > 60)
+    main.addEventListener('scroll', onScroll, { passive: true })
+    return () => main.removeEventListener('scroll', onScroll)
+  }, [isMobile, page])
 
   useEffect(() => {
     const r = document.documentElement
@@ -378,6 +450,7 @@ export default function App() {
         blur_amount: blurAmount,
         surface_alpha: surfaceAlpha,
         panel_gap: panelGap,
+        cal_view: calView,
         display_name: displayName || null,
         timezone: timezone || null,
         day_start_hour: dayStartHour,
@@ -386,19 +459,57 @@ export default function App() {
         notify_digest: notifyDigest,
         notify_reminders: notifyReminders,
         notify_journal: notifyJournal,
-        updated_at: new Date().toISOString(),
+        wallpaper_url: wallpaper === defaultWallpaper ? null : wallpaper,
       }
-      if (prefIdRef.current) {
-        await supabase.from('user_preferences').update(payload).eq('id', prefIdRef.current)
-      } else {
-        const { data } = await supabase.from('user_preferences')
-          .insert({ ...payload, user_id: user.id }).select().single()
-        if (data) { prefIdRef.current = data.id; setPrefId(data.id) }
+      // Strip columns we already know are missing (avoids redundant retries).
+      for (const k of missingPrefColsRef.current) delete payload[k]
+      const fp = prefFingerprint(payload)
+      // Skip if nothing meaningful changed (avoids redundant writes echoing
+      // back via realtime; saves DB round-trip on idle dial-twiddling that
+      // settled to the original value).
+      if (fp === lastPrefFingerprintRef.current) return
+      lastPrefFingerprintRef.current = fp
+      const dbPayload = { ...payload, updated_at: new Date().toISOString() }
+      // Resilient save — if a column doesn't exist yet (i.e. user hasn't run
+      // the latest migration), strip the missing field and retry rather than
+      // letting every save fail silently.
+      async function tryWrite(body) {
+        if (prefIdRef.current) {
+          return supabase.from('user_preferences').update(body).eq('id', prefIdRef.current).select()
+        }
+        return supabase.from('user_preferences').insert({ ...body, user_id: user.id }).select().single()
+      }
+      let body = dbPayload
+      for (let i = 0; i < 4; i++) {
+        const r = await tryWrite(body)
+        if (!r.error) {
+          const created = r.data && !Array.isArray(r.data) ? r.data : null
+          if (created && !prefIdRef.current) { prefIdRef.current = created.id; setPrefId(created.id) }
+          break
+        }
+        const msg = r.error.message || ''
+        // Match both raw Postgres ("column public.user_preferences.foo does not exist")
+        // and PostgREST schema-cache ("Could not find the 'foo' column of ...").
+        const m = msg.match(/(?:could not find the ['"]([\w]+)['"]\s+column|column ['"]?[\w.]*?(\w+)['"]? .*does not exist)/i)
+        const colName = m && (m[1] || m[2])
+        if (colName && body[colName] !== undefined) {
+          missingPrefColsRef.current.add(colName)
+          // Recompute the fingerprint without this column so future saves
+          // and incoming echoes compare apples-to-apples.
+          lastPrefFingerprintRef.current = prefFingerprint(payload)
+          const next = { ...body }
+          delete next[colName]
+          body = next
+          continue
+        }
+        console.error('[prefs save]', r.error)
+        break
       }
     }, 400)
     return () => clearTimeout(prefSaveTimer.current)
   }, [user, font, vibe, surface, density, vibeDials, surfaceDials, accentBoost, blurAmount, surfaceAlpha, panelGap,
-      displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal])
+      calView, displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal,
+      wallpaper])
 
   if (authLoading) {
     return (
@@ -414,7 +525,7 @@ export default function App() {
   }
 
   return (
-    <div className={`app${isMobile ? ' is-mobile' : ''} vibe-${vibe} surface-${surface}`}>
+    <div className={`app${isMobile ? ' is-mobile' : ''}${headerShrink ? ' is-header-shrunk' : ''} vibe-${vibe} surface-${surface}`}>
       <div
         className="wallpaper"
         style={{ backgroundImage: `url(${wallpaper})` }}
@@ -428,12 +539,12 @@ export default function App() {
         <ErrorBoundary>
         <Suspense fallback={<div className="page" />}>
         {page === 'home' && (
-          <HomePage events={events} tasks={tasks} setTasks={setTasks} />
+          <HomePage events={events} tasks={tasks} setTasks={setTasks} isMobile={isMobile} />
         )}
         {page === 'calendar' && (
-          <CalendarPage events={events} calView={calView} setCalView={setCalView} />
+          <CalendarPage events={events} calView={calView} setCalView={setCalView} isMobile={isMobile} />
         )}
-        {page === 'journal' && <JournalPage />}
+        {page === 'journal' && <JournalPage isMobile={isMobile} />}
         {page === 'settings' && (
           <SettingsPage
             font={font} setFont={setFont}

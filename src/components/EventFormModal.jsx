@@ -68,6 +68,7 @@ export default function EventFormModal({ mode, defaultValues, onClose }) {
       onKeyDown={handleKeyDown}
     >
       <div className="modal glass" role="dialog" aria-modal="true">
+        <div className="sheet-handle" aria-hidden="true" />
         <div className="modal-head">
           <h3>{mode === 'create' ? 'New event' : 'Edit event'}</h3>
           <button className="x" onClick={onClose} aria-label="Close">✕</button>
