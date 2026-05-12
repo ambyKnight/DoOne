@@ -95,9 +95,7 @@ alter table public.user_preferences
   add column if not exists notify_reminders   boolean default false,
   add column if not exists notify_journal     boolean default false,
   add column if not exists onboarded_at       timestamptz,
-  add column if not exists cal_view           text default 'dayGridMonth',
-  add column if not exists low_perf           boolean default false,
-  add column if not exists low_perf_user_set  boolean default false;
+  add column if not exists cal_view           text default 'dayGridMonth';
 
 -- =========================================================
 -- 3. Per-user RLS policies

@@ -37,7 +37,6 @@ export default function SettingsPage({
   repalette, prefId,
   wallpaper, setWallpaper,
   lastPalette,
-  lowPerf, setLowPerf,
 }) {
   const { user } = useAuth()
   const [saving, setSaving] = useState(false)
@@ -90,34 +89,7 @@ export default function SettingsPage({
       </header>
 
       <div className="settings-grid">
-        {/* Performance */}
-        <section className="panel glass" style={{ gridColumn: '1 / -1' }}>
-          <div className="panel-head"><h3>Performance</h3><span className="muted">visual effects vs speed</span></div>
-          <div className="perf-row">
-            <div className="perf-info">
-              <div className="perf-label">Low-power mode</div>
-              <div className="muted small">
-                solid backgrounds, no blur, no animations. all features still work — theme &amp; font still sync from other devices.
-              </div>
-            </div>
-            <button
-              className={`switch ${lowPerf ? 'on' : ''}`}
-              role="switch"
-              aria-checked={lowPerf}
-              onClick={() => setLowPerf(!lowPerf)}
-            >
-              <span className="dot" />
-            </button>
-          </div>
-          {lowPerf && (
-            <p className="muted small" style={{ marginTop: 8 }}>
-              design controls hidden in low-power mode. toggle off to restore.
-            </p>
-          )}
-        </section>
-
-        {/* Vibe — hidden in low-perf */}
-        {!lowPerf && (
+        {/* Vibe */}
         <section className="panel glass">
           <div className="panel-head"><h3>Vibe</h3><span className="muted">overall mood</span></div>
           <div className="preset-row">
@@ -131,10 +103,8 @@ export default function SettingsPage({
           </div>
           <p className="muted small" style={{ marginTop: 8 }}>click a preset again to reset its dials in Atelier.</p>
         </section>
-        )}
 
-        {/* Surface — hidden in low-perf */}
-        {!lowPerf && (
+        {/* Surface */}
         <section className="panel glass">
           <div className="panel-head"><h3>Surface</h3><span className="muted">window material</span></div>
           <div className="preset-row">
@@ -148,10 +118,8 @@ export default function SettingsPage({
           </div>
           <p className="muted small" style={{ marginTop: 8 }}>click a preset again to reset its dials in Atelier.</p>
         </section>
-        )}
 
-        {/* Density — hidden in low-perf */}
-        {!lowPerf && (
+        {/* Density */}
         <section className="panel glass">
           <div className="panel-head"><h3>Density</h3><span className="muted">spacing &amp; scale</span></div>
           <div className="preset-row">
@@ -168,7 +136,6 @@ export default function SettingsPage({
             })}
           </div>
         </section>
-        )}
 
         {/* Theme — glass base color picker, algorithmic palette */}
         <section className="panel glass">
@@ -231,7 +198,6 @@ export default function SettingsPage({
 
         {/* Atelier — single source of truth for every renderer dial.
             Vibe/Surface presets above just write bundles of these. */}
-        {!lowPerf && (
         <section className="panel glass atelier-panel" style={{ gridColumn: '1 / -1' }}>
           <div className="panel-head">
             <h3>Atelier</h3>
@@ -276,10 +242,8 @@ export default function SettingsPage({
             </div>
           </div>
         </section>
-        )}
 
-        {/* Wallpaper — hidden in low-perf (no blur layer = uploads pointless) */}
-        {!lowPerf && (
+        {/* Wallpaper */}
         <section className="panel glass">
           <div className="panel-head"><h3>Wallpaper</h3><span className="muted">cherry blossom</span></div>
           <div className="wp-preview">
@@ -287,7 +251,6 @@ export default function SettingsPage({
           </div>
           <div className="muted small" style={{ marginTop: 8 }}>drag-and-drop your own wallpaper · coming soon</div>
         </section>
-        )}
 
         {/* Account */}
         <AccountPanel />

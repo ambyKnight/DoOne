@@ -71,6 +71,4 @@ export const DEFAULT_PREFS = {
   blurAmount: 22,
   surfaceAlpha: 0.55,
   panelGap: 16,
-  lowPerf: false,
-  lowPerfUserSet: false,
 }

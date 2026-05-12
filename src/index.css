@@ -1386,58 +1386,6 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 .chip.danger:hover { background: hsl(0, 65%, 44%); }
 
 /* ─────────────────────────────────────────────────────────────
-   PERFORMANCE — Low-power mode toggle & overrides
-   ───────────────────────────────────────────────────────────── */
-.perf-row {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 18px; padding: 6px 2px;
-}
-.perf-info { flex: 1; min-width: 0; }
-.perf-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
-
-/* Reusable switch (Notifications already uses .switch — extend with .on) */
-.switch {
-  width: 38px; height: 22px;
-  border-radius: 999px;
-  background: var(--surface-3);
-  border: 1px solid var(--stroke);
-  position: relative; cursor: pointer; flex-shrink: 0;
-  transition: background .18s, border-color .18s;
-}
-.switch .dot {
-  position: absolute; top: 2px; left: 2px;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--ink); transition: transform .18s, background .18s;
-}
-.switch.on { background: var(--accent); border-color: transparent; }
-.switch.on .dot { background: white; transform: translateX(16px); }
-
-/* Low-perf overrides — kill expensive effects, keep functionality */
-.app.is-low-perf .glass::before { display: none !important; }
-.app.is-low-perf .glass {
-  background:
-    color-mix(in srgb,
-      color-mix(in srgb, var(--surface-base, white) 90%, var(--accent)) 100%,
-      transparent) !important;
-  backdrop-filter: none !important;
-}
-.app.is-low-perf .chip { backdrop-filter: none !important; }
-.app.is-low-perf .wallpaper { filter: none !important; }
-.app.is-low-perf .wallpaper-veil { display: none !important; }
-.app.is-low-perf .vibe-glow { display: none !important; }
-.app.is-low-perf .hero-orb { display: none !important; }
-.app.is-low-perf .home-page,
-.app.is-low-perf .calendar-page,
-.app.is-low-perf .journal-page,
-.app.is-low-perf .settings-page { animation: none !important; }
-.app.is-low-perf .page-header .eyebrow,
-.app.is-low-perf .page-header .page-sub,
-.app.is-low-perf .page-header .page-title {
-  background: var(--surface-1);
-  box-shadow: none;
-}
-
-/* ─────────────────────────────────────────────────────────────
    MOBILE REVAMP — tighter spacing, sticky header collapse,
    icon-only dock, full-height calendar, journal chip strip,
    bottom-sheet modal
@@ -1609,5 +1557,3 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 .accordion-chev.is-open { transform: rotate(180deg); }
 .accordion-body { padding: 0 20px 18px; }
 
-/* Low-perf disables the sheet-up animation (already cheap, but consistent) */
-.app.is-low-perf .modal { animation: none !important; }
