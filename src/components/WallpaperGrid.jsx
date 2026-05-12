@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { listWallpapers, uploadWallpaper, deleteWallpaper } from '../lib/wallpapers'
 import { useAuth } from '../lib/authContext'
+import LowPolyWallpaper from './LowPolyWallpaper'
 import defaultWallpaper from '../assets/wallpaper.webp'
 
 const BUILTIN = [{ name: 'default', path: null, url: defaultWallpaper, isBuiltin: true }]
@@ -83,12 +84,12 @@ export default function WallpaperGrid({ activeUrl, onSelect }) {
               key={wp.url}
               className={`wp-tile ${isActive ? 'is-active' : ''}`}
               onClick={() => onSelect?.(wp.isBuiltin ? null : wp.url)}
-              style={{ backgroundImage: `url(${wp.url})` }}
               role="button"
               tabIndex={0}
               aria-label={wp.name}
               aria-pressed={isActive}
             >
+              <LowPolyWallpaper src={wp.url} cols={48} rows={36} />
               {wp.isBuiltin && <span className="wp-tile-label">default</span>}
               {!wp.isBuiltin && (
                 <button

@@ -1599,12 +1599,17 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
   position: relative;
   aspect-ratio: 4 / 3;
   border-radius: 12px;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
   box-shadow: 0 4px 14px -6px rgba(0,0,0,0.25);
   transition: transform .14s, box-shadow .14s, border-color .14s;
+}
+.wp-tile canvas {
+  display: block;
+  width: 100%; height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 .wp-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 22px -8px rgba(0,0,0,0.35); }
 .wp-tile.is-active {
