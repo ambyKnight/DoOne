@@ -109,7 +109,7 @@ export default function CalendarPage({ events, calView, setCalView, isMobile }) 
           </div>
           <div className="seg">
             {(isMobile
-              ? [['listWeek','List'],['timeGridDay','Day']]
+              ? [['listWeek','List']]
               : [['dayGridMonth','Month'],['timeGridWeek','Week'],['timeGridDay','Day']]
             ).map(([v, l]) => (
               <button key={v} className={effectiveView === v ? 'on' : ''} onClick={() => setCalView(v)}>{l}</button>

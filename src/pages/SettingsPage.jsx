@@ -106,7 +106,7 @@ export default function SettingsPage({
         </section>
 
         {/* Surface */}
-        <section className="panel glass">
+        <section className="panel glass settings-surface">
           <div className="panel-head"><h3>Surface</h3><span className="muted">window material</span></div>
           <div className="preset-row">
             {['glass','paper','solid','sheer'].map(s => (
@@ -121,7 +121,7 @@ export default function SettingsPage({
         </section>
 
         {/* Density */}
-        <section className="panel glass">
+        <section className="panel glass settings-density">
           <div className="panel-head"><h3>Density</h3><span className="muted">spacing &amp; scale</span></div>
           <div className="preset-row">
             {[['airy','open + roomy'],['cozy','balanced'],['packed','compact']].map(([id, note]) => {
@@ -222,7 +222,7 @@ export default function SettingsPage({
                   onChange={e => setVibeDial('veilAlpha', +e.target.value)} /></label></div>
             </div>
 
-            <div className="atelier-group">
+            <div className="atelier-group atelier-surface">
               <div className="atelier-group-label">surface</div>
               <div className="setting-row"><label>Glass opacity · {Math.round(surfaceAlpha * 100)}% <span className="muted small">({Math.round((1 - surfaceAlpha) * 100)}% transparent)</span>
                 <input type="range" min="0" max="1" step="0.02" value={surfaceAlpha}
@@ -235,7 +235,7 @@ export default function SettingsPage({
                   onChange={e => setSurfaceDial('tint', +e.target.value)} /></label></div>
             </div>
 
-            <div className="atelier-group">
+            <div className="atelier-group atelier-layout">
               <div className="atelier-group-label">layout</div>
               <div className="setting-row"><label>Window gap · {panelGap}px
                 <input type="range" min="2" max="36" step="2" value={panelGap}

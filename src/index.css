@@ -1180,6 +1180,27 @@ button { cursor: pointer; border: 0; background: transparent; }
   .panel { padding: 16px; }
 }
 
+/* ─── TABLET ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .app-main { padding: 18px 18px 20px; }
+  .page-title { font-size: 30px; }
+  .hero-title { font-size: 32px; }
+
+  .home-grid {
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-areas:
+      "hero    hero"
+      "timeline tasks"
+      "timeline mini";
+  }
+
+  .calendar-panel { min-height: 500px; }
+
+  .journal-grid { grid-template-columns: 220px 1fr; }
+
+  .settings-grid { columns: 2 280px; }
+}
+
 /* ─── AVATAR ─────────────────────────────────────────────── */
 .avatar {
   display: inline-flex;
@@ -1443,15 +1464,20 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 
 /* Mobile home — tighten panels, drop hero-orb, cap timeline/tasks height */
 .app.is-mobile .panel { padding: 14px 16px; }
-.app.is-mobile .hero-panel { min-height: 130px; }
-.app.is-mobile .hero-title { font-size: 22px; margin-top: 4px; }
+.app.is-mobile .hero-panel { min-height: 80px; padding: 12px 16px; }
+.app.is-mobile .hero-title { font-size: 20px; margin-top: 2px; }
 .app.is-mobile .hero-eyebrow { font-size: 10px; }
-.app.is-mobile .hero-meta { font-size: 13px; margin-top: 4px; }
-.app.is-mobile .hero-actions { margin-top: 10px; }
+.app.is-mobile .hero-meta { font-size: 12px; margin-top: 2px; }
+.app.is-mobile .hero-actions { margin-top: 6px; }
 .app.is-mobile .hero-orb { display: none; }
 
-.app.is-mobile .home-grid > .panel .timeline { max-height: 280px; overflow-y: auto; }
-.app.is-mobile .home-grid > .panel .tasks { max-height: 240px; overflow-y: auto; }
+.app.is-mobile .tl-empty { padding: 16px 16px; gap: 4px; }
+.app.is-mobile .tl-empty-glyph { width: 48px; height: 48px; margin-bottom: 2px; }
+.app.is-mobile .tl-empty-title { font-size: 20px; }
+.app.is-mobile .tl-empty-hint { font-size: 12px; margin-bottom: 8px; }
+
+.app.is-mobile .home-grid > .panel .timeline { max-height: 220px; overflow-y: auto; }
+.app.is-mobile .home-grid > .panel .tasks { max-height: 200px; overflow-y: auto; }
 .app.is-mobile .home-grid > .panel { overflow: hidden; }
 
 /* Mobile calendar — full available viewport height (parent .app-main is
@@ -1641,4 +1667,70 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 }
 .wp-tile:hover .wp-tile-del { opacity: 1; }
 .wp-tile-del:hover { transform: scale(1.1); }
+
+/* ─── MOBILE PERFORMANCE ────────────────────────────────── */
+/* Kill GPU-heavy effects on mobile: blur, backdrop-filter,
+   animations, transitions. Same brand, lighter rendering. */
+
+.app.is-mobile .glass::before { display: none !important; }
+.app.is-mobile .glass {
+  background:
+    linear-gradient(135deg,
+      hsla(var(--hue), 60%, 60%, 0.15),
+      hsla(calc(var(--hue) + 40), 60%, 60%, 0.3)),
+    color-mix(in srgb,
+      var(--surface-base, white) calc(var(--surface-tint, 100) * 1%),
+      var(--accent)) !important;
+  transition: none;
+}
+
+.app.is-mobile .chip,
+.app.is-mobile .seg,
+.app.is-mobile .preset-sheet,
+.app.is-mobile .modal-back { backdrop-filter: none !important; }
+
+/* Force packed density on mobile + hide irrelevant settings */
+.app.is-mobile { --panel-gap: 2px !important; --panel-pad: 12px !important; }
+.app.is-mobile .settings-density,
+.app.is-mobile .settings-surface { display: none !important; }
+.app.is-mobile .atelier-surface,
+.app.is-mobile .atelier-layout { display: none !important; }
+
+.app.is-mobile .modal-back { background: rgba(0,0,0,0.55); }
+
+.app.is-mobile .home-page,
+.app.is-mobile .calendar-page,
+.app.is-mobile .journal-page,
+.app.is-mobile .settings-page { animation: none; }
+.app.is-mobile .tl-empty-glyph { animation: none; }
+.app.is-mobile .vibe-icon-luminous { animation: none; }
+.app.is-mobile .bottom-sheet { animation: none; }
+.app.is-mobile .onboarding-overlay,
+.app.is-mobile .onboarding-step { animation: none; }
+
+.app.is-mobile .nav-rail button,
+.app.is-mobile .chip,
+.app.is-mobile .seg,
+.app.is-mobile .task-item,
+.app.is-mobile .task-add-btn,
+.app.is-mobile .preset-card,
+.app.is-mobile .preset-dot,
+.app.is-mobile .preset-dot-toggle,
+.app.is-mobile .filter-chip,
+.app.is-mobile .adv-arrow,
+.app.is-mobile .calendar-link,
+.app.is-mobile .task-link,
+.app.is-mobile .form-switch,
+.app.is-mobile .form-button,
+.app.is-mobile .wp-tile,
+.app.is-mobile .wp-tile-del,
+.app.is-mobile .tag-button,
+.app.is-mobile .switch .dot,
+.app.is-mobile .progress-bar,
+.app.is-mobile button.avatar,
+.app.is-mobile .avatar-drop,
+.app.is-mobile .wallpaper-veil,
+.app.is-mobile .vibe-glow,
+.app.is-mobile .filter-shelf.opening,
+.app.is-mobile .filter-shelf.closing { transition: none; }
 

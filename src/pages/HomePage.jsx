@@ -13,7 +13,7 @@ function todayDateStr() {
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`
 }
 
-export default function HomePage({ events, tasks, setTasks }) {
+export default function HomePage({ events, tasks, setTasks, isMobile, setPage }) {
   const { user } = useAuth()
   const now = new Date()
   const [newTask, setNewTask] = useState('')
@@ -80,9 +80,9 @@ export default function HomePage({ events, tasks, setTasks }) {
         {/* Timeline */}
         <section className="panel glass" style={{ gridArea: 'timeline' }}>
           <AlgorithmicOrnament variant="wave" seed={42} position="bl" size={130} />
-          <div className="panel-head">
+          <div className="panel-head" {...(isMobile ? { onClick: () => setPage('calendar'), style: { cursor: 'pointer' } } : {})}>
             <h3>Today's schedule</h3>
-            <span className="muted">{todays.length} event{todays.length === 1 ? '' : 's'}</span>
+            <span className="muted">{todays.length} event{todays.length === 1 ? '' : 's'}{isMobile && ' ›'}</span>
           </div>
           {todays.length === 0 ? (
             <ScheduleEmpty onAdd={() => setQuickModal(true)} />
@@ -142,7 +142,7 @@ export default function HomePage({ events, tasks, setTasks }) {
         </section>
 
         {/* Mini calendar */}
-        <section className="panel glass" style={{ gridArea: 'mini' }}>
+        <section className="panel glass" style={{ gridArea: 'mini' }} {...(isMobile ? { onClick: () => setPage('calendar'), style: { gridArea: 'mini', cursor: 'pointer' } } : {})}>
           <MiniCalendar events={events} />
         </section>
       </div>

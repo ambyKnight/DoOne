@@ -539,7 +539,7 @@ export default function App() {
         <ErrorBoundary>
         <Suspense fallback={<div className="page" />}>
         {page === 'home' && (
-          <HomePage events={events} tasks={tasks} setTasks={setTasks} isMobile={isMobile} />
+          <HomePage events={events} tasks={tasks} setTasks={setTasks} isMobile={isMobile} setPage={setPage} />
         )}
         {page === 'calendar' && (
           <CalendarPage events={events} calView={calView} setCalView={setCalView} isMobile={isMobile} />
