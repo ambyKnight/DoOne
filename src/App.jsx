@@ -47,6 +47,10 @@ export default function App() {
   // (a) skip redundant auto-saves that would just echo back, and (b) ignore
   // realtime UPDATEs that are echoes of our own writes.
   const lastPrefFingerprintRef = useRef(null)
+  // Columns we've discovered are missing in this DB (schema not yet migrated).
+  // We exclude them from BOTH the save payload and the fingerprint computation,
+  // so local + remote fingerprints stay equal and we don't loop on echoes.
+  const missingPrefColsRef = useRef(new Set())
 
   const [events, setEvents] = useState([])
   const [tasks, setTasks] = useState([])
@@ -78,8 +82,11 @@ export default function App() {
 
   // Fingerprint of the persistable subset of prefs. JSON-stable so we can
   // compare with === / strict equality on the resulting string.
+  // Excludes columns we know don't exist in the DB yet — otherwise local
+  // (which has the value) and remote (where the column is absent) would
+  // produce different fingerprints, triggering an infinite save/echo loop.
   function prefFingerprint(p) {
-    return JSON.stringify({
+    const all = {
       font: p.font, vibe: p.vibe, surface: p.surface, density: p.density,
       vibe_dials: p.vibe_dials, surface_dials: p.surface_dials,
       accent_boost: p.accent_boost, blur_amount: p.blur_amount,
@@ -91,7 +98,9 @@ export default function App() {
       notify_digest: p.notify_digest, notify_reminders: p.notify_reminders,
       notify_journal: p.notify_journal,
       wallpaper_url: p.wallpaper_url,
-    })
+    }
+    for (const k of missingPrefColsRef.current) delete all[k]
+    return JSON.stringify(all)
   }
 
   // Apply a user_preferences row from DB to local state. Used by both the
@@ -121,8 +130,11 @@ export default function App() {
     if (row.notify_digest != null) setNotifyDigest(row.notify_digest)
     if (row.notify_reminders != null) setNotifyReminders(row.notify_reminders)
     if (row.notify_journal != null) setNotifyJournal(row.notify_journal)
-    // wallpaper_url: null/empty → bundled default; otherwise the persisted URL
-    setWallpaper(row.wallpaper_url || defaultWallpaper)
+    // wallpaper_url: only react if the column is present on the row. If the
+    // key is absent (schema not yet migrated), don't clobber local state.
+    if ('wallpaper_url' in row) {
+      setWallpaper(row.wallpaper_url || defaultWallpaper)
+    }
     // Record fingerprint so the auto-save effect knows this state matches DB
     // and skips a redundant write (which would echo back via realtime).
     lastPrefFingerprintRef.current = prefFingerprint(row)
@@ -449,6 +461,8 @@ export default function App() {
         notify_journal: notifyJournal,
         wallpaper_url: wallpaper === defaultWallpaper ? null : wallpaper,
       }
+      // Strip columns we already know are missing (avoids redundant retries).
+      for (const k of missingPrefColsRef.current) delete payload[k]
       const fp = prefFingerprint(payload)
       // Skip if nothing meaningful changed (avoids redundant writes echoing
       // back via realtime; saves DB round-trip on idle dial-twiddling that
@@ -479,6 +493,10 @@ export default function App() {
         const m = msg.match(/(?:could not find the ['"]([\w]+)['"]\s+column|column ['"]?[\w.]*?(\w+)['"]? .*does not exist)/i)
         const colName = m && (m[1] || m[2])
         if (colName && body[colName] !== undefined) {
+          missingPrefColsRef.current.add(colName)
+          // Recompute the fingerprint without this column so future saves
+          // and incoming echoes compare apples-to-apples.
+          lastPrefFingerprintRef.current = prefFingerprint(payload)
           const next = { ...body }
           delete next[colName]
           body = next
