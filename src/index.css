@@ -1454,15 +1454,16 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 .app.is-mobile .home-grid > .panel .tasks { max-height: 240px; overflow-y: auto; }
 .app.is-mobile .home-grid > .panel { overflow: hidden; }
 
-/* Mobile calendar — full height, no fixed 600px */
-.app.is-mobile .calendar-page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+/* Mobile calendar — full available viewport height (parent .app-main is
+   display:block on mobile, so flex:1 wouldn't propagate; use explicit calc). */
+.app.is-mobile .calendar-page { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 .app.is-mobile .calendar-panel {
-  height: auto !important;
-  min-height: 0 !important;
-  flex: 1;
+  height: calc(100vh - 200px) !important;
+  min-height: 420px !important;
   padding: 8px 8px 10px;
+  display: flex; flex-direction: column;
 }
-.app.is-mobile .calendar-panel .fc-host { height: 100%; }
+.app.is-mobile .calendar-panel .fc-host { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .app.is-mobile .seg { font-size: 12px; }
 .app.is-mobile .seg button { padding: 4px 8px; }
 

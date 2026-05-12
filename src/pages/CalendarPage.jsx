@@ -29,6 +29,20 @@ export default function CalendarPage({ events, calView, setCalView, isMobile }) 
     if (calRef.current) calRef.current.getApi().changeView(effectiveView)
   }, [effectiveView])
 
+  // FullCalendar with height="100%" sometimes measures its parent at 0 (e.g.
+  // mounting inside a flex column whose siblings haven't sized yet). Force a
+  // resize once layout settles + on every window resize so it claims the full
+  // calendar-panel height.
+  useEffect(() => {
+    if (!calRef.current) return
+    const api = calRef.current.getApi()
+    const ro = new ResizeObserver(() => api.updateSize())
+    const host = document.querySelector('.calendar-panel')
+    if (host) ro.observe(host)
+    const t = setTimeout(() => api.updateSize(), 60)
+    return () => { clearTimeout(t); ro.disconnect() }
+  }, [])
+
   function handleDateClick(info) {
     const startDate = info.date
     const endDate = info.allDay ? null : new Date(startDate.getTime() + 60 * 60 * 1000)
@@ -124,7 +138,7 @@ export default function CalendarPage({ events, calView, setCalView, isMobile }) 
             dayMaxEvents={3}
             firstDay={1}
             expandRows={true}
-            height="100%"
+            height="auto"
             datesSet={info => setTitle(info.view.title)}
             dateClick={handleDateClick}
             eventClick={handleEventClick}
