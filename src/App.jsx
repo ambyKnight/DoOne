@@ -90,6 +90,7 @@ export default function App() {
       week_starts_monday: p.week_starts_monday,
       notify_digest: p.notify_digest, notify_reminders: p.notify_reminders,
       notify_journal: p.notify_journal,
+      wallpaper_url: p.wallpaper_url,
     })
   }
 
@@ -120,6 +121,8 @@ export default function App() {
     if (row.notify_digest != null) setNotifyDigest(row.notify_digest)
     if (row.notify_reminders != null) setNotifyReminders(row.notify_reminders)
     if (row.notify_journal != null) setNotifyJournal(row.notify_journal)
+    // wallpaper_url: null/empty → bundled default; otherwise the persisted URL
+    setWallpaper(row.wallpaper_url || defaultWallpaper)
     // Record fingerprint so the auto-save effect knows this state matches DB
     // and skips a redundant write (which would echo back via realtime).
     lastPrefFingerprintRef.current = prefFingerprint(row)
@@ -444,6 +447,7 @@ export default function App() {
         notify_digest: notifyDigest,
         notify_reminders: notifyReminders,
         notify_journal: notifyJournal,
+        wallpaper_url: wallpaper === defaultWallpaper ? null : wallpaper,
       }
       const fp = prefFingerprint(payload)
       // Skip if nothing meaningful changed (avoids redundant writes echoing
@@ -470,11 +474,13 @@ export default function App() {
           break
         }
         const msg = r.error.message || ''
-        const m = msg.match(/column ['"]?[\w.]*?(\w+)['"]? .*does not exist/i)
-        if (m && body[m[1]] !== undefined) {
-          // strip the missing column and retry
+        // Match both raw Postgres ("column public.user_preferences.foo does not exist")
+        // and PostgREST schema-cache ("Could not find the 'foo' column of ...").
+        const m = msg.match(/(?:could not find the ['"]([\w]+)['"]\s+column|column ['"]?[\w.]*?(\w+)['"]? .*does not exist)/i)
+        const colName = m && (m[1] || m[2])
+        if (colName && body[colName] !== undefined) {
           const next = { ...body }
-          delete next[m[1]]
+          delete next[colName]
           body = next
           continue
         }
@@ -484,7 +490,8 @@ export default function App() {
     }, 400)
     return () => clearTimeout(prefSaveTimer.current)
   }, [user, font, vibe, surface, density, vibeDials, surfaceDials, accentBoost, blurAmount, surfaceAlpha, panelGap,
-      calView, displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal])
+      calView, displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal,
+      wallpaper])
 
   if (authLoading) {
     return (

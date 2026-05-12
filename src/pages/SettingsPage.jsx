@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { FONTS, VIBE_PRESETS, SURFACE_PRESETS, ensureFontLoaded } from '../lib/constants'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../lib/authContext'
-import LowPolyWallpaper from '../components/LowPolyWallpaper'
 import VibeIcon from '../components/VibeIcon'
 import AvatarUpload from '../components/AvatarUpload'
+import WallpaperGrid from '../components/WallpaperGrid'
+import defaultWallpaper from '../assets/wallpaper.webp'
 
 // Algorithmic theme palette — curated hues × lightness steps, plus a row
 // of neutrals. Kept compact so the panel sits flush with neighbours.
@@ -244,12 +245,12 @@ export default function SettingsPage({
         </section>
 
         {/* Wallpaper */}
-        <section className="panel glass">
-          <div className="panel-head"><h3>Wallpaper</h3><span className="muted">cherry blossom</span></div>
-          <div className="wp-preview">
-            <LowPolyWallpaper src={wallpaper} cols={48} rows={27} />
-          </div>
-          <div className="muted small" style={{ marginTop: 8 }}>drag-and-drop your own wallpaper · coming soon</div>
+        <section className="panel glass" style={{ gridColumn: '1 / -1' }}>
+          <div className="panel-head"><h3>Wallpaper</h3><span className="muted">upload &amp; switch</span></div>
+          <WallpaperGrid
+            activeUrl={wallpaper}
+            onSelect={url => setWallpaper(url || defaultWallpaper)}
+          />
         </section>
 
         {/* Account */}
