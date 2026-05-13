@@ -6,18 +6,20 @@ import { extractPalette, applyPalette } from './lib/palette'
 import NavRail from './components/NavRail'
 import MobileDock from './components/MobileDock'
 import ErrorBoundary from './components/ErrorBoundary'
-import HomePage from './pages/HomePage' // home is the landing; keep eager
-import AuthGate from './pages/AuthGate'
-import defaultWallpaper from './assets/wallpaper.webp'
+import HomePage from './views/HomePage' // home is the landing; keep eager
+import AuthGate from './views/AuthGate'
+const defaultWallpaper = '/wallpaper.webp'
 
 // Off-home pages are code-split. Calendar pulls in FullCalendar (heavy);
 // Settings pulls in lots of UI; Journal + Onboarding are also infrequent.
-const CalendarPage = lazy(() => import('./pages/CalendarPage'))
-const JournalPage  = lazy(() => import('./pages/JournalPage'))
-const SettingsPage = lazy(() => import('./pages/SettingsPage'))
-const Onboarding   = lazy(() => import('./pages/Onboarding'))
+const CalendarPage = lazy(() => import('./views/CalendarPage'))
+const JournalPage  = lazy(() => import('./views/JournalPage'))
+const SettingsPage = lazy(() => import('./views/SettingsPage'))
+const JobsPage     = lazy(() => import('./views/JobsPage'))
+const InsightsPage = lazy(() => import('./views/InsightsPage'))
+const Onboarding   = lazy(() => import('./views/Onboarding'))
 
-const NAV_ORDER = ['home', 'calendar', 'journal', 'settings']
+const NAV_ORDER = ['home', 'calendar', 'jobs', 'journal', 'insights', 'settings']
 
 function toFCEvent(row) {
   return {
@@ -35,7 +37,7 @@ export default function App() {
   const [page, setPage] = useState('home')
   const [calView, setCalViewState] = useState('dayGridMonth')
   function setCalView(v) { setCalViewState(v) }
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 880)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 880 : false)
 
   const mainRef = useRef(null)
   const deltaRef = useRef(0)
@@ -68,6 +70,15 @@ export default function App() {
   const [prefId, setPrefId] = useState(null)
   const [lastPalette, setLastPalette] = useState(null)
   const [wallpaper, setWallpaper] = useState(defaultWallpaper)
+  const [wallpaperOff, setWallpaperOff] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return localStorage.getItem('wallpaperOff') === '1'
+  })
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    document.body.classList.toggle('wallpaper-off', wallpaperOff)
+    try { localStorage.setItem('wallpaperOff', wallpaperOff ? '1' : '0') } catch {}
+  }, [wallpaperOff])
   // onboarding fields (kept for future use; auto-completed at signup for now)
   const [displayName, setDisplayName] = useState('')
   const [timezone, setTimezone] = useState('')
@@ -98,6 +109,8 @@ export default function App() {
       notify_digest: p.notify_digest, notify_reminders: p.notify_reminders,
       notify_journal: p.notify_journal,
       wallpaper_url: p.wallpaper_url,
+      wallpaper_disabled: p.wallpaper_disabled,
+      last_device_type: p.last_device_type,
     }
     for (const k of missingPrefColsRef.current) delete all[k]
     return JSON.stringify(all)
@@ -134,6 +147,9 @@ export default function App() {
     // key is absent (schema not yet migrated), don't clobber local state.
     if ('wallpaper_url' in row) {
       setWallpaper(row.wallpaper_url || defaultWallpaper)
+    }
+    if ('wallpaper_disabled' in row && row.wallpaper_disabled != null) {
+      setWallpaperOff(!!row.wallpaper_disabled)
     }
     // Record fingerprint so the auto-save effect knows this state matches DB
     // and skips a redundant write (which would echo back via realtime).
@@ -266,10 +282,16 @@ export default function App() {
   useEffect(() => {
     const r = document.documentElement
     r.style.setProperty('--vibe-sat-mult', vibeDials.satMult)
-    r.style.setProperty('--vibe-glow-alpha', vibeDials.glowAlpha)
-    r.style.setProperty('--vibe-glow-blur', `${vibeDials.glowBlur}px`)
-    r.style.setProperty('--vibe-veil-alpha', vibeDials.veilAlpha)
-  }, [vibeDials])
+    if (isMobile) {
+      r.style.setProperty('--vibe-glow-alpha', 0)
+      r.style.setProperty('--vibe-glow-blur', '0px')
+      r.style.setProperty('--vibe-veil-alpha', 0.5)
+    } else {
+      r.style.setProperty('--vibe-glow-alpha', vibeDials.glowAlpha)
+      r.style.setProperty('--vibe-glow-blur', `${vibeDials.glowBlur}px`)
+      r.style.setProperty('--vibe-veil-alpha', vibeDials.veilAlpha)
+    }
+  }, [vibeDials, isMobile])
 
   // Surface dials → CSS vars. NOTE: --surface-alpha-mult and --blur are
   // deliberately NOT written here; blurAmount + surfaceAlpha overrides own them.
@@ -278,7 +300,6 @@ export default function App() {
     r.style.setProperty('--stroke-mult', surfaceDials.strokeMult)
     r.style.setProperty('--shadow-mult', surfaceDials.shadowMult)
     r.style.setProperty('--panel-tint', surfaceDials.panelTint ?? 0)
-    r.style.setProperty('--surface-tint', surfaceDials.tint ?? 100)
     r.style.setProperty('--surface-base', surfaceDials.baseColor ?? '#ffffff')
   }, [surfaceDials])
 
@@ -300,8 +321,32 @@ export default function App() {
   }, [blurAmount])
 
   useEffect(() => {
-    document.documentElement.style.setProperty('--surface-alpha-mult', surfaceAlpha)
-  }, [surfaceAlpha])
+    const r = document.documentElement
+    r.style.setProperty('--surface-alpha-mult', surfaceAlpha)
+    // For mobile: pre-compute the surface RGB for dynamic alpha.
+    // Use browser to parse any CSS color (hex, hsl, rgb, named) into RGB.
+    const baseColor = surfaceDials.baseColor ?? '#ffffff'
+    const probe = document.createElement('div')
+    probe.style.color = baseColor
+    document.body.appendChild(probe)
+    const computed = getComputedStyle(probe).color
+    document.body.removeChild(probe)
+    // computed is "rgb(r, g, b)" or "rgba(r, g, b, a)"
+    const m = computed.match(/\d+/g)
+    if (m && m.length >= 3) {
+      const [r1, g1, b1] = m
+      r.style.setProperty('--surface-rgba-bg', `rgba(${r1}, ${g1}, ${b1}, ${surfaceAlpha})`)
+      r.style.setProperty('--surface-rgba-bg-opaque', `rgb(${r1}, ${g1}, ${b1})`)
+      // Relative luminance — auto-flip text contrast based on surface lightness.
+      const lum = (0.2126 * (+r1) + 0.7152 * (+g1) + 0.0722 * (+b1)) / 255
+      const isLight = lum > 0.55
+      r.style.setProperty('--ink-auto', isLight ? '#1a1a1a' : '#ffffff')
+      r.style.setProperty('--ink-soft-auto', isLight ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.75)')
+      r.style.setProperty('--ink-mute-auto', isLight ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.55)')
+      document.body.classList.toggle('theme-light', isLight)
+      document.body.classList.toggle('theme-dark', !isLight)
+    }
+  }, [surfaceAlpha, surfaceDials])
 
   useEffect(() => {
     document.documentElement.style.setProperty('--panel-gap', `${panelGap}px`)
@@ -460,6 +505,8 @@ export default function App() {
         notify_reminders: notifyReminders,
         notify_journal: notifyJournal,
         wallpaper_url: wallpaper === defaultWallpaper ? null : wallpaper,
+        wallpaper_disabled: !!wallpaperOff,
+        last_device_type: isMobile ? 'mobile' : 'pc',
       }
       // Strip columns we already know are missing (avoids redundant retries).
       for (const k of missingPrefColsRef.current) delete payload[k]
@@ -509,7 +556,7 @@ export default function App() {
     return () => clearTimeout(prefSaveTimer.current)
   }, [user, font, vibe, surface, density, vibeDials, surfaceDials, accentBoost, blurAmount, surfaceAlpha, panelGap,
       calView, displayName, timezone, dayStartHour, dayEndHour, weekStartsMonday, notifyDigest, notifyReminders, notifyJournal,
-      wallpaper])
+      wallpaper, wallpaperOff, isMobile])
 
   if (authLoading) {
     return (
@@ -544,7 +591,9 @@ export default function App() {
         {page === 'calendar' && (
           <CalendarPage events={events} calView={calView} setCalView={setCalView} isMobile={isMobile} />
         )}
+        {page === 'jobs' && <JobsPage />}
         {page === 'journal' && <JournalPage isMobile={isMobile} />}
+        {page === 'insights' && <InsightsPage />}
         {page === 'settings' && (
           <SettingsPage
             font={font} setFont={setFont}
@@ -552,7 +601,7 @@ export default function App() {
             surface={surface} setSurface={s => {
               const preset = SURFACE_PRESETS[s]
               setSurface(s)
-              setSurfaceDialsState(prev => ({ ...preset, baseColor: prev.baseColor, tint: prev.tint }))
+              setSurfaceDialsState(prev => ({ ...preset, baseColor: prev.baseColor }))
               setBlurAmount(preset.blur)
               setSurfaceAlpha(Math.min(1, preset.alphaMult * 0.55))
             }}
@@ -566,7 +615,9 @@ export default function App() {
             repalette={repalette}
             prefId={prefId}
             wallpaper={wallpaper} setWallpaper={setWallpaper}
+            wallpaperOff={wallpaperOff} setWallpaperOff={setWallpaperOff}
             lastPalette={lastPalette}
+            isMobile={isMobile}
           />
         )}
         </Suspense>

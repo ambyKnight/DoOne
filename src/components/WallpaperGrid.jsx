@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { listWallpapers, uploadWallpaper, deleteWallpaper } from '../lib/wallpapers'
 import { useAuth } from '../lib/authContext'
 import LowPolyWallpaper from './LowPolyWallpaper'
-import defaultWallpaper from '../assets/wallpaper.webp'
+const defaultWallpaper = '/wallpaper.webp'
 
 const BUILTIN = [{ name: 'default', path: null, url: defaultWallpaper, isBuiltin: true }]
 

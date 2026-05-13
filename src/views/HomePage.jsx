@@ -2,6 +2,7 @@ import { useState } from 'react'
 import MiniCalendar from '../components/MiniCalendar'
 import EventFormModal from '../components/EventFormModal'
 import AlgorithmicOrnament from '../components/AlgorithmicOrnament'
+import NowCard from '../components/NowCard'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../lib/authContext'
 
@@ -56,26 +57,11 @@ export default function HomePage({ events, tasks, setTasks, isMobile, setPage })
             {tasks.filter(t => !t.done).length} tasks open · {todays.length} events today
           </div>
         </div>
-        <div className="header-tools">
-          <button className="chip primary" onClick={() => setQuickModal(true)}>
-            <PlusIcon width="14" height="14" /> quick add
-          </button>
-        </div>
       </header>
 
       <div className="home-grid">
-        {/* Hero — next up */}
-        <section className="panel glass hero-panel" style={{ gridArea: 'hero' }}>
-          <AlgorithmicOrnament variant="arc" seed={7} position="tr" size={140} />
-          <div className="hero-eyebrow">
-            {next ? `Next up · in ${minsUntil} min` : 'Nothing scheduled'}
-          </div>
-          <h2 className="hero-title">{next?.title || 'Free time'}</h2>
-          <div className="hero-meta">
-            {next && `${fmtTime(new Date(next.start))} — ${fmtTime(new Date(next.end || next.start))}`}
-          </div>
-          <div className="hero-orb" aria-hidden="true" />
-        </section>
+        {/* NowCard — the ONE action */}
+        <NowCard />
 
         {/* Timeline */}
         <section className="panel glass" style={{ gridArea: 'timeline' }}>
@@ -141,10 +127,12 @@ export default function HomePage({ events, tasks, setTasks, isMobile, setPage })
           </div>
         </section>
 
-        {/* Mini calendar */}
-        <section className="panel glass" style={{ gridArea: 'mini' }} {...(isMobile ? { onClick: () => setPage('calendar'), style: { gridArea: 'mini', cursor: 'pointer' } } : {})}>
-          <MiniCalendar events={events} />
-        </section>
+        {/* Mini calendar — desktop only */}
+        {!isMobile && (
+          <section className="panel glass" style={{ gridArea: 'mini' }}>
+            <MiniCalendar events={events} />
+          </section>
+        )}
       </div>
 
       {quickModal && (

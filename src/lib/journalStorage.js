@@ -1,58 +1,94 @@
 import { supabase } from './supabaseClient'
 
-// Journals live in the private `journals` bucket at `<user_id>/<date>.json`.
-// A row in public.journal_pointers tracks each one purely for realtime sync —
-// the pointer table has no text content, just metadata that triggers a
-// Postgres realtime UPDATE other clients can listen on.
-
-const BUCKET = 'journals'
-const pathFor = (userId, date) => `${userId}/${date}.json`
+// Journals live in public.journal_entries — one row per (user_id, entry_date).
+// Migrated from Storage to DB for cross-device realtime streaming.
+//
+// Row shape: { id, user_id, entry_date, did, plan, mood, updated_at }
+// Public API preserves the prior pointer-style contract so JournalPage.jsx
+// can keep using `date` / `updated_at` fields unchanged.
 
 const EMPTY = { did: '', plan: '', mood: '' }
 
-export async function readJournal(userId, date) {
-  const { data, error } = await supabase.storage.from(BUCKET).download(pathFor(userId, date))
-  if (error) {
-    if (error.message?.toLowerCase().includes('not found') || error.status === 404) return { ...EMPTY }
-    throw error
-  }
-  const text = await data.text()
-  try {
-    const parsed = JSON.parse(text)
-    return { ...EMPTY, ...parsed }
-  } catch {
-    return { ...EMPTY }
+function rowToPointer(row) {
+  return {
+    user_id: row.user_id,
+    date: row.entry_date,
+    updated_at: row.updated_at,
   }
 }
 
-// Write returns the updated_at timestamp so callers can record it for the
-// echo-guard (skip realtime UPDATE events that match our own write).
+export async function readJournal(userId, date) {
+  const { data, error } = await supabase
+    .from('journal_entries')
+    .select('did, plan, mood')
+    .eq('user_id', userId)
+    .eq('entry_date', date)
+    .maybeSingle()
+  if (error) throw error
+  if (!data) return { ...EMPTY }
+  return { ...EMPTY, ...data }
+}
+
+// Write upserts the row, returns updated_at for the echo-guard.
 export async function writeJournal(userId, date, content) {
-  const path = pathFor(userId, date)
-  const body = new Blob([JSON.stringify({ ...EMPTY, ...content })], { type: 'application/json' })
-  const up = await supabase.storage.from(BUCKET).upload(path, body, { upsert: true, contentType: 'application/json' })
-  if (up.error) throw up.error
   const updated_at = new Date().toISOString()
-  const ptr = await supabase.from('journal_pointers')
-    .upsert({ user_id: userId, date, storage_path: path, updated_at }, { onConflict: 'user_id,date' })
-  if (ptr.error) throw ptr.error
+  const payload = {
+    user_id: userId,
+    entry_date: date,
+    did: content.did ?? '',
+    plan: content.plan ?? '',
+    mood: content.mood ?? '',
+    updated_at,
+  }
+  const { error } = await supabase
+    .from('journal_entries')
+    .upsert(payload, { onConflict: 'user_id,entry_date' })
+  if (error) throw error
   return updated_at
 }
 
-// Pointer table is source of truth for "which entries exist". Returns rows
-// ordered most-recent-date-first.
+// List metadata for all entries (most-recent-date-first). Shape kept
+// compatible with the old pointer rows.
 export async function listJournalPointers(userId) {
-  const { data, error } = await supabase.from('journal_pointers')
-    .select('*')
+  const { data, error } = await supabase
+    .from('journal_entries')
+    .select('user_id, entry_date, updated_at')
     .eq('user_id', userId)
-    .order('date', { ascending: false })
+    .order('entry_date', { ascending: false })
   if (error) throw error
-  return data || []
+  return (data || []).map(r => ({ user_id: r.user_id, date: r.entry_date, updated_at: r.updated_at }))
 }
 
-// Create an empty entry for `date` (only if one doesn't exist yet).
-// Returns the new pointer row.
+// One-shot fetch: returns pointers AND content for every entry in a single
+// round-trip. Used on mount so the journal page renders instantly without
+// the list → create → read cascade.
+export async function listJournalEntriesFull(userId) {
+  const { data, error } = await supabase
+    .from('journal_entries')
+    .select('user_id, entry_date, did, plan, mood, updated_at')
+    .eq('user_id', userId)
+    .order('entry_date', { ascending: false })
+  if (error) throw error
+  const pointers = []
+  const contents = {}
+  for (const r of (data || [])) {
+    pointers.push({ user_id: r.user_id, date: r.entry_date, updated_at: r.updated_at })
+    contents[r.entry_date] = { did: r.did ?? '', plan: r.plan ?? '', mood: r.mood ?? '' }
+  }
+  return { pointers, contents }
+}
+
+// Create an empty row for `date`. Returns pointer-shaped row.
 export async function createJournal(userId, date) {
   const updated_at = await writeJournal(userId, date, EMPTY)
-  return { user_id: userId, date, storage_path: pathFor(userId, date), updated_at }
+  return { user_id: userId, date, updated_at }
+}
+
+// Helper for realtime callers — convert a journal_entries row to the
+// pointer/content split JournalPage expects.
+export function splitRow(row) {
+  return {
+    pointer: rowToPointer(row),
+    content: { did: row.did ?? '', plan: row.plan ?? '', mood: row.mood ?? '' },
+  }
 }

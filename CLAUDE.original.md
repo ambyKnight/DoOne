@@ -2,7 +2,7 @@
 
 ## What This Project Is
 
-Personal daily planner web app, glassmorphism UI. Interactive calendar (FullCalendar), task mgmt, focus progress ring, AI agent tools layer for LLM-driven scheduling.
+A personal daily planner web app with a glassmorphism UI. Features an interactive calendar (FullCalendar), task management, a focus progress ring, and an AI agent tools layer designed for LLM-driven scheduling.
 
 ## Tech Stack
 
@@ -34,7 +34,7 @@ supabase-setup.sql    # DB schema + RLS policies (run once in Supabase SQL edito
 
 ## Environment Setup
 
-Copy `.env.example` to `.env`, fill:
+Copy `.env.example` to `.env` and fill in:
 ```
 VITE_SUPABASE_URL=...
 VITE_SUPABASE_ANON_KEY=...
@@ -52,30 +52,30 @@ npm run lint     # ESLint
 
 ## Database
 
-Schema in `supabase-setup.sql`. Run once in Supabase SQL editor — creates `events` table, enables Realtime.
+Schema lives in `supabase-setup.sql`. Run it once in the Supabase SQL editor to create the `events` table and enable Realtime.
 
 Table: `public.events` — `id (uuid)`, `title (text)`, `start_time (timestamptz)`, `end_time (timestamptz)`, `all_day (boolean)`, `created_at (timestamptz)`
 
-RLS enabled, policies permissive (no auth) — demo mode.
+RLS is enabled but policies are permissive (no auth required) — demo mode only.
 
 ## Architecture Notes
 
-- **Events**: Persisted in Supabase. `Planner.jsx` subscribes to Postgres changes, refetches on INSERT/UPDATE/DELETE — calendar stays live.
-- **Tasks**: Hardcoded in `App.jsx` local state — not persisted.
-- **AI Tools** (`src/ai-agent/tools.js`): Standalone async fns for LLM agents. Event CRUD, fuzzy search, conflict checking, free-slot finding. Not wired to UI.
-- **Focus Ring**: SVG `stroke-dashoffset` driven by ratio of completed tasks. Circumference 314px.
+- **Events**: Persisted in Supabase. `Planner.jsx` subscribes to Postgres changes and refetches on any INSERT/UPDATE/DELETE so the calendar stays live.
+- **Tasks**: Currently hardcoded in `App.jsx` local state — not persisted.
+- **AI Tools** (`src/ai-agent/tools.js`): Standalone async functions built for LLM agents. Includes event CRUD, fuzzy search, conflict checking, and free-slot finding. Not wired to the UI yet.
+- **Focus Ring**: SVG `stroke-dashoffset` driven by the ratio of completed tasks — circumference is 314px.
 
 ## Design System
 
 - Font: `Outfit` (Google Fonts, weights 300–700)
-- Glassmorphism: `backdrop-filter: blur()`, semi-transparent white bg, 1px white borders
-- Palette: Pink/magenta bg, white text, glass cards ~10–30% opacity
-- Border radius: 16–24px cards, 12px buttons
-- FullCalendar heavily restyled in `index.css` to match glass theme
+- Glassmorphism: `backdrop-filter: blur()`, semi-transparent white backgrounds, 1px white borders
+- Color palette: Pink/magenta background, white text, glass cards at ~10–30% opacity
+- Border radius: 16–24px on cards, 12px on buttons
+- FullCalendar is extensively restyled in `index.css` to match the glass theme
 
 ## Known Gaps / TODOs
 
-- Task persistence (no Supabase table, state hardcoded)
-- User auth (RLS wide-open)
+- Task persistence (no Supabase table yet, state is hardcoded)
+- User authentication (RLS policies are wide-open)
 - Mobile responsiveness (fixed 3-column grid)
-- LLM UI integration (tools.js exists, no UI entry point)
+- LLM UI integration (tools.js exists but has no UI entry point)

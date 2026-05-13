@@ -7,6 +7,22 @@
   --ink: hsl(220, 30%, 16%);
   --ink-soft: hsl(220, 20%, 32%);
   --ink-muted: hsl(220, 15%, 48%);
+}
+
+/* Auto contrast — overrides ink colors based on surface luminance.
+   App.jsx adds theme-light/theme-dark to body whenever surfaceDials.baseColor changes. */
+body.theme-light {
+  --ink: var(--ink-auto, #1a1a1a);
+  --ink-soft: var(--ink-soft-auto, rgba(0,0,0,0.65));
+  --ink-muted: var(--ink-mute-auto, rgba(0,0,0,0.45));
+}
+body.theme-dark {
+  --ink: var(--ink-auto, #ffffff);
+  --ink-soft: var(--ink-soft-auto, rgba(255,255,255,0.75));
+  --ink-muted: var(--ink-mute-auto, rgba(255,255,255,0.55));
+}
+
+:root {
   --surface-1: rgba(255,255,255,0.55);
   --surface-2: rgba(255,255,255,0.40);
   --surface-3: rgba(255,255,255,0.30);
@@ -115,16 +131,14 @@ button { cursor: pointer; border: 0; background: transparent; }
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background:
+  /* Solid layer driven by JS-computed --surface-rgba-bg = rgba(r,g,b,alpha)
+     where alpha == slider value. Guarantees alpha=1 is bit-exact opaque
+     (prior color-mix(..., transparent) chain left subpixel bleed). */
+  background-color: var(--surface-rgba-bg, rgba(255,255,255,0.55));
+  background-image:
     linear-gradient(135deg,
       hsla(var(--hue), 60%, 60%, calc(var(--panel-tint) * 0.6)),
-      hsla(calc(var(--hue) + 40), 60%, 60%, var(--panel-tint))),
-    color-mix(
-      in srgb,
-      color-mix(in srgb, var(--surface-base, white) calc(var(--surface-tint, 100) * 1%), var(--accent))
-      calc(var(--surface-alpha-mult, 0.55) * 100%),
-      transparent
-    );
+      hsla(calc(var(--hue) + 40), 60%, 60%, var(--panel-tint)));
   border: 1px solid color-mix(in srgb, var(--stroke) calc(var(--stroke-mult) * 100%), transparent);
   border-radius: var(--rad);
   box-shadow:
@@ -193,7 +207,7 @@ button { cursor: pointer; border: 0; background: transparent; }
 .nav-item:hover { background: var(--surface-3); color: var(--ink); }
 .nav-item.is-active,
 .nav-item.is-active:hover {
-  background: var(--ink);
+  background: var(--accent);
   color: #fff;
 }
 .nav-item.is-active svg { color: #fff; stroke: #fff; }
@@ -227,7 +241,7 @@ button { cursor: pointer; border: 0; background: transparent; }
   color: var(--ink-soft);
   transition: all .2s;
 }
-.dock-item.is-active { background: var(--ink); color: var(--surface-1); }
+.dock-item.is-active { background: var(--accent); color: white; }
 .dock-item.is-active .dock-icon { color: white; }
 .dock-label { font-size: 10px; letter-spacing: 0.2px; }
 
@@ -278,6 +292,33 @@ button { cursor: pointer; border: 0; background: transparent; }
   line-height: 1.05;
 }
 .app.is-mobile .page-header .page-title { padding: 6px 18px; }
+
+/* Mobile: page-header parts each become a fit-content squircle.
+   header-tools wraps as one group squircle. */
+.app.is-mobile .page-header {
+  background: transparent !important;
+  align-items: center;
+}
+.app.is-mobile .page-header > div:first-child {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  width: auto;
+}
+.app.is-mobile .page-header .header-tools {
+  background: var(--surface-rgba-bg-opaque, rgba(0,0,0,0.4));
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  padding: 4px 6px;
+  gap: 4px;
+  width: fit-content;
+}
+
+/* Mobile keeps wallpaper visible behind 2px gaps for depth. */
+.app.is-mobile { background: transparent; }
+/* Wallpaper-off toggle: hide wallpaper layers + glass blur pseudo wallpaper. */
+body.wallpaper-off .wallpaper,
+body.wallpaper-off .wallpaper-veil { display: none !important; }
+body.wallpaper-off .glass::before { display: none !important; }
+body.wallpaper-off .app { background: var(--surface-rgba-bg-opaque, #1a1a1a); }
 .accent-glyph { color: var(--accent); }
 .header-tools { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -353,7 +394,7 @@ button { cursor: pointer; border: 0; background: transparent; }
 .app.is-mobile .home-grid {
   grid-template-columns: 1fr;
   grid-template-rows: none;
-  grid-template-areas: "hero" "timeline" "tasks" "mini";
+  grid-template-areas: "hero" "timeline" "tasks";
   flex: initial;
 }
 .app.is-mobile .home-grid > .panel { overflow: visible; }
@@ -558,7 +599,7 @@ button { cursor: pointer; border: 0; background: transparent; }
 .mini-day.empty { cursor: default; }
 .mini-day.empty:hover { background: transparent; }
 .mini-day.today {
-  background: var(--ink);
+  background: var(--accent);
   color: white;
   font-weight: 700;
   border-radius: 10px;
@@ -672,14 +713,7 @@ button { cursor: pointer; border: 0; background: transparent; }
 /* organic vertical stagger — kills the straight line where panels start.
    Pseudo-random offsets keyed off DOM order. Last-of-column collapses
    naturally because multi-column reflow groups by available height. */
-.settings-grid > *:nth-child(8n+1) { margin-top: 0; }
-.settings-grid > *:nth-child(8n+2) { margin-top: 28px; }
-.settings-grid > *:nth-child(8n+3) { margin-top: 12px; }
-.settings-grid > *:nth-child(8n+4) { margin-top: 44px; }
-.settings-grid > *:nth-child(8n+5) { margin-top: 6px; }
-.settings-grid > *:nth-child(8n+6) { margin-top: 32px; }
-.settings-grid > *:nth-child(8n+7) { margin-top: 18px; }
-.settings-grid > *:nth-child(8n+8) { margin-top: 38px; }
+.settings-grid > * { margin-top: 0; }
 /* NOTE: avoid `transform` on these — a transformed ancestor becomes the
    containing block for `background-attachment: fixed` on .glass::before,
    which would make every card sample the same slice of wallpaper. */
@@ -819,7 +853,7 @@ button { cursor: pointer; border: 0; background: transparent; }
   color: var(--ink); text-transform: capitalize;
 }
 .vibe-icon {
-  position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%);
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: 72%; height: 72%;
   pointer-events: none;
 }
@@ -828,6 +862,7 @@ button { cursor: pointer; border: 0; background: transparent; }
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
   50%      { transform: translate(-50%, -50%) scale(1.06); }
 }
+.vibe-icon + .preset-name { /* keep label visible at bottom */ }
 .vibe-icon-mono { filter: saturate(0); }
 .preset-card.vibe-preview { background: color-mix(in srgb, var(--surface-1) 50%, transparent); }
 .preset-card.vibe-preview.on { background: color-mix(in srgb, var(--accent) 12%, var(--surface-1)); }
@@ -1414,27 +1449,29 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 
 /* Shell padding tighten (overrides earlier 18/16/110) */
 .app.is-mobile .app-main {
-  padding: 14px 12px 84px;
+  padding: 2px 2px 84px;
 }
 
 /* Sticky page-header collapse on mobile.
    Replaces the bigger pill treatment with a slim title. */
 .app.is-mobile .page-header {
-  position: sticky; top: 0; z-index: 30;
-  background: linear-gradient(to bottom,
-    color-mix(in srgb, var(--surface-1) 92%, transparent) 70%,
-    transparent);
-  padding-top: 4px; padding-bottom: 8px;
-  margin-bottom: 8px;
-  gap: 8px;
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0;
+  gap: 6px;
   transition: padding .18s;
 }
+.app.is-mobile .page { gap: 2px; }
 .app.is-mobile .page-header .eyebrow { display: none; }
 .app.is-mobile .page-header .page-sub { display: none; }
 .app.is-mobile .page-header .page-title {
   font-size: 22px;
-  padding: 4px 12px;
-  border-radius: 14px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--surface-rgba-bg-opaque, rgba(0,0,0,0.4));
+  border: 1px solid var(--stroke);
+  width: fit-content;
+  display: inline-block;
 }
 .app.is-mobile.is-header-shrunk .page-header { padding-top: 2px; padding-bottom: 4px; }
 .app.is-mobile.is-header-shrunk .page-header .page-title { font-size: 18px; padding: 2px 10px; }
@@ -1492,6 +1529,14 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 .app.is-mobile .calendar-panel .fc-host { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .app.is-mobile .seg { font-size: 12px; }
 .app.is-mobile .seg button { padding: 4px 8px; }
+/* Inside header-tools pill, seg loses its own pill chrome — outer wrapper holds the squircle */
+.app.is-mobile .page-header .header-tools .seg {
+  background: transparent;
+  border: 0;
+  backdrop-filter: none;
+  padding: 0;
+}
+.app.is-mobile .page-header .header-tools .chip { box-shadow: none; }
 
 /* Mobile journal — entries become horizontal chip strip on top */
 .app.is-mobile .journal-grid {
@@ -1522,10 +1567,16 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
   background: var(--surface-3);
   white-space: nowrap;
 }
-.app.is-mobile .entry-row.on {
-  background: var(--ink); color: #fff; border-color: transparent;
+.app.is-mobile .entry-row {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
 }
-.app.is-mobile .entry-row.on .entry-date { color: #fff; }
+.app.is-mobile .entry-row.on {
+  background: var(--accent); color: #fff; border-color: transparent;
+  box-shadow: 0 2px 8px -2px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.app.is-mobile .entry-row.on .entry-date { color: #fff; font-weight: 600; }
 .app.is-mobile .entry-preview { display: none; }
 .app.is-mobile .entry-date { font-size: 12px; font-weight: 500; }
 .app.is-mobile .journal-editor { padding: 14px; }
@@ -1533,9 +1584,13 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 
 /* Mobile settings — tighter grid, simpler heads */
 .app.is-mobile .settings-grid {
-  grid-template-columns: 1fr;
-  gap: 10px;
+  columns: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
+.app.is-mobile .settings-grid > * { margin: 0 !important; }
+.app.is-mobile .home-grid { gap: 2px; }
 .app.is-mobile .preset-row { flex-wrap: wrap; gap: 6px; }
 .app.is-mobile .theme-grid { gap: 4px; }
 .app.is-mobile .atelier-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -1676,11 +1731,10 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 .app.is-mobile .glass {
   background:
     linear-gradient(135deg,
-      hsla(var(--hue), 60%, 60%, 0.15),
-      hsla(calc(var(--hue) + 40), 60%, 60%, 0.3)),
-    color-mix(in srgb,
-      var(--surface-base, white) calc(var(--surface-tint, 100) * 1%),
-      var(--accent)) !important;
+      hsla(var(--hue), 60%, 60%, calc(var(--panel-tint) * 0.6)),
+      hsla(calc(var(--hue) + 40), 60%, 60%, var(--panel-tint))),
+    var(--surface-rgba-bg-opaque, white) !important;
+  box-shadow: none !important;
   transition: none;
 }
 
@@ -1733,4 +1787,15 @@ button.avatar:hover { transform: scale(1.05); box-shadow: 0 4px 14px -4px rgba(0
 .app.is-mobile .vibe-glow,
 .app.is-mobile .filter-shelf.opening,
 .app.is-mobile .filter-shelf.closing { transition: none; }
+
+/* ─── NOWCARD ───────────────────────────────────────────── */
+.now-card .now-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.now-card .now-card-actions .chip {
+  min-width: 80px;
+  text-align: center;
+}
 

@@ -1,28 +1,79 @@
--- DoOne — full schema with auth, profiles, per-user RLS, avatar storage.
--- Run in Supabase SQL Editor. Idempotent where possible; destructive where noted.
+-- DoOne — full schema. Single-file, idempotent, deadlock-safe.
+--
+-- Strategy: drop hot tables from supabase_realtime publication FIRST so the
+-- realtime worker stops polling them, then run all DDL, then add them back.
+-- Without this, the realtime worker's AccessShareLock fights every ALTER
+-- TABLE and deadlocks on busy projects.
+--
+-- Run the entire file as ONE batch in Supabase SQL Editor.
+
+set lock_timeout = '6s';
+set statement_timeout = '120s';
 
 -- =========================================================
--- 0. Wipe existing demo data (one-time migration)
+-- 0. Unsubscribe hot tables from realtime so DDL won't fight worker locks
 -- =========================================================
--- These were created without owner columns. Per the auth migration decision,
--- we start fresh. Skip this block if running on an empty database.
+do $$
+declare t text;
+begin
+  foreach t in array array['events','tasks','user_preferences','profiles','journal_entries','journal_pointers'] loop
+    begin
+      execute format('alter publication supabase_realtime drop table public.%I', t);
+    exception when others then null;  -- table or membership absent → ignore
+    end;
+  end loop;
+end $$;
+
+-- =========================================================
+-- 1. Base tables (create if missing — no-op when present)
+-- =========================================================
+create table if not exists public.events (
+  id          uuid primary key default gen_random_uuid(),
+  title       text,
+  start_time  timestamptz,
+  end_time    timestamptz,
+  all_day     boolean default false,
+  created_at  timestamptz default now()
+);
+
+create table if not exists public.tasks (
+  id          uuid primary key default gen_random_uuid(),
+  title       text,
+  done        boolean default false,
+  created_at  timestamptz default now()
+);
+
+create table if not exists public.user_preferences (
+  id              uuid primary key default gen_random_uuid(),
+  font            text,
+  vibe            text,
+  surface         text,
+  density         text,
+  vibe_dials      jsonb,
+  surface_dials   jsonb,
+  accent_boost    numeric,
+  blur_amount     int,
+  surface_alpha   numeric,
+  panel_gap       int,
+  created_at      timestamptz default now(),
+  updated_at      timestamptz default now()
+);
+
+-- =========================================================
+-- 2. Drop legacy permissive policies (no-op if missing)
+-- =========================================================
 drop policy if exists "Allow all select" on public.events;
 drop policy if exists "Allow all insert" on public.events;
 drop policy if exists "Allow all update" on public.events;
 drop policy if exists "Allow all delete" on public.events;
-drop policy if exists "Allow all tasks" on public.tasks;
-drop policy if exists "allow all journal" on public.journal_entries;
-drop policy if exists "allow all prefs" on public.user_preferences;
+drop policy if exists "Allow all tasks"  on public.tasks;
+drop policy if exists "allow all prefs"  on public.user_preferences;
 
--- Drop legacy journal_entries — replaced by storage + journal_pointers.
--- DESTRUCTIVE: any existing journal text is wiped.
-drop table if exists public.journal_entries cascade;
-
-truncate public.events, public.tasks, public.user_preferences
-  restart identity cascade;
+-- Legacy storage-pointer journal table from prior design.
+drop table if exists public.journal_pointers cascade;
 
 -- =========================================================
--- 1. Profiles — public-readable, references auth.users
+-- 3. Profiles — public-readable, references auth.users
 -- =========================================================
 create table if not exists public.profiles (
   id            uuid primary key references auth.users(id) on delete cascade,
@@ -41,7 +92,6 @@ create policy "profiles owner write" on public.profiles
   for update using (id = auth.uid())
   with check (id = auth.uid());
 
--- Auto-create profile row when a new auth.users row appears.
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
@@ -58,7 +108,7 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- =========================================================
--- 2. Add user_id to owned tables
+-- 4. Owner column + indexes on owned tables
 -- =========================================================
 alter table public.events
   add column if not exists user_id uuid references auth.users(id) on delete cascade;
@@ -67,32 +117,49 @@ alter table public.tasks
 alter table public.user_preferences
   add column if not exists user_id uuid references auth.users(id) on delete cascade;
 
-alter table public.events          alter column user_id set not null;
-alter table public.tasks           alter column user_id set not null;
-alter table public.user_preferences alter column user_id set not null;
+-- Set NOT NULL only when no orphan rows.
+do $$
+begin
+  if not exists (select 1 from public.events           where user_id is null) then
+    execute 'alter table public.events           alter column user_id set not null';
+  end if;
+  if not exists (select 1 from public.tasks            where user_id is null) then
+    execute 'alter table public.tasks            alter column user_id set not null';
+  end if;
+  if not exists (select 1 from public.user_preferences where user_id is null) then
+    execute 'alter table public.user_preferences alter column user_id set not null';
+  end if;
+end $$;
 
-create index if not exists events_user_id_idx          on public.events(user_id);
-create index if not exists tasks_user_id_idx           on public.tasks(user_id);
+create index if not exists events_user_id_idx               on public.events(user_id);
+create index if not exists tasks_user_id_idx                on public.tasks(user_id);
 create unique index if not exists user_preferences_user_idx on public.user_preferences(user_id);
 
 -- =========================================================
--- 2b. Journal pointer table — metadata for realtime sync.
--- Text content lives in storage at journals/<user_id>/<date>.json.
+-- 5. Journal entries — content in Postgres for cross-device realtime
 -- =========================================================
-create table if not exists public.journal_pointers (
-  user_id      uuid not null references auth.users(id) on delete cascade,
-  date         date not null,
-  storage_path text not null,
-  updated_at   timestamptz default now(),
-  primary key (user_id, date)
+create table if not exists public.journal_entries (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid not null references auth.users(id) on delete cascade,
+  entry_date  date not null,
+  did         text default '',
+  plan        text default '',
+  mood        text default '',
+  updated_at  timestamptz default now(),
+  unique (user_id, entry_date)
 );
-alter table public.journal_pointers enable row level security;
-drop policy if exists "owner-rw" on public.journal_pointers;
-create policy "owner-rw" on public.journal_pointers
+create index if not exists journal_entries_user_date_idx
+  on public.journal_entries (user_id, entry_date desc);
+
+alter table public.journal_entries enable row level security;
+drop policy if exists "owner-rw" on public.journal_entries;
+create policy "owner-rw" on public.journal_entries
   for all using (user_id = auth.uid())
   with check (user_id = auth.uid());
 
--- Onboarding columns on user_preferences (additive)
+-- =========================================================
+-- 6. Onboarding + UX columns on user_preferences (additive)
+-- =========================================================
 alter table public.user_preferences
   add column if not exists display_name       text,
   add column if not exists timezone           text,
@@ -104,84 +171,63 @@ alter table public.user_preferences
   add column if not exists notify_journal     boolean default false,
   add column if not exists onboarded_at       timestamptz,
   add column if not exists cal_view           text default 'dayGridMonth',
-  add column if not exists wallpaper_url      text;
+  add column if not exists wallpaper_url      text,
+  add column if not exists wallpaper_disabled boolean default false,
+  add column if not exists last_device_type   text;
+
+-- Strip deprecated `tint` key from surface_dials (Glass-tint slider removed).
+update public.user_preferences
+   set surface_dials = surface_dials - 'tint'
+ where surface_dials ? 'tint';
 
 -- =========================================================
--- 3. Per-user RLS policies
+-- 7. Per-user RLS policies for owned tables
 -- =========================================================
-do $$
-declare t text;
-begin
-  for t in select unnest(array['events','tasks','user_preferences']) loop
-    execute format('drop policy if exists "owner-rw" on public.%I', t);
-    execute format(
-      'create policy "owner-rw" on public.%I for all
-         using (user_id = auth.uid())
-         with check (user_id = auth.uid())', t);
-  end loop;
-end $$;
+alter table public.events           enable row level security;
+alter table public.tasks            enable row level security;
+alter table public.user_preferences enable row level security;
+
+drop policy if exists "owner-rw" on public.events;
+create policy "owner-rw" on public.events for all
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+drop policy if exists "owner-rw" on public.tasks;
+create policy "owner-rw" on public.tasks for all
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+drop policy if exists "owner-rw" on public.user_preferences;
+create policy "owner-rw" on public.user_preferences for all
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
 
 -- =========================================================
--- 4. Avatar storage bucket + policies
+-- 8. Avatar storage bucket + policies
 -- =========================================================
 insert into storage.buckets (id, name, public)
   values ('avatars', 'avatars', true)
   on conflict (id) do nothing;
 
-drop policy if exists "avatars public read" on storage.objects;
-drop policy if exists "avatars owner write" on storage.objects;
+drop policy if exists "avatars public read"  on storage.objects;
+drop policy if exists "avatars owner write"  on storage.objects;
 drop policy if exists "avatars owner update" on storage.objects;
 drop policy if exists "avatars owner delete" on storage.objects;
 
 create policy "avatars public read" on storage.objects
   for select using (bucket_id = 'avatars');
-
 create policy "avatars owner write" on storage.objects
   for insert with check (
     bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]
   );
-
 create policy "avatars owner update" on storage.objects
   for update using (
     bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]
   );
-
 create policy "avatars owner delete" on storage.objects
   for delete using (
     bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]
   );
 
 -- =========================================================
--- 4b. Journals storage bucket — PRIVATE. Folder per user.
--- =========================================================
-insert into storage.buckets (id, name, public)
-  values ('journals', 'journals', false)
-  on conflict (id) do nothing;
-
-drop policy if exists "journals owner read"   on storage.objects;
-drop policy if exists "journals owner write"  on storage.objects;
-drop policy if exists "journals owner update" on storage.objects;
-drop policy if exists "journals owner delete" on storage.objects;
-
-create policy "journals owner read" on storage.objects
-  for select using (
-    bucket_id = 'journals' and auth.uid()::text = (storage.foldername(name))[1]
-  );
-create policy "journals owner write" on storage.objects
-  for insert with check (
-    bucket_id = 'journals' and auth.uid()::text = (storage.foldername(name))[1]
-  );
-create policy "journals owner update" on storage.objects
-  for update using (
-    bucket_id = 'journals' and auth.uid()::text = (storage.foldername(name))[1]
-  );
-create policy "journals owner delete" on storage.objects
-  for delete using (
-    bucket_id = 'journals' and auth.uid()::text = (storage.foldername(name))[1]
-  );
-
--- =========================================================
--- 4c. Wallpapers storage bucket — PUBLIC. Folder per user.
+-- 9. Wallpapers storage bucket — PUBLIC, folder per user
 -- =========================================================
 insert into storage.buckets (id, name, public)
   values ('wallpapers', 'wallpapers', true)
@@ -194,7 +240,6 @@ drop policy if exists "wallpapers owner delete"  on storage.objects;
 
 create policy "wallpapers public read" on storage.objects
   for select using (bucket_id = 'wallpapers');
-
 create policy "wallpapers owner write" on storage.objects
   for insert with check (
     bucket_id = 'wallpapers' and auth.uid()::text = (storage.foldername(name))[1]
@@ -209,7 +254,7 @@ create policy "wallpapers owner delete" on storage.objects
   );
 
 -- =========================================================
--- 5. Delete-account RPC (cascades through FKs)
+-- 10. Delete-account RPC (cascades through FKs)
 -- =========================================================
 create or replace function public.delete_my_account()
 returns void language plpgsql security definer set search_path = public as $$
@@ -224,12 +269,15 @@ revoke all on function public.delete_my_account() from public;
 grant execute on function public.delete_my_account() to authenticated;
 
 -- =========================================================
--- 6. Realtime publication (idempotent)
+-- 11. Re-add tables to realtime publication (after all DDL is done)
 -- =========================================================
-do $$ begin
-  begin alter publication supabase_realtime add table public.events;            exception when duplicate_object then null; end;
-  begin alter publication supabase_realtime add table public.tasks;             exception when duplicate_object then null; end;
-  begin alter publication supabase_realtime add table public.journal_pointers;  exception when duplicate_object then null; end;
-  begin alter publication supabase_realtime add table public.user_preferences;  exception when duplicate_object then null; end;
-  begin alter publication supabase_realtime add table public.profiles;          exception when duplicate_object then null; end;
+do $$
+declare t text;
+begin
+  foreach t in array array['events','tasks','user_preferences','profiles','journal_entries'] loop
+    begin
+      execute format('alter publication supabase_realtime add table public.%I', t);
+    exception when duplicate_object then null;
+    end;
+  end loop;
 end $$;

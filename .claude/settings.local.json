@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\(require\\('next/package.json'\\).version\\)\")",
+      "Bash(node -e \"console.log\\(require\\('react/package.json'\\).version\\)\")",
+      "Bash(npx next *)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

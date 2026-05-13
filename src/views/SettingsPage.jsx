@@ -5,7 +5,7 @@ import { useAuth } from '../lib/authContext'
 import VibeIcon from '../components/VibeIcon'
 import AvatarUpload from '../components/AvatarUpload'
 import WallpaperGrid from '../components/WallpaperGrid'
-import defaultWallpaper from '../assets/wallpaper.webp'
+const defaultWallpaper = '/wallpaper.webp'
 
 // Algorithmic theme palette — curated hues × lightness steps, plus a row
 // of neutrals. Kept compact so the panel sits flush with neighbours.
@@ -37,7 +37,9 @@ export default function SettingsPage({
   panelGap, setPanelGap,
   repalette, prefId,
   wallpaper, setWallpaper,
+  wallpaperOff, setWallpaperOff,
   lastPalette,
+  isMobile,
 }) {
   const { user } = useAuth()
   const [saving, setSaving] = useState(false)
@@ -198,7 +200,8 @@ export default function SettingsPage({
         </section>
 
         {/* Atelier — single source of truth for every renderer dial.
-            Vibe/Surface presets above just write bundles of these. */}
+            Vibe/Surface presets above just write bundles of these. Hidden on mobile. */}
+        {!isMobile && (
         <section className="panel glass atelier-panel" style={{ gridColumn: '1 / -1' }}>
           <div className="panel-head">
             <h3>Atelier</h3>
@@ -230,9 +233,6 @@ export default function SettingsPage({
               <div className="setting-row"><label>Glass blur · {blurAmount}px
                 <input type="range" min="0" max="40" step="1" value={blurAmount}
                   onChange={e => setBlurAmount(+e.target.value)} /></label></div>
-              <div className="setting-row"><label>Glass tint · {Math.round(surfaceDials.tint ?? 100)}% <span className="muted small">(base ↔ accent)</span>
-                <input type="range" min="0" max="100" step="2" value={surfaceDials.tint ?? 100}
-                  onChange={e => setSurfaceDial('tint', +e.target.value)} /></label></div>
             </div>
 
             <div className="atelier-group atelier-layout">
@@ -243,10 +243,20 @@ export default function SettingsPage({
             </div>
           </div>
         </section>
+        )}
 
         {/* Wallpaper */}
         <section className="panel glass" style={{ gridColumn: '1 / -1' }}>
           <div className="panel-head"><h3>Wallpaper</h3><span className="muted">upload &amp; switch</span></div>
+          <div className="settings-row" style={{ marginBottom: 12 }}>
+            <span>Disable wallpaper</span>
+            <button
+              type="button"
+              className={`switch ${wallpaperOff ? 'on' : ''}`}
+              aria-pressed={wallpaperOff}
+              onClick={() => setWallpaperOff(!wallpaperOff)}
+            ><span className="dot" /></button>
+          </div>
           <WallpaperGrid
             activeUrl={wallpaper}
             onSelect={url => setWallpaper(url || defaultWallpaper)}

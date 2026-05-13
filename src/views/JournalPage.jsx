@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../lib/authContext'
-import { readJournal, writeJournal, listJournalPointers, createJournal } from '../lib/journalStorage'
+import { readJournal, writeJournal, createJournal, splitRow, listJournalEntriesFull } from '../lib/journalStorage'
 
 const ymd = d => d.toISOString().slice(0, 10)
 
@@ -25,26 +25,25 @@ export default function JournalPage() {
   // in-progress typing with a remote UPDATE.
   const lastTypedAtRef = useRef({})
 
-  // Initial load — fetch pointers, create today's entry if missing, fetch its content.
+  // Initial load — single round-trip fetches every entry's metadata AND
+  // content. No cascade of list → create → read. Today's row is NOT
+  // auto-created on mount; if missing, we surface an empty editor and the
+  // upsert happens on the first keystroke (debounced save handles it).
   useEffect(() => {
     if (!user) return
     let cancelled = false
     ;(async () => {
-      let list = await listJournalPointers(user.id)
-      const today = ymd(new Date())
-      if (!list.some(p => p.date === today)) {
-        const created = await createJournal(user.id, today)
-        lastWrittenAtRef.current[today] = created.updated_at
-        list = [created, ...list]
-      }
+      const { pointers: list, contents: all } = await listJournalEntriesFull(user.id)
       if (cancelled) return
-      setPointers(list)
-      setActiveDate(list[0]?.date ?? null)
-      // Eager-fetch the first (active) entry's content
-      if (list[0]) {
-        const c = await readJournal(user.id, list[0].date)
-        if (!cancelled) setContents(prev => ({ ...prev, [list[0].date]: c }))
-      }
+      const today = ymd(new Date())
+      // Prepend a synthetic "today" pointer if no row exists yet, so the
+      // editor renders immediately on a clean account.
+      const hasToday = list.some(p => p.date === today)
+      const finalList = hasToday ? list : [{ user_id: user.id, date: today, updated_at: null }, ...list]
+      const finalContents = hasToday ? all : { ...all, [today]: { did: '', plan: '', mood: '' } }
+      setPointers(finalList)
+      setContents(finalContents)
+      setActiveDate(finalList[0]?.date ?? null)
     })().catch(console.error)
     return () => { cancelled = true }
   }, [user])
@@ -53,27 +52,33 @@ export default function JournalPage() {
   useEffect(() => {
     if (!user) return
     const userFilter = `user_id=eq.${user.id}`
-    const ch = supabase.channel(`journal-pointers-${user.id}`)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'journal_pointers', filter: userFilter },
+    const ch = supabase.channel(`journal-entries-${user.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'journal_entries', filter: userFilter },
         ({ new: row }) => {
+          const { pointer, content } = splitRow(row)
           setPointers(prev => {
-            if (prev.some(p => p.date === row.date)) return prev
-            return [row, ...prev].sort((a, b) => b.date.localeCompare(a.date))
+            if (prev.some(p => p.date === pointer.date)) return prev
+            return [pointer, ...prev].sort((a, b) => b.date.localeCompare(a.date))
           })
+          setContents(prev => prev[pointer.date] !== undefined ? prev : { ...prev, [pointer.date]: content })
         })
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'journal_pointers', filter: userFilter },
-        async ({ new: row }) => {
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'journal_entries', filter: userFilter },
+        ({ new: row }) => {
+          const { pointer, content } = splitRow(row)
           // Skip our own echoes.
-          if (lastWrittenAtRef.current[row.date] === row.updated_at) return
+          if (lastWrittenAtRef.current[pointer.date] === pointer.updated_at) return
           // If the user is actively typing on this date, defer — applying now
           // would overwrite their in-flight characters.
-          const lastTyped = lastTypedAtRef.current[row.date] || 0
+          const lastTyped = lastTypedAtRef.current[pointer.date] || 0
           if (Date.now() - lastTyped < 3000) return
-          try {
-            const c = await readJournal(user.id, row.date)
-            setContents(prev => ({ ...prev, [row.date]: c }))
-            setPointers(prev => prev.map(p => p.date === row.date ? row : p))
-          } catch (e) { console.error(e) }
+          setContents(prev => ({ ...prev, [pointer.date]: content }))
+          setPointers(prev => prev.map(p => p.date === pointer.date ? pointer : p))
+        })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'journal_entries', filter: userFilter },
+        ({ old: row }) => {
+          const date = row.entry_date
+          setPointers(prev => prev.filter(p => p.date !== date))
+          setContents(prev => { const next = { ...prev }; delete next[date]; return next })
         })
       .subscribe()
     return () => supabase.removeChannel(ch)
@@ -90,7 +95,14 @@ export default function JournalPage() {
     return () => { cancelled = true }
   }, [user, activeDate, contents])
 
-  const active = activeDate && contents[activeDate] ? { date: activeDate, ...contents[activeDate] } : null
+  // Optimistic render: if active content not loaded yet, surface an empty
+  // shell so the editor is interactive immediately. Real content (if any)
+  // replaces this once the initial fetch resolves.
+  const today = ymd(new Date())
+  const fallbackDate = activeDate ?? today
+  const active = contents[fallbackDate]
+    ? { date: fallbackDate, ...contents[fallbackDate] }
+    : { date: fallbackDate, did: '', plan: '', mood: '' }
 
   function updateField(field, value) {
     if (!active || !user) return
@@ -128,8 +140,6 @@ export default function JournalPage() {
       setActiveDate(date)
     } catch (e) { console.error(e) }
   }
-
-  const today = ymd(new Date())
 
   return (
     <div className="page journal-page">
@@ -172,42 +182,36 @@ export default function JournalPage() {
         </aside>
 
         <section className="panel glass journal-editor">
-          {active ? (
-            <>
-              <div className="editor-meta">
-                <span className="eyebrow">{fmtEntryDate(active.date)}</span>
-                <span className="muted small">autosaved · stored in files</span>
-              </div>
-              <div className="editor-field">
-                <label className="field-label">What I did today</label>
-                <textarea
-                  placeholder="how the day went…"
-                  value={active.did}
-                  onChange={e => updateField('did', e.target.value)}
-                  rows={4}
-                />
-              </div>
-              <div className="editor-field">
-                <label className="field-label">What I plan to do</label>
-                <textarea
-                  placeholder="next steps, tomorrow's intentions…"
-                  value={active.plan}
-                  onChange={e => updateField('plan', e.target.value)}
-                  rows={4}
-                />
-              </div>
-              <div className="editor-field">
-                <label className="field-label">Mood · notes</label>
-                <input
-                  placeholder="one line — how are you feeling?"
-                  value={active.mood}
-                  onChange={e => updateField('mood', e.target.value)}
-                />
-              </div>
-            </>
-          ) : (
-            <div className="muted" style={{ margin: 'auto' }}>Loading…</div>
-          )}
+          <div className="editor-meta">
+            <span className="eyebrow">{fmtEntryDate(active.date)}</span>
+            <span className="muted small">autosaved · synced across devices</span>
+          </div>
+          <div className="editor-field">
+            <label className="field-label">What I did today</label>
+            <textarea
+              placeholder="how the day went…"
+              value={active.did}
+              onChange={e => updateField('did', e.target.value)}
+              rows={4}
+            />
+          </div>
+          <div className="editor-field">
+            <label className="field-label">What I plan to do</label>
+            <textarea
+              placeholder="next steps, tomorrow's intentions…"
+              value={active.plan}
+              onChange={e => updateField('plan', e.target.value)}
+              rows={4}
+            />
+          </div>
+          <div className="editor-field">
+            <label className="field-label">Mood · notes</label>
+            <input
+              placeholder="one line — how are you feeling?"
+              value={active.mood}
+              onChange={e => updateField('mood', e.target.value)}
+            />
+          </div>
         </section>
       </div>
     </div>
