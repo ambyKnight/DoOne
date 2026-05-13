@@ -1,0 +1,836 @@
+{
+  "generated_at": "2026-05-13T11:05:19.492Z",
+  "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+  "date_remap": {
+    "day_01": "2026-04-22",
+    "day_21": "2026-05-12"
+  },
+  "summary": {
+    "journal_entries": 21,
+    "jobs": 9,
+    "events": 35
+  },
+  "journals": [
+    {
+      "entry_date": "2026-04-22",
+      "did_chars": 3596,
+      "plan_chars": 406,
+      "mood_chars": 181,
+      "mood_preview": "bro the way I literally just lay in bed scrolling for 90 min straight when I had alarms going off. the absolute state. b…"
+    },
+    {
+      "entry_date": "2026-04-23",
+      "did_chars": 3732,
+      "plan_chars": 386,
+      "mood_chars": 294,
+      "mood_preview": "bro the way my entire day just vanished is actually so scary. I cannot believe I slept from 4:50pm to 7:34pm again. why …"
+    },
+    {
+      "entry_date": "2026-04-24",
+      "did_chars": 3337,
+      "plan_chars": 336,
+      "mood_chars": 340,
+      "mood_preview": "okay today wasn't completely cooked? attended 4 classes, did problem 2, club was elite. brain feels less like soup. but …"
+    },
+    {
+      "entry_date": "2026-04-25",
+      "did_chars": 3388,
+      "plan_chars": 437,
+      "mood_chars": 310,
+      "mood_preview": "the bare minimum at 80% capacity is somehow worse than skipping. like I went, I did stuff, but I didn't actually win any…"
+    },
+    {
+      "entry_date": "2026-04-26",
+      "did_chars": 3095,
+      "plan_chars": 484,
+      "mood_chars": 407,
+      "mood_preview": "bro the club work today was the most ALIVE I've felt in weeks. genuinely. and yet I skipped 4 classes to be there. like …"
+    },
+    {
+      "entry_date": "2026-04-27",
+      "did_chars": 2706,
+      "plan_chars": 365,
+      "mood_chars": 325,
+      "mood_preview": "the sleep schedule is officially in shambles. waking up at 1:47pm and napping 5pm to 8pm is feral behavior. and yet. it …"
+    },
+    {
+      "entry_date": "2026-04-28",
+      "did_chars": 2689,
+      "plan_chars": 394,
+      "mood_chars": 367,
+      "mood_preview": "bro the sunday scaries hit different when you're already behind. the way I made a beautiful Notion plan at 4:35pm and di…"
+    },
+    {
+      "entry_date": "2026-04-29",
+      "did_chars": 4229,
+      "plan_chars": 353,
+      "mood_chars": 524,
+      "mood_preview": "the assignment list dropped today and I just. shut down. like flipped a switch. I know this feeling. it's the one from 1…"
+    },
+    {
+      "entry_date": "2026-04-30",
+      "did_chars": 3589,
+      "plan_chars": 349,
+      "mood_chars": 786,
+      "mood_preview": "bro the slow panic is the worst kind. I'm anxious all day, my chest is tight, but my body moves like it's underwater. I'…"
+    },
+    {
+      "entry_date": "2026-05-01",
+      "did_chars": 3744,
+      "plan_chars": 434,
+      "mood_chars": 796,
+      "mood_preview": "bro Rohan called and I picked up and that was the wrong choice but also the right choice because he was crying and what …"
+    },
+    {
+      "entry_date": "2026-05-02",
+      "did_chars": 4470,
+      "plan_chars": 350,
+      "mood_chars": 903,
+      "mood_preview": "the evening nap broke me. it didn't just delay me, it broke the day. I had a real shot today to do the paper in normal h…"
+    },
+    {
+      "entry_date": "2026-05-03",
+      "did_chars": 3792,
+      "plan_chars": 375,
+      "mood_chars": 872,
+      "mood_preview": "bro the body just SHUT DOWN at 4pm. I lay down for \"a nap\" and I genuinely could not have stopped it. and I missed the d…"
+    },
+    {
+      "entry_date": "2026-05-04",
+      "did_chars": 3479,
+      "plan_chars": 422,
+      "mood_chars": 733,
+      "mood_preview": "bro Karthik came over and for 4 hours I felt like a person again. like a real functional human being. we wrote actual co…"
+    },
+    {
+      "entry_date": "2026-05-05",
+      "did_chars": 3136,
+      "plan_chars": 475,
+      "mood_chars": 995,
+      "mood_preview": "sent a long message to the AI chat today. spilled everything. JEE, 12th, the shutdown pattern, the way I can't handle ur…"
+    },
+    {
+      "entry_date": "2026-05-06",
+      "did_chars": 3830,
+      "plan_chars": 447,
+      "mood_chars": 953,
+      "mood_preview": "walked out of both offices with my dignity 70% intact. Sir was nice about it. Ent ma'am wasn't, but fair. and I learned …"
+    },
+    {
+      "entry_date": "2026-05-07",
+      "did_chars": 2756,
+      "plan_chars": 423,
+      "mood_chars": 662,
+      "mood_preview": "bro the post-deadline emptiness is real and it's evil. the panic of last week was awful but at least the panic was MAKIN…"
+    },
+    {
+      "entry_date": "2026-05-08",
+      "did_chars": 3020,
+      "plan_chars": 347,
+      "mood_chars": 687,
+      "mood_preview": "attended 4 classes today which is statistically a good day. wrote 370 words on back-assignment 1 which is also technical…"
+    },
+    {
+      "entry_date": "2026-05-09",
+      "did_chars": 2532,
+      "plan_chars": 402,
+      "mood_chars": 751,
+      "mood_preview": "bro I slept until 1:42pm. like that's not a \"slept in\" that's a \"slept through the entire morning of life.\" and yet I al…"
+    },
+    {
+      "entry_date": "2026-05-10",
+      "did_chars": 2989,
+      "plan_chars": 343,
+      "mood_chars": 910,
+      "mood_preview": "the contrast is genuinely insane. for 12 hours today I was a person. a SMART person. I solved a hardware integration pro…"
+    },
+    {
+      "entry_date": "2026-05-11",
+      "did_chars": 2210,
+      "plan_chars": 439,
+      "mood_chars": 795,
+      "mood_preview": "finished back-assignment 1 today. that should feel like something. it feels like nothing. dopamine is a depleted resourc…"
+    },
+    {
+      "entry_date": "2026-05-12",
+      "did_chars": 3152,
+      "plan_chars": 634,
+      "mood_chars": 1157,
+      "mood_preview": "end of week 3. counting: 2 things submitted late. 3 things done but unsubmitted because the deadlines are floating (\"soo…"
+    }
+  ],
+  "jobs": [
+    {
+      "title": "Signals problem set",
+      "status": "completed",
+      "priority": 3,
+      "total_time": 300,
+      "description": "Last status (2026-05-12): ✅ submitted late (-25%). Tracked across 17 days of logs.",
+      "history_days": 17,
+      "last_status": "✅ submitted late (-25%)"
+    },
+    {
+      "title": "Entrepreneurship paper",
+      "status": "completed",
+      "priority": 3,
+      "total_time": 240,
+      "description": "Last status (2026-05-12): ✅ submitted late (-30%). Tracked across 16 days of logs.",
+      "history_days": 16,
+      "last_status": "✅ submitted late (-30%)"
+    },
+    {
+      "title": "Microprocessors lab record",
+      "status": "completed",
+      "priority": 3,
+      "total_time": 240,
+      "description": "Last status (2026-05-12): 100% — sitting, no deadline submitted. Tracked across 23 days of logs.",
+      "history_days": 23,
+      "last_status": "100% — sitting, no deadline submitted"
+    },
+    {
+      "title": "Microprocessors practice problems",
+      "status": "active",
+      "priority": 2,
+      "total_time": 240,
+      "description": "Last status (2026-05-12): not started. Tracked across 7 days of logs.",
+      "history_days": 7,
+      "last_status": "not started"
+    },
+    {
+      "title": "Back-assignment 1",
+      "status": "completed",
+      "priority": 4,
+      "total_time": 180,
+      "description": "Last status (2026-05-12): 100% — done, no deadline submitted. Tracked across 6 days of logs.",
+      "history_days": 6,
+      "last_status": "100% — done, no deadline submitted"
+    },
+    {
+      "title": "Back-assignment 2",
+      "status": "completed",
+      "priority": 4,
+      "total_time": 180,
+      "description": "Last status (2026-05-12): 100% — done, no deadline submitted. Tracked across 6 days of logs.",
+      "history_days": 6,
+      "last_status": "100% — done, no deadline submitted"
+    },
+    {
+      "title": "Back-assignment 3",
+      "status": "active",
+      "priority": 4,
+      "total_time": 180,
+      "description": "Last status (2026-05-12): not opened. Tracked across 6 days of logs.",
+      "history_days": 6,
+      "last_status": "not opened"
+    },
+    {
+      "title": "Entrepreneurship group project",
+      "status": "active",
+      "priority": 3,
+      "total_time": 300,
+      "description": "Last status (2026-05-12): not checked. Tracked across 5 days of logs.",
+      "history_days": 5,
+      "last_status": "not checked"
+    },
+    {
+      "title": "End-semester revision",
+      "status": "active",
+      "priority": 5,
+      "total_time": 900,
+      "description": "Last status (2026-05-12): not even mentally engaged with yet. Tracked across 1 day of logs.",
+      "history_days": 1,
+      "last_status": "not even mentally engaged with yet"
+    }
+  ],
+  "events_per_day": {
+    "2026-04-22": [
+      "09:00 attend ALL 5 classes (8:45am–3:45pm)",
+      "19:00 club work 5–7pm",
+      "18:00 gym (lol)"
+    ],
+    "2026-04-23": [
+      "09:00 attend all 5 classes",
+      "18:00 gym attempt"
+    ],
+    "2026-04-24": [
+      "09:00 all 5 classes",
+      "17:00 club work"
+    ],
+    "2026-04-25": [
+      "09:00 attend all classes",
+      "13:00 Microproc lab + record start (mandatory, 1pm slot)"
+    ],
+    "2026-04-26": [
+      "09:00 attend Friday classes (Signals, Analog, Microproc theory, Control)",
+      "17:00 club 5pm",
+      "09:00 early sleep — important class Saturday morning (lol there's no class Saturday)"
+    ],
+    "2026-04-27": [
+      "18:00 gym"
+    ],
+    "2026-04-29": [
+      "09:00 ALL 5 classes",
+      "17:00 club work evening"
+    ],
+    "2026-04-30": [
+      "09:00 attend all classes"
+    ],
+    "2026-05-01": [
+      "09:00 attend at least afternoon classes"
+    ],
+    "2026-05-02": [
+      "13:00 microproc lab 1pm (MANDATORY — cannot skip)"
+    ],
+    "2026-05-03": [
+      "08:00 8am wake",
+      "09:00 submit ent paper 9am"
+    ],
+    "2026-05-04": [
+      "10:00 finish graph 5 by 10am",
+      "12:00 submit all 5 graphs to Sir by 12pm",
+      "18:00 gym"
+    ],
+    "2026-05-06": [
+      "09:00 submit ent paper to ma'am 9am",
+      "10:00 submit signals to sir 10am",
+      "09:00 attend rest of classes",
+      "17:00 club work evening"
+    ],
+    "2026-05-07": [
+      "09:00 attend all 5 classes"
+    ],
+    "2026-05-08": [
+      "09:00 all 5 classes"
+    ],
+    "2026-05-09": [
+      "09:00 attend morning classes",
+      "13:00 microproc lab 1pm (mandatory)"
+    ],
+    "2026-05-10": [
+      "09:00 attend Friday classes",
+      "17:00 club event prep evening"
+    ],
+    "2026-05-11": [
+      "18:00 gym"
+    ],
+    "2026-05-12": [
+      "21:00 call mom properly"
+    ]
+  },
+  "_full": {
+    "journals": [
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-22",
+        "did": "### What happened\n\n**07:30** — Alarm. Snoozed.\n\n**07:32** — Mom calls. Picked half-asleep. \"you up beta?\" \"yeah ma yeah.\" Hung up. Slept again immediately.\n\n**08:00** — Second alarm. Dismissed. Brain went *\"5 more mins.\"* Famous words.\n\n**08:47** — First class started without me. Phone right next to face, woke up to Instagram notification ping. Did not get up.\n\n**09:23** — Genuinely woke. Realized 2 classes already gone. *\"It's already over so might as well skip more.\"* Bro logic activated.\n\n**09:24–10:15** — Doomscroll. Reels. One reel led to another. Engineering memes hitting different today. Saw a post about a guy who topped GATE while working full-time. Felt nothing.\n\n**10:20** — Got out of bed. No breakfast — mess closed at 9:30.\n\n**10:30** — Showered. Felt mildly human.\n\n**10:55** — Walked to college. Late for 3rd hour but going.\n\n**11:15** — Slid into Analog Comm class halfway through. Sir didn't notice (or pretended not to). Sat at the back. Friend Aman slid notes over WhatsApp.\n\n**12:00–12:50** — Control Systems. Actually paying attention. Topic = stability analysis. Genuinely interesting but lecturer monotone af.\n\n**12:50** — Lunch. Mess. Daal-rice. Fine.\n\n**13:00** — Mom calls. \"did you eat?\" \"yeah ma.\" 30 second call.\n\n**13:30–14:20** — Free period. Library. Opened Signals textbook. Read 2 pages. Eyes glazed. Phone.\n\n**14:25** — Last 2 classes today = Microprocessors theory + EVS. Microproc important. EVS = everyone skips.\n\n**14:30** — Bunked Microproc. Walked to canteen with the gang. \"5 min break\" became 50 min.\n\n**15:30** — Back in hostel. Class ended without me anyway by now.\n\n**15:45** — Bed. \"30 min nap.\" We all know.\n\n**17:32** — Woke up. 2hr nap. Mouth dry. Disoriented. The classic afternoon-nap regret. Brain feels like static.\n\n**17:35** — Phone. WhatsApp. The gang planning to go out Saturday.\n\n**18:00** — Was supposed to be at club at 5. Texted \"running late.\"\n\n**18:15** — Got to club room. Working on the line-follower bot for inter-college fest. IR sensor calibration giving issues. Locked in immediately. **This** is the only place my brain actually works.\n\n**20:47** — Looked up. 3 hours gone in a blink. Felt good. Productive feeling. False productive feeling — none of it was college work.\n\n**21:00** — Dinner with club crew at the tea stall outside campus. Maggi + chai.\n\n**22:00** — Back in room.\n\n**22:15** — Signals problem set. Opened PDF. 14 problems. Stared at problem 1.\n\n**22:23** — Picked up phone \"for water break.\" Did not get water.\n\n**23:08** — Phone still in hand. 45 min on Reddit. r/IndianTeenagers and r/Btechtards. Doom validated.\n\n**23:10** — Back to problem 1. Drew Laplace transform setup. Got distracted halfway thinking about whether I should learn Verilog over the summer.\n\n**23:30** — Mom calls. \"sleeping?\" \"yeah ma about to sleep.\" Lied effortlessly.\n\n**23:35** — Back to phone. YouTube — tech video about FPGAs (interesting, irrelevant to syllabus, irrelevant to the problem set in front of me).\n\n**00:47** — Realized I haven't done anything. 1 problem half-done.\n\n**00:50** — *\"Tomorrow for sure.\"* Closed laptop.\n\n**01:15** — Still scrolling.\n\n**01:43** — Spotify on (lofi). Eyes closing.\n\n**01:51** — Asleep.\n\n### Metrics\n\n- **Sleep:** 01:51 → 09:23 (7h 32m, fragmented, phone in bed)\n- **Screen time:** 6h 47m\n  - Instagram: 2h 18m\n  - YouTube: 1h 42m\n  - WhatsApp: 1h 04m\n  - Reddit: 51m\n  - Spotify: background (not counted)\n- **Breakfast:** missed (mess closed)\n- **Classes attended:** 2 / 5 (Analog Comm half, Control Systems full)\n- **Steps:** 3,847\n- **Mom calls:** picked 3/3 (lied on 2 of them)",
+        "plan": "### Intended (set night before)\n\n- wake 7:30am\n- attend ALL 5 classes (8:45am–3:45pm)\n- start Signals & Systems problem set in evening\n- club work 5–7pm\n- gym (lol)\n- sleep by midnight\n\n### Notes to self (for tomorrow)\n\n- set 3 alarms across room tomorrow (phone away from bed)\n- eat breakfast → walk straight to college\n- problem set: at least 3 problems before sleep\n- NO phone after 11pm (lol let's see)",
+        "mood": "bro the way I literally just lay in bed scrolling for 90 min straight when I had alarms going off. the absolute state. but lowkey class be boring fr. tomorrow I'll go on time fr fr."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-23",
+        "did": "### What happened\n\n**07:00** — Alarm 1 (across room). Dismissed in sleep somehow. Body has memorized the walk.\n\n**07:15** — Alarm 2. Dismissed.\n\n**07:30** — Mom calls. Phone on silent overnight. Did not pick. Brain fully shut.\n\n**07:32** — Alarm 3. Dismissed.\n\n**10:14** — Woke. Naturally. Sun in face. Roommate already gone, bed made.\n\n**10:15** — Saw missed call from mom on lockscreen. Stomach drop. Texted \"bro got up late will call after class.\" Did not have class. Did not plan to go.\n\n**10:20** — Phone. Instagram. The girl from Analog Comm posted a story — coffee shop near campus. Stared at it longer than I should have.\n\n**11:00** — Got out of bed for water. Came back to bed.\n\n**11:30** — Mess closed long ago. Ate Parle-G from drawer. Two packets. This is breakfast now.\n\n**12:00** — Briefly considered going to college for last 3 classes. Did not.\n\n**12:30** — *\"Today is cooked. Might as well rest properly and lock in tomorrow.\"* The classic lie. The original lie.\n\n**13:00** — Mom calls. Picked. \"did you eat?\" \"yeah ma I'm in college.\" Mom: \"okay take care beta.\" 47 sec call. Felt physically sick lying.\n\n**13:05** — Stared at ceiling. Guilt creeping. Pushed it down with Instagram.\n\n**13:30** — Maggi cooked in room. Watching YouTube — some random Veritasium episode about black holes.\n\n**14:00–16:00** — Doomscroll variety pack. Reels → YouTube essay on the fall of the Roman Empire → Reddit → back to Reels. Brain feels like wet bread.\n\n**16:00** — Roommate (Vikram) back from college. Asks where I was. \"Slept through alarms bro.\" He nods. He knows. He doesn't say anything. Respect.\n\n**16:30** — Felt guilt crystallizing. Opened Signals PDF. Stared at problem 1 again. Still half-done from yesterday.\n\n**16:45** — Decided to take a \"fresh nap\" to \"reset.\" Famous last words.\n\n**16:50** — Asleep.\n\n**19:34** — Woke up. Dark outside. Disoriented. Dinner already started in mess.\n\n**19:35** — Sat up. *\"I just slept through my entire day.\"* Felt the existential dip. 2hr 44min nap on top of a 10hr sleep is a war crime against myself.\n\n**19:40** — Phone. WhatsApp. The gang at basketball court.\n\n**20:00** — Got dressed. Went to basketball court. Watched, didn't play. Didn't want to move. Sat on bench. The boys roasted me for sleeping all day.\n\n**21:30** — Back in room. Mess closed.\n\n**22:00** — Canteen sandwich. Cold. Ate it anyway.\n\n**22:30** — Mom calls. Picked. \"sleeping?\" \"yeah ma soon.\" Lied. Currently eating sandwich in bed.\n\n**22:35** — Sat at desk. Genuinely tried this time. Opened laptop. Opened Signals PDF.\n\n**22:38** — Phone \"for music.\" Put Spotify on.\n\n**22:51** — 13 min on Reels somehow. Rage at self.\n\n**23:00** — Back to problem 1. Finished it properly this time. Felt fake-good.\n\n**23:30** — Started problem 2. Got stuck on the Laplace step. Googled. Stack Exchange. Found a thread that linked to a YouTube tutorial. 22 min long.\n\n**23:32** — Watching tutorial.\n\n**00:15** — Tutorial done. Genuinely learned something. Have not actually finished problem 2 yet.\n\n**00:30** — Phone. WhatsApp call from Rohan (school friend, different college). \"yo what's up.\" Casual chat. 1hr 12min. Mostly about a girl in his batch. I am invested.\n\n**01:42** — Hung up. Realized it's 2am again. Promised myself to sleep.\n\n**01:43** — Phone. \"One last scroll.\"\n\n**02:38** — Asleep.\n\n### Metrics\n\n- **Sleep:** 02:38 → 10:14 (7h 36m night sleep + 2h 44m evening nap = total mess)\n- **Screen time:** 8h 04m\n  - Instagram: 3h 18m\n  - YouTube: 2h 02m\n  - WhatsApp: 1h 47m (mostly Rohan call)\n  - Reddit: 41m\n  - Spotify: background\n- **Breakfast:** Parle-G (does this count)\n- **Classes attended:** 0 / 5\n- **Steps:** 1,124\n- **Mom calls:** picked 1/3 (dodged morning, picked midday + night, lied both times)",
+        "plan": "### Intended (set night before)\n\n- WAKE 7AM (3 alarms set across room)\n- attend all 5 classes\n- Signals problem set: at least 5 problems\n- gym attempt\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- ALARM ACROSS THE ROOM tomorrow. phone in drawer. THIS TIME.\n- no afternoon naps. nap = day cooked.\n- finish problem 2 + 3 before sleep\n- TELL MOM the truth at some point. (will not)",
+        "mood": "bro the way my entire day just vanished is actually so scary. I cannot believe I slept from 4:50pm to 7:34pm again. why am I like this. I was going to lock in today. I LITERALLY said I would last night. and then. nothing. dawg I don't even know what to say to myself. tomorrow tho. tomorrow fr."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-24",
+        "did": "### What happened\n\n**07:00** — Alarm across room as promised. Got up to dismiss it. Sat on bed \"for a sec.\" Lay back down.\n\n**07:15** — Slept again. Predictable.\n\n**07:30** — Mom calls. Picked. \"yeah ma up.\" Half-true (I am holding a phone). Hung up. Slept.\n\n**08:14** — Woke. Real panic this time. First class at 8:45. Showered in 9 min, fastest shower of the semester.\n\n**08:30** — Out the door. No breakfast again. Mess fruit stolen on the way out.\n\n**08:48** — Slipped into Signals & Systems class. Sat near door. Sir mid-sentence about Fourier convergence. Looked judgey at me but didn't say anything. The look will haunt me later.\n\n**09:35** — Signals over. Took actual notes. Genuinely interesting topic. Bro why does it click in class only when I'm not stressed about it.\n\n**09:45** — Analog Comm. Attended. Took notes. Sir made a joke about Bode plots that I didn't get. Aman explained later.\n\n**10:35** — Tea break. The gang outside the canteen. Talking about a Coldplay concert someone's parents got tickets for. Jealousy levels: maximum.\n\n**11:00** — Microproc theory. Attended. Topic: 8086 addressing modes. Confusing. Sir spoke fast. Took partial notes.\n\n**12:00** — Control Systems. Started attending properly. 15 min in: phone. Half-checked out. By 12:30 my notes were doodles of the bot circuit.\n\n**12:50** — Lunch. Daal rice again. Aman tells me he's stressed about end-sems. Felt seen, felt worse.\n\n**13:00** — Mom calls. \"did you eat?\" Picked. \"yeah ma.\" Honest finally.\n\n**13:30** — Last class = EVS. Bunked unanimously with the gang. EVS sir doesn't take attendance most days anyway.\n\n**13:30–15:30** — Canteen + walking around campus. The girl from Analog Comm walked past with her friend. We made awkward eye contact. I died a little.\n\n**15:45** — Back in room. Sat at desk. Surprised myself. Opened Signals problem 2.\n\n**16:15** — Solved problem 2 properly. Took 30 min, the YouTube tutorial actually helped. Felt **real** productive feel for once.\n\n**16:20** — Phone \"to celebrate.\" 40 min Reels.\n\n**17:00** — Club meeting at 5:30. Walked over.\n\n**17:30–20:45** — Club. Line-follower bot. Got the IR sensor working with the new threshold values I tweaked over the weekend. The boys hyped. Karthik said \"bro you cooked.\" Brain on fire (good way). **This** is what I'm built for fr fr.\n\n**20:50** — Tea + Maggi with club crew at the stall. Discussion about whether to go for IEEE or local fest.\n\n**21:30** — Back in room.\n\n**22:00** — Mom calls. Picked. \"sleeping?\" \"soon ma.\" Lied (it was kinda true intent).\n\n**22:15** — Tried problem 3. Brain tired from club deep work. Got 30% through.\n\n**23:00** — Phone break \"for 10 min.\" Reels.\n\n**23:40** — Still on phone. Forced laptop open again.\n\n**23:50** — Problem 3 → got 50% in. Will finish tomorrow fr.\n\n**00:15** — Lights off. Phone on. Reddit.\n\n**01:08** — Asleep with phone on face. Spotify still playing.\n\n### Metrics\n\n- **Sleep:** 01:08 → 08:14 (7h 06m, phone in bed)\n- **Screen time:** 4h 51m (lowest this week, club ate the time productively)\n  - Instagram: 1h 47m\n  - YouTube: 1h 02m\n  - WhatsApp: 58m\n  - Reddit: 38m\n  - Spotify: background\n- **Breakfast:** missed (overslept, took mess fruit on run)\n- **Classes attended:** 4 / 5 (skipped EVS — universal)\n- **Steps:** 7,238 (campus walking + club room walking around)\n- **Mom calls:** 3/3 picked, 1 lie",
+        "plan": "### Intended (set night before)\n\n- wake 7am (alarm across room PROMISE)\n- all 5 classes\n- problem 2 + 3 of Signals\n- club work\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- finish problem 3 tomorrow\n- check Ent skill dev syllabus — paper coming soon??\n- ATTEND EVS at least once this month\n- club: bring soldering iron next time",
+        "mood": "okay today wasn't completely cooked? attended 4 classes, did problem 2, club was elite. brain feels less like soup. but lowkey I'm still behind on everything. and EVS attendance is dying. but vibes were good today fr. one more day like this and I'm cooking. (I won't have one more day like this lmao the universe doesn't give two in a row)."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-25",
+        "did": "### What happened\n\n**07:00** — Alarm. Dismissed.\n\n**07:30** — Mom calls. Picked. \"yeah ma good morning.\" Lied. Still in bed.\n\n**07:31** — Slept.\n\n**08:42** — Woke. First class started 3 min ago. Logical conclusion: don't go.\n\n**08:45** — Phone. Reels. 30 min.\n\n**09:30** — Got up. Showered. Decided to go for last 3 classes + lab.\n\n**10:00** — Skipped breakfast (mess closed). Bought a vada pav from the stall on the way.\n\n**10:30** — Slid into Analog Comm — wait, no, today is different schedule. Today is Thursday. Schedule: Signals (8:45) ✗ already missed, Control Systems (9:45) ✗ missed, Analog Comm (11:00), Microproc theory (12:00), MICROPROC LAB (1:00–3:45).\n\n**10:35** — Realized I missed first 2. Sat in library waiting for 11am Analog. Phone.\n\n**11:00** — Analog Comm. Sir doing a derivation on the board. Took notes for first 20 min, then drifted.\n\n**12:00** — Microproc theory. Sir gave a warning about lab record submission \"in the coming weeks.\" Did not specify date. My brain logged: ✗ not due, ignore.\n\n**13:00** — MICROPROC LAB. Attended. Mandatory attendance. Did the exercise — 8086 assembly to compute factorial. Worked. Felt smart. Sir said next week we'll do something harder.\n\n**13:00** (parallel) — Mom called. Did not pick (in lab). Texted \"in lab will call later.\" Did not call later.\n\n**15:45** — Lab done. Tired. Walked back to hostel slow.\n\n**16:00** — Considered grabbing canteen food. Just lay on bed.\n\n**16:15** — Phone. Instagram. The girl from Analog posted another story. Coffee again. She is testing me.\n\n**17:00** — Roommate Vikram asks if I'm gonna do the Signals problems with him at library. Said \"yeah give me 30 min.\" Did not.\n\n**17:30** — Reels. The brain is asking for dopamine and I am providing.\n\n**18:30** — Vikram texts \"you coming?\" Lied — \"yeah leaving now.\" Did not leave.\n\n**19:00** — Got hungry. Mess dinner. Daal-paneer.\n\n**19:30** — Back in room. Vikram back from library, looked at me, said nothing. Opened his own laptop, started studying.\n\n**20:00** — Pretended to study next to him for moral support. Opened Signals PDF. Problem 3 still at 50%.\n\n**20:05** — Started solving. Slow.\n\n**20:45** — 40 min. Problem 3 done. Halfway through, my brain wandered to whether I should buy a new mechanical keyboard.\n\n**21:00** — Mom calls. Picked. \"did you eat?\" \"yeah ma.\" \"and your studies?\" \"going on.\" Half-lie.\n\n**21:30** — Genuinely opened problem 4. Read it. Closed it.\n\n**21:45** — Phone. YouTube. Tech video about how RISC-V is taking over. 35 min.\n\n**22:30** — Vikram says \"I'm done for today.\" Goes to bed. Felt weirdly competitive.\n\n**22:35** — Opened problem 4 again. Started.\n\n**23:10** — Got 25% in. Hit a wall. Did not Google. Just stopped.\n\n**23:11** — Phone.\n\n**23:30** — Mom calls. Picked. \"sleeping?\" \"yeah ma.\" Was on Reels.\n\n**00:30** — Switched to YouTube. Long-form video about a guy who quit FAANG to start a cafe.\n\n**01:42** — Video done. Tabbed back to Reels.\n\n**02:18** — Asleep with phone on chest.\n\n### Metrics\n\n- **Sleep:** 02:18 → 08:42 (6h 24m, phone in bed)\n- **Screen time:** 7h 12m\n  - Instagram: 3h 04m\n  - YouTube: 2h 18m\n  - WhatsApp: 47m\n  - Reddit: 38m\n  - Spotify: background\n- **Breakfast:** vada pav (technically food)\n- **Classes attended:** 3 / 5 (Analog, Microproc theory, Microproc lab — all the back half)\n- **Steps:** 4,612\n- **Mom calls:** picked 2/3 (dodged midday, lied on the other two)",
+        "plan": "### Intended (set night before)\n\n- wake 7am\n- attend all classes\n- Microproc lab + record start (mandatory, 1pm slot)\n- finish problem 3, start problem 4 of Signals\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- problem 4 — Google the stuck part tomorrow\n- Microproc lab record: write up today's exercise BEFORE the next session\n- (it will not be written up before the next session)\n- skip college tomorrow??? club has more energy",
+        "mood": "the bare minimum at 80% capacity is somehow worse than skipping. like I went, I did stuff, but I didn't actually win anything. tomorrow is friday. friday is club day. friday is the only day my brain works. lowkey can't wait to skip college and be at the club room all day. is that bad. probably. don't care rn."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-26",
+        "did": "### What happened\n\n**07:00** — Alarm. Dismissed.\n\n**07:30** — Mom calls. Picked. \"ma I have a free morning today no class.\" Full lie. Mom didn't push. \"okay rest beta you're working hard.\" Felt **terrible.**\n\n**07:31** — Slept.\n\n**09:47** — Woke. Phone for 20 min in bed.\n\n**10:00** — Made the explicit decision: not going to college today. Brain wants club. Logged this in head as \"responsible self-care.\" It is not.\n\n**10:30** — Showered. Mess closed for breakfast — yet again — but I had a banana from the table.\n\n**11:00** — Walked to club room. Empty. Settled in. Opened the bot.\n\n**11:15–14:30** — Pure deep work. IR sensor calibration in different lighting. Wrote a small auto-calibration routine on the Arduino. Brain is **lit.** Time disappeared. This is what they mean by flow.\n\n**13:00** — Mom called. Did not pick (in flow, phone face-down). Forgot to call back.\n\n**14:30** — Karthik shows up. We talk for 15 min about the strategy for the inter-college competition.\n\n**14:45–17:00** — Karthik joins the work. Two-person debug session. Found a bug in the threshold logic that's been bugging us for 3 weeks. Fixed it. We hugged. I am not exaggerating.\n\n**17:00** — More club members trickle in. The energy is up.\n\n**17:30** — Took a \"break\" — tea + chai with the crew at the stall. 40 min.\n\n**18:10** — Back at club room.\n\n**18:10–21:00** — More work. Started building the bot's chassis with the 3D-printed parts. Karthik's idea about wheel placement was brilliant.\n\n**21:00** — Realized I haven't eaten anything since the banana. Hungry.\n\n**21:15** — Dinner at the Andhra mess off-campus with 3 club guys. Biryani. Talked about life. Anish (final year) was telling us about his GATE prep. Made me feel a way.\n\n**22:30** — Mom calls. Picked. \"you sound tired beta.\" \"yeah ma long day.\" Wasn't entirely lying.\n\n**22:35** — Back in hostel.\n\n**22:45** — Felt guilt about Signals. Opened the PDF. Problem 4 still at 25%.\n\n**22:50** — Phone. WhatsApp call from Rohan (school friend). Picked. \"what's up.\" Casual.\n\n**23:00–00:12** — Long call. Discussed his college, his girlfriend, his stress. Felt like a real conversation. The kind that's worth losing sleep over.\n\n**00:15** — Hung up. Looked at the Signals PDF still open. Closed laptop.\n\n**00:30** — Got water. Did push-ups for 4 minutes. Felt energetic. Decided to \"do problem 4 quick.\"\n\n**00:35** — Opened laptop again. Started problem 4.\n\n**01:05** — Got to 60%. Hit the wall.\n\n**01:06** — Phone. \"5 min break.\"\n\n**01:50** — Still on phone. Reels. The break is the trap.\n\n**02:30** — Closed laptop properly. Brain dead.\n\n**02:33** — Bed. Phone.\n\n**03:14** — Asleep.\n\n### Metrics\n\n- **Sleep:** 03:14 → 09:47 (6h 33m)\n- **Screen time:** 5h 28m\n  - Instagram: 1h 42m\n  - WhatsApp: 1h 51m (Rohan call)\n  - YouTube: 47m\n  - Reddit: 31m\n  - Spotify: background\n- **Breakfast:** banana. acceptable.\n- **Classes attended:** 0 / 4 (full skip — Friday is short)\n- **Steps:** 6,847 (campus + club room walking)\n- **Mom calls:** 2/3 picked (dodged midday, didn't call back). lied on AM call.\n- **Club hours:** 9h 30m (deep work + chassis build)",
+        "plan": "### Intended (set night before)\n\n- wake 8am\n- attend Friday classes (Signals, Analog, Microproc theory, Control)\n- problem 4 done by lunch\n- club 5pm\n- early sleep — important class Saturday morning (lol there's no class Saturday)\n\n### Notes to self (for tomorrow)\n\n- problem 4 — Google the integral by parts thing\n- start problem 5 weekend\n- write Microproc lab record before next Thursday\n- ASK ENT TEACHER when the paper is due (you have not asked)\n- buy chassis screws for the bot",
+        "mood": "bro the club work today was the most ALIVE I've felt in weeks. genuinely. and yet I skipped 4 classes to be there. like the universe is testing me. why can I work for 10 hours straight on a robot but I can't sit through one Signals lecture without dissociating. my brain is broken or maybe it's just bored. probably both. tomorrow is saturday, I'm sleeping in for once, no guilt. (it will be lots of guilt)."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-27",
+        "did": "### What happened\n\n**11:00** — Mom called. Did not hear it. Asleep.\n\n**12:30** — Mom called again. Did not hear it.\n\n**13:47** — Naturally woke up. Saw 2 missed calls from mom. Heart sank.\n\n**13:48** — Called mom back. \"where were you beta?\" \"ma I was at club whole day yesterday, slept late.\" Half-truth. Mom: \"okay take care, eat properly.\" 2 min call. I felt the disappointment in her voice. Or maybe I projected it.\n\n**13:55** — Phone. Reels. 30 min in bed staring at ceiling.\n\n**14:30** — Got up. Hungry. Mess lunch over. Walked to canteen.\n\n**15:00** — Canteen lunch (chole bhature + lassi). Talked to Aman who was also there. He's been studying since morning. Felt 0% inspired and 100% guilty.\n\n**15:45** — Back in room. Sat at desk. Genuinely planned to work.\n\n**16:00** — Opened Signals PDF. Problem 4 at 60%.\n\n**16:05** — Picked up phone \"for music.\" Spotify.\n\n**16:08** — Reels.\n\n**16:53** — 45 min gone. Closed phone. Stared at problem 4.\n\n**17:00** — Decided I'm too tired (??? I just woke up 3 hours ago) and need a \"fresh start.\" Lay on bed.\n\n**17:15** — Asleep again. Evening nap inbound.\n\n**20:34** — Woke. Dark outside. The evening nap = sleep schedule's funeral.\n\n**20:35** — Phone. The gang chat group going OFF. They're at the new mall in Indiranagar. I forgot we planned to go out. Texted \"bro I just woke up I'm sorry.\"\n\n**20:36** — Aman: \"bruh you fr??? we left at 5.\" Felt the FOMO. Felt the guilt.\n\n**20:40** — Got ready slowly. Decided to go meet them.\n\n**21:00** — Auto to Indiranagar. The boys at a chai cafe. Joined them.\n\n**21:30–23:30** — Out with the gang. Coffee, snacks, walking around. The girl from Analog Comm walked by with her friends. We made eye contact again. Aman noticed and would not let it go for 20 minutes.\n\n**23:30** — Auto back to hostel. Mom calls (her 3rd of the day). Picked. \"where are you?\" \"with friends ma coming back to hostel.\" Truth. Mom: \"be safe.\"\n\n**23:55** — Back in room.\n\n**00:00** — Wide awake. Brain wired from the outing.\n\n**00:15** — Phone. Reels.\n\n**01:00** — YouTube. Random tech videos. Got into a rabbit hole about embedded systems careers.\n\n**02:30** — Tried to sleep. Brain too active.\n\n**03:00** — Phone again.\n\n**04:08** — Asleep.\n\n### Metrics\n\n- **Sleep:** 04:08 → 13:47 (9h 39m night sleep) + 17:15 → 20:34 (3h 19m evening nap) = total 12h 58m across two chunks. Body confused.\n- **Screen time:** 7h 03m\n  - Instagram: 2h 51m\n  - YouTube: 2h 14m\n  - WhatsApp: 1h 12m\n  - Reddit: 28m\n  - Spotify: background\n- **Breakfast:** N/A — woke at 1:47pm. Lunch was at 3pm.\n- **Classes attended:** N/A — Saturday\n- **Steps:** 5,124 (auto + walking at mall)\n- **Mom calls:** 1/3 picked actively. 2 missed, 1 called back. Lied partially.",
+        "plan": "### Intended (set night before)\n\n- wake 10am (generous)\n- finish problem 4 + 5 of Signals\n- write Microproc lab record\n- gym\n- outing with the gang in evening\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- attendance check Monday — must go\n- problem 4: GOOGLE IT and finish\n- start problem 5\n- buy detergent (running out)\n- text the gang sorry for being late",
+        "mood": "the sleep schedule is officially in shambles. waking up at 1:47pm and napping 5pm to 8pm is feral behavior. and yet. it was nice to see the boys tonight. needed it. the FOMO when they left without me at 5 was real tho. promised myself I'd lock in tomorrow. it's Sunday. tomorrow's Sunday. monday I need to attend class fr fr."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-28",
+        "did": "### What happened\n\n**11:00** — Mom calls. Did not hear.\n\n**12:30** — Mom calls again. Did not hear.\n\n**13:15** — Naturally awake. 2 missed calls. Didn't even feel surprised this time.\n\n**13:16** — Called mom. \"ma I'm fine slept late.\" Mom: \"you said yesterday too you'd sleep early.\" She is keeping receipts. 3 min call. Hung up.\n\n**13:20** — Phone in bed. Reels. 1 hour.\n\n**14:30** — Got up. Mess lunch ended. Maggi in room.\n\n**15:00** — Sat at desk. Genuinely opened laptop. Opened Signals PDF.\n\n**15:15** — Stared at problem 4 (still at 60%). Looked at it for 8 minutes without writing.\n\n**15:23** — Picked up phone \"to ask Aman a doubt.\" Did not text Aman. Opened Instagram.\n\n**15:25–16:30** — Doomscroll. Mostly Reels.\n\n**16:30** — Sunday scaries officially kicking in. Tomorrow is Monday.\n\n**16:35** — Made a list in Notion:\n  ```\n  monday plan:\n  - wake 7am\n  - all 5 classes\n  - signals problem 4 + 5\n  - microproc lab record\n  - club 5pm\n  - sleep midnight\n  ```\n  Felt momentary peace.\n\n**16:50** — Closed Notion. Phone again.\n\n**17:00** — Vikram came back from his weekend trip home. Asked how my weekend was. \"Productive.\" Lied to my own roommate.\n\n**17:30** — Tried to nap \"to reset for tomorrow.\" Did not sleep, just lay there. Brain spinning.\n\n**18:30** — Got up. Hungry. Mess dinner soon.\n\n**19:00** — Mess dinner. Roti + sabzi. Ate alone, scrolled phone the whole time.\n\n**19:30** — Back in room. Vikram studying. Felt the contagious-energy guilt.\n\n**19:45** — Opened laptop. Sat down. Problem 4.\n\n**20:10** — Solved problem 4 finally. Googled the integral by parts trick, applied it, it clicked. Real productive feeling.\n\n**20:15** — Phone \"to celebrate.\"\n\n**21:00** — 45 min later, closed phone. Tried problem 5. Read it. Closed PDF.\n\n**21:30** — Mom calls. \"you sleeping early today right?\" \"yeah ma 11pm.\" Already a lie at 9:30pm.\n\n**21:45** — Watched YouTube. Long video about how Apple's M-series chips work. 1hr 12min.\n\n**23:00** — Closed YouTube. Tried problem 5 again.\n\n**23:30** — Got 20% in. Brain checked out.\n\n**23:35** — Phone \"for 10 min wind down.\"\n\n**00:30** — Still on phone. Switched to YouTube essay about Indian education.\n\n**01:45** — Closed video. Lay there.\n\n**02:00** — Reels.\n\n**02:38** — Asleep.\n\n### Metrics\n\n- **Sleep:** 02:38 → 13:15 (10h 37m — body recovering from yesterday's mess, also escaping reality)\n- **Screen time:** 8h 12m\n  - Instagram: 3h 24m\n  - YouTube: 2h 51m\n  - WhatsApp: 1h 18m\n  - Reddit: 39m\n  - Spotify: background\n- **Breakfast:** N/A — woke afternoon\n- **Classes attended:** N/A — Sunday\n- **Steps:** 1,872 (room → mess → room → mess → room)\n- **Mom calls:** 1/3 active. 2 missed, 1 called back. Lied on the timing one.",
+        "plan": "### Intended (set night before)\n\n- wake 9am\n- problem 4 + 5 + 6 of Signals\n- Microproc lab record draft\n- groceries\n- meal prep (lol)\n- sleep 11pm — Monday matters\n\n### Notes to self (for tomorrow)\n\n- alarm 7am, across room, phone in drawer\n- problem 5 + 6 priority\n- microproc lab record THIS WEEK\n- ATTEND every class monday (panic attendance protocol activate)\n- groceries (still not bought)",
+        "mood": "bro the sunday scaries hit different when you're already behind. the way I made a beautiful Notion plan at 4:35pm and didn't follow a single line of it. and tomorrow's Monday and I haven't done jack. but problem 4 is done. that's something. I'm telling myself that's something. tomorrow I'm going to college on time and I'm going to be a different person. yeah right."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-29",
+        "did": "### What happened\n\n**07:00** — Alarm. Across room. Got up to dismiss. Sat back down. Familiar pattern.\n\n**07:30** — Mom calls. Picked. \"up beta?\" \"yeah ma.\" Half-true. Hung up.\n\n**07:32** — Slept.\n\n**08:55** — Woke. Missed first class. Showered fast.\n\n**09:30** — Out the door. Crammed a piece of bread from Vikram's stash.\n\n**09:50** — Slid into Analog Comm. Sir was 5 min into the lecture. Sat in back. Took half-decent notes.\n\n**10:40** — Tea break. The gang said the new bot chassis Karthik printed is ready.\n\n**11:00** — Microproc theory. Took notes. Topic: stack operations.\n\n**12:00** — Control Systems. Sir announced **end-sem syllabus review starts Thursday.** First mention of end-sems. Felt the gentle pre-panic ramp begin.\n\n**12:50** — Lunch. Mess.\n\n**13:00** — Mom calls. Picked. \"yeah ma I ate.\" Honest for once.\n\n**13:15** — **THE EVENT.** Signals & Systems lecture. Sir announces:\n  - **5 graph problems** to be submitted **handwritten on A4 paper**. Bode plots, root locus, Nyquist diagrams. **DUE SATURDAY MAY 16.** Hard deadline. No extensions (\"I know how you all are.\").\n  - Said it like it was nothing. The room went silent. Then groans.\n\n**13:45** — Walking to next class with Aman. He: \"bro 5 days is nothing for 5 full graphs.\" Me: nervous laugh.\n\n**14:00** — Entrepreneurship & Skill Development. Open elective. Teacher: \"a 2000-word paper on entrepreneurial mindset, **due Friday May 15, 9am.** Submit hard copy.\"\n\n**14:02** — Brain went numb. Two assignments due in the same window.\n\n**14:30–15:30** — Microproc theory continued (afternoon slot today). Did not absorb anything. Sir's voice was static.\n\n**15:45** — Walked to hostel. Slowly. Like a man walking to his execution but in a chill way.\n\n**16:00** — Sat on bed. Did not move for 20 min.\n\n**16:20** — Phone. Reels.\n\n**17:00** — Roommate Vikram comes in. He has the same Signals deadline. He's already started graph 1.\n\n**17:05** — I told Vikram \"I'll start tonight.\" He said \"yeah bro lock in.\" He doesn't believe me. I don't believe me.\n\n**17:30** — Skipped club. Couldn't even bring myself to walk to club room despite that being the only place my brain works. Energy is gone.\n\n**17:45** — Lay on bed. Eyes open. Stared at ceiling for 35 min.\n\n**18:20** — Phone. Instagram. The doom scroll has a flavor today — every reel is about productivity, study tips, \"how I topped my exam.\" The algorithm is bullying me.\n\n**19:30** — Mess dinner. Tasted nothing. Ate fast.\n\n**20:00** — Back in room. Opened laptop. Opened the Signals graphs PDF.\n\n**20:05** — Read graph 1 prompt. Bode plot of a 3rd-order system. Felt physically heavy.\n\n**20:10** — Phone \"for 5 min break.\"\n\n**20:55** — 45 min on phone. Closed it.\n\n**21:00** — Tried to draw the asymptote. Got the gain wrong. Erased. Felt rage.\n\n**21:30** — Mom calls. Picked. \"studying?\" \"yeah ma a lot of work this week.\" Truth. Mom: \"okay you focus, eat properly.\"\n\n**21:35** — Did NOT focus.\n\n**22:00** — Vikram: \"I finished graph 1.\" Showed me. It's done. Looks good. Felt simultaneously inspired and crushed.\n\n**22:15** — Tried again. Got 15% of graph 1 done. Hit a wall on a phase margin calculation. Did not Google. Just stopped.\n\n**22:30** — Phone.\n\n**23:00** — Still on phone. Made a \"study plan\" in Notion for the week:\n  ```\n  tue: graph 1 + 2\n  wed: graph 3 + 4\n  thu: graph 5 + start ent paper\n  fri: ent paper morning, submit, then signals review\n  sat: submit signals\n  ```\n  Felt fake-relief.\n\n**23:30** — Closed Notion. Reels.\n\n**00:30** — Mom didn't call tonight (she's already asleep, called at 21:30).\n\n**00:45** — YouTube. \"How to stop procrastinating.\" Watched the video. Nodded at every point. Did not act on a single one.\n\n**01:50** — Tried to sleep. Brain spinning about Saturday.\n\n**02:30** — Phone. Reels. Anxious scrolling.\n\n**03:14** — Asleep.\n\n### Metrics\n\n- **Sleep:** 03:14 → 08:55 (5h 41m)\n- **Screen time:** 7h 47m\n  - Instagram: 3h 12m\n  - YouTube: 2h 27m\n  - WhatsApp: 1h 18m\n  - Reddit: 50m\n- **Breakfast:** stolen bread\n- **Classes attended:** 4 / 5 (missed Signals morning slot, but caught Signals announcement during afternoon — wait actually it was during the 1:15pm afternoon Signals slot. Yes attended that.)\n- **Steps:** 4,847\n- **Mom calls:** 3/3 picked",
+        "plan": "### Intended (set night before)\n\n- wake 7am\n- ALL 5 classes\n- problem 5 + 6\n- club work evening\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- graph 1 + 2 tomorrow NO MATTER WHAT\n- start ent paper outline tomorrow\n- maybe ask Vikram for help on phase margin thing\n- DO NOT TAKE EVENING NAP TOMORROW\n- (the universe will laugh at all of the above)",
+        "mood": "the assignment list dropped today and I just. shut down. like flipped a switch. I know this feeling. it's the one from 12th grade right before boards when I was so behind I just stopped going to school. I'm doing it again. 5 days to do 5 graphs and a 2000 word paper is technically possible. but bro I haven't even started graph 1 properly. and the algorithm is showing me productivity reels like it's mocking me. I made a beautiful plan in notion at 11pm tonight. I will not follow it. I know I won't. and I made it anyway."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-04-30",
+        "did": "### What happened\n\n**07:00** — Alarm. Dismissed.\n\n**07:30** — Mom calls. Did not pick. Anxiety made me unable to pick. I cannot perform \"fine\" today.\n\n**08:00** — Alarm 2. Dismissed.\n\n**09:15** — Woke. Phone. Saw missed mom call. Did not call back yet.\n\n**09:20** — Lay in bed. Knew today was supposed to be the lock-in day. Could not move.\n\n**10:00** — Decided I cannot face college today. Did not go.\n\n**10:30** — Showered. Mess closed.\n\n**11:00** — Made coffee in room. Sat at desk. Opened Signals graphs PDF.\n\n**11:05** — Read graph 1. Made a fresh start on it. Drew the axes.\n\n**11:18** — Picked up phone. \"I need music.\" Spotify.\n\n**11:23** — On phone. Instagram. The trap is real.\n\n**11:51** — 28 min gone. Closed phone. Looked at half-drawn axes.\n\n**12:00** — Slow continuation. Drew the gain plot for the low-frequency asymptote.\n\n**12:30** — Got stuck on the phase plot at -90 degrees. Stared at it.\n\n**12:45** — Got up. Walked around room. Drank water. Sat back down.\n\n**13:00** — Mom called. Picked. \"yeah ma I'm at college I had a free hour now.\" Lied. Mom: \"you sound off.\" \"no ma just tired.\" Hung up.\n\n**13:15** — Vikram came back during lunch (he had a free period). Saw me at desk. \"How's it going?\" \"Slow.\" He nodded. He's already on graph 2. I want to throw something.\n\n**13:30** — Vikram left for afternoon classes. I should have gone too. Did not.\n\n**13:35** — Sat at desk. Looked at graph 1.\n\n**13:50** — Drew the phase plot. Wrong slope. Erased. Drew again. Still wrong. Got frustrated. Closed laptop.\n\n**14:00** — Phone. YouTube. \"How to draw Bode plots step by step.\" Watched 14 min. Felt slightly less lost.\n\n**14:30** — Opened laptop. Tried again. Got the slope right this time.\n\n**15:00** — Phone \"for 2 min break.\"\n\n**15:55** — 55 min on phone. The break is always the trap.\n\n**16:00** — Back to graph. Finished the phase asymptote. The corner frequencies. The breakpoint.\n\n**17:15** — Graph 1 = 85% done. Brain fried.\n\n**17:30** — Took a nap. \"Just 30 min.\"\n\n**19:20** — Woke up. Late evening. Hate myself.\n\n**19:25** — Mess dinner. Tasted nothing.\n\n**20:00** — Back in room. Vikram is on graph 3. He has done 2 in the time I've done 0.85.\n\n**20:30** — Sat down. Forced graph 1 to completion. Last 15% took 50 min because brain wouldn't engage. Done at 21:20.\n\n**21:30** — Phone \"to celebrate.\"\n\n**22:00** — Mom calls. \"studying?\" \"yeah ma a lot.\" Truthful.\n\n**22:30** — Started graph 2 finally. It's a root locus problem. Harder than Bode.\n\n**22:45** — Got stuck immediately. Opened YouTube tutorial.\n\n**23:00** — Tutorial done. Tried to apply it.\n\n**23:30** — Got 30% in. Hit a wall.\n\n**23:35** — Phone.\n\n**00:30** — Doomscroll. Anxiety scroll. Productivity tweets are everywhere.\n\n**01:00** — Forced laptop open. Back to graph 2.\n\n**01:30** — Got 50% in. Two graphs in a day was the plan and I have 1.5.\n\n**02:00** — Slow. Brain mush. Slow.\n\n**02:30** — Got 70% in.\n\n**03:00** — Cried briefly. Just frustration. Not even sad. Just rage at self.\n\n**03:30** — Got 85% in.\n\n**04:00** — Done with graph 2. So tired body is shaking.\n\n**04:01** — Did NOT close laptop. Phone. Reels for 18 minutes as \"reward.\"\n\n**04:25** — Sleep.\n\n### Metrics\n\n- **Sleep:** 04:25 → 09:15 (4h 50m) + evening nap 17:30 → 19:20 (1h 50m) = 6h 40m fragmented\n- **Screen time:** 6h 28m\n  - Instagram: 2h 48m\n  - YouTube: 2h 12m (tutorials counted here, mixed)\n  - WhatsApp: 47m\n  - Reddit: 41m\n- **Breakfast:** missed\n- **Classes attended:** 0 / 5 (full skip — first time this week, last in a while too)\n- **Steps:** 1,438\n- **Mom calls:** 1/3 picked, 1 dodged, 1 picked. Lied on one.",
+        "plan": "### Intended (set night before)\n\n- wake 7am\n- attend all classes\n- graph 1 + 2 done\n- start ent paper outline\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- graph 3 tomorrow MINIMUM\n- start ent paper outline NO LATER THAN WEDNESDAY NIGHT\n- eat actual breakfast tomorrow even if late\n- phone away after 11pm tomorrow (it's not going to happen)",
+        "mood": "bro the slow panic is the worst kind. I'm anxious all day, my chest is tight, but my body moves like it's underwater. I'll sit at the desk and 4 hours pass and I've done 30 minutes of actual work. and I KNOW I'm doing it. I can see it happening in real time and I can't stop. graph 1 took me 9 hours total across two days. NINE HOURS. and there's 3 graphs + a 2000 word paper left in 4 days. I'm so cooked it's almost funny. almost. I'm not laughing. I almost cried at 3am. body shaking from caffeine + no food + stress. and I still picked up the phone at 4am for one more scroll. WHY. why am I like this. tomorrow is wednesday. wednesday I have to wake up and go to class and do graph 3. I have to. there is no choice anymore. (there's always a choice and I always make the wrong one)."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-01",
+        "did": "### What happened\n\n**09:00** — Alarm. Did not move.\n\n**09:30** — Alarm. Did not move.\n\n**10:14** — Mom calls. Did not pick. Cannot face.\n\n**11:30** — Mom calls again. Did not pick.\n\n**12:47** — Woke up naturally. 4h 50m of night sleep wasn't enough after the 4am bedtime. Body feels like wet cement.\n\n**12:48** — Saw 2 missed mom calls. Did not call back yet. Will get scolded later.\n\n**12:50** — Phone. Reels in bed. 20 min.\n\n**13:10** — Got up. Mess lunch ending. Walked over fast. Got the last plate of food.\n\n**13:30** — Back in room. Texted mom: \"ma sorry slept late was up doing assignment.\" Half-true.\n\n**13:35** — Mom replied: \"you call me when free beta.\" Stomach drop.\n\n**13:45** — Sat at desk. Opened graph 3. Read prompt. Nyquist plot.\n\n**13:50** — Phone \"for 5 min.\"\n\n**14:30** — 40 min later put phone down. Did not start graph.\n\n**14:35** — Walked around room. Drank water. Made coffee. Drank coffee. Sat back at desk.\n\n**14:50** — Started graph 3. Slow.\n\n**15:30** — Got 25% in. Hit a wall on the encirclement count.\n\n**15:32** — Phone. Instagram.\n\n**16:05** — Vikram comes home from class. He finished graph 3 last night. Currently on graph 4. He says \"bro you need to lock in fr you're falling behind.\" Felt the words like slaps. Did not show it.\n\n**16:10** — Vikram leaves for the library. I sit at desk. Vikram's energy left with him.\n\n**16:30** — Back to graph 3. Got 40% in.\n\n**17:00** — **Rohan calls.** Long distance friend. Picked. Should not have picked.\n\n**17:00–18:23** — 1hr 23m on call. He's going through a breakup. He needed to talk. I am a good friend but a bad student and right now those two are at war.\n\n**18:25** — Hung up. Looked at graph 3.\n\n**18:30** — Tried to resume. Brain split between Rohan's situation and the encirclement count.\n\n**19:00** — Got 55% in.\n\n**19:15** — Mess dinner. Ate at desk while staring at graph 3.\n\n**19:45** — Phone \"for 10 min.\"\n\n**20:30** — 45 min later, put it down. Pattern is established. The phone is a black hole.\n\n**20:35** — Tried calling mom. She didn't pick (probably in evening pooja). Sent voice note: \"ma I'll call later love you.\"\n\n**20:40** — Back to graph 3.\n\n**21:30** — Graph 3 = 80% done.\n\n**21:45** — Vikram back. He's done with graph 4 too. He is **two** graphs ahead of me now.\n\n**22:00** — Mom calls back. Picked. \"where were you whole day?\" \"sleeping ma was up till 4am doing work.\" Truth. Mom didn't push, told me to eat properly. Made me feel worse.\n\n**22:15** — Back to graph 3. Closed it out at 90% — close enough, will polish later.\n\n**22:30** — Opened graph 4. Bode plot again, different system.\n\n**22:35** — Phone \"5 min.\"\n\n**23:20** — Back to graph 4. Started.\n\n**00:00** — Got 20% in. Slow.\n\n**00:30** — Got 35% in. Brain melting.\n\n**01:00** — **Considered the Ent paper.** Have not started. 2000 words. Due Friday 9am. Currently Wednesday night. Did the math. Felt sick.\n\n**01:15** — Opened Google Docs. Typed \"Entrepreneurial Mindset\" as the title. Closed it.\n\n**01:20** — Back to graph 4. Got 45% in.\n\n**01:45** — Phone. Reels. The dopamine reaching for me.\n\n**02:30** — Closed phone. Back to graph 4.\n\n**02:45** — Got 55%.\n\n**03:30** — Got 65%. Body shaking from coffee + no proper meal.\n\n**04:00** — Got 75%.\n\n**04:30** — Got 80%. Hit wall.\n\n**04:31** — Phone for 22 min as \"reward.\"\n\n**04:55** — Closed laptop. Bed.\n\n**05:08** — Asleep.\n\n### Metrics\n\n- **Sleep:** 05:08 → 12:47 (7h 39m, but the schedule is feral)\n- **Screen time:** 6h 47m\n  - Instagram: 2h 22m\n  - WhatsApp: 2h 14m (Rohan call dominated)\n  - YouTube: 1h 18m\n  - Reddit: 53m\n- **Breakfast:** N/A — woke at lunch\n- **Classes attended:** 0 / 5 (full skip)\n- **Steps:** 894 (one trip to mess, that's it)\n- **Mom calls:** 2 missed + 1 picked back later. Truthful this time.",
+        "plan": "### Intended (set night before)\n\n- wake 9am (gave up on 7am)\n- attend at least afternoon classes\n- graph 3 + 4\n- start ent paper outline\n- sleep 1am at latest\n\n### Notes to self (for tomorrow)\n\n- ENT PAPER OUTLINE FIRST THING TOMORROW\n- graph 4 finish (last 20%)\n- graph 5 START\n- microproc lab attendance tomorrow (Thursday — mandatory)\n- eat actual food. set 3 alarms.\n- DO NOT pick up calls tomorrow during work hours (sorry Rohan)",
+        "mood": "bro Rohan called and I picked up and that was the wrong choice but also the right choice because he was crying and what was I supposed to do. but those 80 minutes were the difference between graph 4 being done and graph 4 being at 80%. and the ENT paper. dawg the ent paper. it's due in 32 hours. 2000 words. zero words written. zero. and I'm sitting here at 4am still working on graphs slow as hell. the body refuses to move at the speed the brain is demanding. I can feel myself failing in real time. this is what 12th grade felt like. exact same flavor. same shutdown. same body-underwater feeling. I have not eaten a real meal in 36 hours unless you count rice at lunch which I don't because I was scrolling through it. tomorrow has to be different. has to. there is literally no buffer left."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-02",
+        "did": "### What happened\n\n**09:00** — Alarm. Dismissed.\n\n**10:14** — Mom calls. Did not pick. Cannot afford the emotional cost right now.\n\n**11:42** — Woke. Body wrecked. Phone immediately.\n\n**11:43** — Saw missed mom call. Texted: \"ma busy whole day will call evening.\" Cold but functional.\n\n**11:50** — Got out of bed. Brain fog level 9.\n\n**12:00** — Bread + butter from Vikram's stash. Coffee.\n\n**12:15** — Sat at desk. Opened ent paper Google Doc. Title is still there from last night.\n\n**12:18** — Started writing the intro. 4 sentences. Brain stalled. The 2000 words feel like a mountain.\n\n**12:30** — Wrote bullet point outline. 5 points:\n  ```\n  1. what is entrepreneurial mindset\n  2. key traits\n  3. examples (indian context)\n  4. how to develop\n  5. conclusion\n  ```\n  This took 12 min. Beat self up for it.\n\n**12:45** — Got ready for lab. Slow.\n\n**12:55** — Walked to college. Skipped first 3 classes today (Signals, Analog, Microproc theory). Going for Microproc LAB only (mandatory).\n\n**13:00** — Microproc lab. Sir gave new exercise — 8086 string reversal. Got it done in 40 min. Was actually engaged. Strange how my brain works on this.\n\n**13:00** (parallel) — Mom called. Did not pick (in lab). Texted \"in lab ma will call later.\" Did not call.\n\n**15:30** — Lab over early. Sir let us go.\n\n**15:35** — Walked back to hostel. Brain mush. The 4 hours of sleep last night = inhumane.\n\n**15:50** — In room. Decided to nap.\n\n**16:00** — \"20 min nap.\"\n\n**18:47** — Woke up. 2hr 47m nap. The classic catastrophic afternoon nap.\n\n**18:48** — Realized: ent paper due in 14 hours. 0% complete. Graph 4 still at 80%. Graph 5 not started.\n\n**18:50** — Existential moment. Sat on edge of bed for 8 min not moving.\n\n**19:00** — Forced self up. Mess dinner.\n\n**19:30** — Back in room. Sat at desk. Opened ent paper.\n\n**19:35** — Wrote 3 sentences of section 1.\n\n**19:42** — Phone \"for 5 min.\"\n\n**20:25** — 43 min on phone. Pattern is BORN.\n\n**20:30** — Back to ent paper. Section 1 = 120 words.\n\n**21:00** — Vikram came home. He's done with all 5 graphs. He's editing them now. I felt nothing — past envy now.\n\n**21:15** — Section 1 = 280 words.\n\n**21:30** — Mom calls. Picked. \"where were you whole day?\" \"ma I had lab and now I'm working on assignment, paper due tomorrow.\" Truth. Mom: \"okay focus, eat properly.\" 90 sec call.\n\n**21:35** — Back to paper. Section 2 = \"key traits.\"\n\n**22:00** — Phone \"to look up an article for the paper.\" Used this as cover for Instagram for 25 min.\n\n**22:30** — Back to paper. Section 2 started for real. ChatGPT used to brainstorm traits (not generate text — actually brainstorm). 8 traits listed.\n\n**23:00** — Wrote 4 traits with explanations. ~400 words. Section 2 = 400 words. Total = 680.\n\n**23:30** — Phone break \"for 10.\"\n\n**00:15** — 45 min later, closed phone.\n\n**00:20** — Section 2 finished. 580 words. Total = 860.\n\n**00:45** — Section 3 = \"indian context examples.\" Wrote about Ola founder, Zomato founder, some textbook examples. Recycling content from internet but rephrasing. Ethically gray, intellectually dead.\n\n**01:30** — Section 3 = 450 words. Total = 1310.\n\n**01:45** — Phone \"5 min.\"\n\n**02:30** — Back. Slow.\n\n**02:35** — Section 4 = \"how to develop.\" Wrote generic advice (read books, network, fail forward). Hated every word I typed.\n\n**03:30** — Section 4 = 380 words. Total = 1690.\n\n**03:45** — Phone. Reels. Hate-scrolling.\n\n**04:30** — Back. Section 5 conclusion.\n\n**05:00** — Conclusion done. 220 words. Total = 1910.\n\n**05:15** — Padded the conclusion to hit 2010 words.\n\n**05:30** — Read through it. It's bad. It's mid. It's done. Or rather, it exists.\n\n**05:35** — Realized: graph 4 still at 80%. Graph 5 untouched. Submission tomorrow morning at 9am for ent paper.\n\n**05:40** — Forced graph 4. Last 20% in 35 min. Done at 06:15.\n\n**06:20** — Looked at graph 5 prompt. Brain cannot.\n\n**06:30** — Tried. Got 5% in. Could not.\n\n**06:35** — Crashed. Phone in hand.\n\n**06:45** — Asleep at desk, head on book.\n\n### Metrics\n\n- **Sleep:** Night sleep 05:08 → 11:42 yesterday + evening nap 16:00 → 18:47 (2h 47m, catastrophic) → crash at desk 06:45 (transitioning into Day 12)\n- **Screen time:** 5h 31m (down because of the paper grind)\n  - Instagram: 2h 04m\n  - WhatsApp: 1h 38m\n  - YouTube: 1h 12m\n  - Reddit: 37m\n- **Breakfast:** bread + coffee (from Vikram's stash)\n- **Classes attended:** 1 / 5 (Microproc lab only, mandatory)\n- **Steps:** 3,148 (lab walk)\n- **Mom calls:** 1/3 picked. 2 dodged. Texted once.",
+        "plan": "### Intended (set night before)\n\n- wake 9am\n- microproc lab 1pm (MANDATORY — cannot skip)\n- ent paper outline before lab\n- graph 4 finish, graph 5 start\n- sleep 1am\n\n### Notes to self (for tomorrow)\n\n- print ent paper 8am\n- submit by 9am\n- come back, sleep, then graph 5\n- saturday is the signals deadline\n- you survived another night. unsustainable.",
+        "mood": "the evening nap broke me. it didn't just delay me, it broke the day. I had a real shot today to do the paper in normal hours and finish graph 4-5. instead I slept 2:47 hours at 4pm to 7pm and now it's 6:45am and I haven't slept and I haven't even DONE the assignment fully. the ent paper is done but it's slop. complete slop. I rephrased internet text for 1310 of the 2010 words. nobody is going to read it but I'm still ashamed. and graph 5 — graph 5 doesn't even exist yet. the deadline for graphs is tomorrow afternoon technically wait no it's SATURDAY okay I still have a buffer for graph 5. but right now I have to PRINT the ent paper, walk to college, submit it, and not collapse. and then sleep. and then graph 5. and then submit on saturday. that's the plan. body is shaking. I haven't eaten properly in 3 days. but the paper is done. it exists. it's something. it's not good but it's something."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-03",
+        "did": "### What happened\n\n**07:00** — Alarm. Did not hear. Crashed at desk.\n\n**07:30** — Mom calls. Did not hear. Phone on silent.\n\n**08:00** — Alarm 2. Did not hear.\n\n**09:32** — Woke up. Head on the desk. Sun in face. Saw the time. **DEADLINE WAS 9AM.**\n\n**09:33** — Panic. Real panic, not slow-panic. Sprung up. Heart racing.\n\n**09:35** — Opened laptop. Email to Ent teacher:\n  ```\n  Respected Ma'am,\n  I am extremely sorry. I had a medical issue last night\n  and overslept. The paper is ready, please allow me to\n  submit by today evening / Monday morning latest.\n  Apologies for the inconvenience.\n  Regards, Arjun Menon, ECE Sem 4, Roll: ECE21B043\n  ```\n  Sent at 09:42.\n\n**09:42** — Stared at screen. Refresh inbox. No reply yet.\n\n**09:45** — Sat on bed. Body shaking. Hadn't slept. Hadn't eaten.\n\n**10:00** — Walked to mess. Closed. Got biscuits from canteen.\n\n**10:30** — Back in room. Refreshed email. No reply.\n\n**11:00** — Decided to start graph 5 because what else.\n\n**11:05** — Opened graph 5 prompt. Eyes won't focus. Read same line 5 times.\n\n**11:20** — Phone \"for 5.\"\n\n**12:00** — 40 min phone. Body underwater.\n\n**12:30** — Mom calls. Picked. Voice was wrecked. \"are you sick?\" \"yeah ma slept badly.\" \"eat properly please.\" 1 min call.\n\n**12:35** — Texted Vikram (he's at college): \"bro can you check if Ent ma'am is in office? I need to submit my paper.\" Vikram: \"she left at 11. back monday.\"\n\n**12:36** — That sealed it. Ent paper officially **LATE.** Monday submission only. Grade penalty likely 20-30%.\n\n**12:40** — Felt the resigned numbness. The \"well, this is happening\" feeling.\n\n**13:00** — Back to graph 5. Slow.\n\n**13:30** — Got 15% in.\n\n**14:00** — Phone. Reels. Ate biscuits at desk while scrolling.\n\n**14:45** — Back. Slow.\n\n**15:00** — Got 30% in.\n\n**15:30** — Mess lunch was supposed to be 12:30-2pm. Missed it.\n\n**15:45** — Got 40% in.\n\n**16:00** — **Body crashed.** Head on desk again. Lay down on bed at 16:05.\n\n**16:08** — Asleep instantly.\n\n**21:47** — Woke up. **5h 39m crash nap.** Dark outside. Felt like death and also weirdly rested.\n\n**21:50** — Disoriented. Checked phone. Ent teacher replied at 14:32:\n  ```\n  Arjun, submit by Monday morning. Late penalty applies.\n  Hope you're better.\n  ```\n  Relief + shame.\n\n**22:00** — Mom calls. Picked. \"you okay beta? you sound better.\" \"yeah ma slept.\" Truth. \"eat dinner please.\" Promised.\n\n**22:15** — Mess closed. Canteen. Sandwich + cold coffee.\n\n**22:45** — Back in room. Vikram is editing his graphs neatly. He has time and energy. Different species.\n\n**23:00** — Wide awake. The 6 hour evening nap = brain reset, body wired.\n\n**23:15** — Tried to start graph 5. Couldn't focus despite being awake. Different kind of can't.\n\n**23:30** — Phone. YouTube. Started a video. Then another. Then another.\n\n**00:15** — Watching a 2-hour movie review on YouTube. Watching it like it's the most important thing.\n\n**01:30** — Movie review over. Started another video. About the Soviet space program.\n\n**02:45** — Watched a full documentary on YouTube.\n\n**03:00** — Tried to sleep. Failed. Mind wired.\n\n**03:30** — Opened laptop. Graph 5. Got 50% in.\n\n**04:00** — Got 60%. Brain fried again.\n\n**04:15** — Phone. Reels.\n\n**04:45** — Sleep.\n\n### Metrics\n\n- **Sleep:** Asleep at desk 06:45 (yesterday) → 09:32 (2h 47m) + crash 16:08 → 21:47 (5h 39m evening) + 04:45 → next day (continues). Total chaos.\n- **Screen time:** 9h 12m (massive due to YouTube binge after crash nap)\n  - YouTube: 4h 18m\n  - Instagram: 2h 51m\n  - WhatsApp: 1h 12m\n  - Reddit: 51m\n- **Breakfast:** biscuits\n- **Classes attended:** 0 / 4 (Friday — was supposed to submit Ent paper, didn't, then collapsed)\n- **Steps:** 1,247\n- **Mom calls:** 2/3 picked. Truthful both.\n- **Assignment submissions:** 0 / 1 (**ENT PAPER LATE — submission Monday**)",
+        "plan": "### Intended (set night before)\n\n- 8am wake\n- print ent paper\n- submit ent paper 9am\n- finish graph 5\n- sleep early\n\n### Notes to self (for tomorrow)\n\n- graph 5 — finish tomorrow morning early\n- email Ent teacher Saturday to confirm Monday submission\n- back-assignments still 0 — those are due \"soon\" (no date yet)\n- microproc lab record — not done\n- eat actual food saturday",
+        "mood": "bro the body just SHUT DOWN at 4pm. I lay down for \"a nap\" and I genuinely could not have stopped it. and I missed the deadline by SLEEPING. and somehow the resignation feels worse than the panic did. like at least when I was panicking I was trying. now I just... missed it. and I'm awake at 4am watching a documentary about russian rockets like nothing is wrong. my body said \"we're not doing the panic thing anymore, we're doing the dissociation thing now.\" and the paper is in my inbox and I have to email the teacher again on monday and walk in and submit late and look her in the eye. and graph 5 is at 60%. and tomorrow it's due. and I'm going to be doing it tomorrow too. and then sunday I'll be tired and not do the back-assignments. and then monday I'll submit late and start the next round of being behind. I see the loop. I see it. I don't know how to step out."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-04",
+        "did": "### What happened\n\n**08:00** — Alarm. Did not hear.\n\n**10:00** — Alarm. Did not hear.\n\n**11:30** — Mom calls. Did not hear.\n\n**13:00** — Mom calls again. Did not hear.\n\n**13:47** — Woke up. Brain fog. Body sore from the desk-sleeping last night.\n\n**13:48** — Saw 2 missed mom calls. Felt the dread.\n\n**13:50** — Saw the time. **SIR LEAVES COLLEGE AT 2PM ON SATURDAYS.** Realized graph 5 is at 60% and there's no way I get to college before 2.\n\n**13:51** — Forced self to call Sir. Sir didn't pick. Texted: \"Sir I'm running late with the graphs, please allow me to submit Monday.\" No reply.\n\n**13:55** — Called mom back. \"ma slept late again sorry sorry.\" Mom was angry quiet. \"you're not eating right.\" \"yeah ma I'll eat.\" 90 sec call.\n\n**14:00** — Got out of bed. Brain mush.\n\n**14:15** — Canteen. Lunch (rice + curry). Ate while staring at the wall.\n\n**14:45** — Back in room.\n\n**15:00** — Sat at desk. Opened graph 5. Surveyed the damage: 60% done. 40% to go. Plus all 5 graphs need to be inked properly on A4.\n\n**15:05** — Started graph 5.\n\n**15:30** — Phone \"for 10.\"\n\n**16:10** — 40 min on phone. The dopamine well is dry but I keep pulling the lever.\n\n**16:15** — Back to graph 5.\n\n**16:45** — Got 75% in.\n\n**17:00** — Vikram comes back from college (he submitted yesterday afternoon, the responsible one). Asks how I'm doing. \"Late.\" He says \"Sir said in class yesterday he'd accept till Monday if you ask nicely.\" Felt a wave of relief I did not expect.\n\n**17:05** — Refreshed phone. Sir replied my text at 16:42: \"Monday morning, office hours. -25% penalty.\" Felt the relief and the penalty land together.\n\n**17:15** — Back to graph 5 with less panic. Slower if anything.\n\n**17:45** — Got 85%.\n\n**18:30** — Got 95%. Last bits being polished.\n\n**18:45** — Graph 5 done. Felt nothing. The win is dampened by the late penalty.\n\n**19:00** — Mess dinner. Tasted nothing, ate everything.\n\n**19:45** — Back in room. Vikram says Karthik (club friend) is coming over to work on the bot code.\n\n**20:00** — **Karthik arrives.** Energy in the room shifts. He brought chai and pakoras.\n\n**20:15–23:50** — Karthik and I debug the bot's line-following code. Found a logic error in the PID. Fixed it. Then started writing the chassis docs for our club project portfolio. Brain works. **Brain works perfectly.**\n\n**23:55** — Karthik leaves. We hug. He says \"bro you're so smart you just need to apply this to school.\" I laugh, hollow.\n\n**00:00** — Sat at desk. Took out the 5 graphs to ink them onto fresh A4 paper for Monday submission.\n\n**00:30** — Inked graph 1 properly. Looks neat.\n\n**01:00** — Mom didn't call tonight (she's asleep, called at 1:30pm earlier).\n\n**01:15** — Inked graph 2.\n\n**01:30** — Phone \"for 5.\"\n\n**02:00** — Inked graph 3.\n\n**02:30** — Inked graph 4.\n\n**03:00** — Inked graph 5. All 5 done. Ready for Monday.\n\n**03:05** — Felt a tiny victory. The work exists. It's late but it exists.\n\n**03:10** — Phone. Reels. The brain wants the reward.\n\n**04:00** — Sleep.\n\n### Metrics\n\n- **Sleep:** 04:00 → 13:47 (9h 47m — the body claiming back what we owe it)\n- **Screen time:** 5h 51m\n  - Instagram: 1h 58m\n  - YouTube: 1h 32m\n  - WhatsApp: 1h 18m (Karthik chat coordination)\n  - Reddit: 41m\n- **Breakfast:** N/A (woke at 1:47pm)\n- **Classes attended:** N/A — Saturday\n- **Steps:** 3,124\n- **Mom calls:** 2 missed + 1 picked. Mom angry-quiet.\n- **Club hours:** 3h 50m (Karthik debug session)\n- **Assignment submissions:** 0 / 2 (BOTH ent + signals now late for Monday)",
+        "plan": "### Intended (set night before)\n\n- wake 8am\n- finish graph 5 by 10am\n- submit all 5 graphs to Sir by 12pm\n- gym\n- evening: relax, prep for monday\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- monday: print ent paper extra copy\n- monday 8am go to Sir's office FIRST then Ent ma'am\n- back-assignments are pending (no deadline announced yet)\n- TRUST MOM ENOUGH TO TELL HER something real on monday's call\n- (will not)",
+        "mood": "bro Karthik came over and for 4 hours I felt like a person again. like a real functional human being. we wrote actual code. we fixed actual bugs. I was sharp, fast, articulate. and then he left and I'm right back to being the guy who can't open a college PDF without 5 phone breaks. it's literally a personality switch I can't control. the graphs are done now. inked, neat, ready for monday. the paper is ready. monday I walk into both offices, apologize, submit, take the L on grades. and then I have to figure out the back-assignments situation for attendance. but tonight, for like 4 hours, I was okay. that has to mean something. it has to. (it doesn't have to mean anything. I'll do this exact same thing next assignment cycle.)"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-05",
+        "did": "### What happened\n\n**09:00** — Alarm. Did not move.\n\n**10:00** — Alarm. Did not move.\n\n**11:00** — Mom calls. **PICKED.** First mom morning call I've picked properly in 4 days. \"ma good morning.\" Mom: \"are you okay?\" \"yeah ma just tired.\" 3 min call. She asked about food, sleep, college. I answered mostly honestly.\n\n**11:15** — Got up. Mess closed. Bread + jam in room. Coffee.\n\n**11:30** — Sat at window. Bangalore Sunday morning. Felt strangely calm.\n\n**11:45** — Opened phone. Started typing a message to the Claude chat thread I sometimes use. Typed for 20 minutes. Hit send.\n\n> *(the long message about JEE, 12th boards, the pattern, the shutdown, the assignments, attendance, all of it)*\n\n**12:10** — Sent. Felt lighter for 4 minutes. Then felt embarrassed for venting to an AI. Then felt nothing.\n\n**12:30** — Made another coffee. Stared at the wall.\n\n**13:00** — Mom calls. Picked. \"did you eat?\" \"yeah ma bread.\" Mom didn't approve but didn't push.\n\n**13:30** — Walked to canteen. Lunch alone. Sat at the corner table.\n\n**14:30** — Back in room. Sat at desk. Wanted to write a Notion entry — like a real reflective journal entry. Got 3 sentences in. Closed it.\n\n**15:00** — Phone. Reels. Doomscroll. But oddly without anxiety — the assignments are technically done.\n\n**16:00** — Vikram comes back from his weekend home trip. Tells me his mom made him idli sambar for the train. I am jealous of all of it.\n\n**16:30** — Roommate energy makes me want to study. Opened Microproc lab record.\n\n**16:35** — Started writing it up. Week 1 + Week 2 exercises (factorial + string reversal). It's like 3 hours of writing if I commit.\n\n**16:50** — Phone \"5 min.\"\n\n**17:30** — 40 min phone. Back to lab record.\n\n**18:00** — Got 30% of lab record done.\n\n**18:30** — Mess dinner. Ate properly for the first time in a week. Roti, sabzi, daal, rice, curd. Felt human.\n\n**19:30** — Back in room. Tried to keep going on lab record.\n\n**19:45** — Phone \"10 min.\"\n\n**20:30** — Closed phone. Back to lab record.\n\n**21:00** — Got 50% in. Brain glazing.\n\n**21:30** — Mom calls. Picked. \"you doing okay?\" Hesitated. Almost told her the truth. Said: \"ma I had some assignments late this week. I'm okay though. I'll do better next week.\" Mom: \"you don't need to be perfect beta, just talk to me.\" Felt like crying. Hung up before I did.\n\n**21:35** — Sat for 10 min not moving.\n\n**21:45** — Back to lab record. Got 60%.\n\n**22:00** — Closed laptop. Tomorrow I have to submit ent + signals. I need to wake up early.\n\n**22:30** — Phone in bed.\n\n**23:00** — YouTube. A video about why some people procrastinate. Watched 18 min. Got hit with stuff. Closed it.\n\n**23:30** — Tried to sleep.\n\n**00:15** — Phone again. Reels.\n\n**01:00** — More reels.\n\n**01:30** — Asleep.\n\n### Metrics\n\n- **Sleep:** 01:30 → 11:00 (9h 30m, weirdly clean for once)\n- **Screen time:** 5h 47m\n  - Instagram: 2h 12m\n  - YouTube: 1h 58m\n  - WhatsApp: 1h 04m\n  - Reddit: 33m\n- **Breakfast:** bread + jam (decent)\n- **Classes attended:** N/A — Sunday\n- **Steps:** 2,847\n- **Mom calls:** 3/3 picked. Mostly truthful.\n- **Productive items:** Microproc lab record 60% done. AI chat vent sent.",
+        "plan": "### Intended (set night before)\n\n- wake 9am\n- sleep schedule fix attempt\n- print ent paper\n- relax (you \"earned\" it)\n- prep for monday\n- sleep 11pm\n\n### Notes to self (for tomorrow)\n\n- WAKE 7AM TOMORROW (alarm phone in drawer)\n- print ent paper extra copy in morning\n- go to Sir's office at 9am sharp\n- then Ent ma'am office\n- finish lab record before next Thursday\n- back-assignments — pick a deadline myself this week and stick to it\n- (the chat thread said the same thing)",
+        "mood": "sent a long message to the AI chat today. spilled everything. JEE, 12th, the shutdown pattern, the way I can't handle urgency, how I need someone to anchor me out of these spirals because I can't do it alone. it felt good for 4 minutes. then I felt stupid for telling an AI. but it talked back and it didn't judge me and it asked me practical questions about how much was due and when. it gave me a triage framework. I haven't used it yet. but the way I responded honestly was different. it asked me how many assignments and I just SAID it. I almost told mom the same things tonight. couldn't. but I'm closer than I've ever been. lab record is at 60% which is a small miracle. tomorrow I submit late, take the L on grades, and start week 3. there are no announced deadlines for week 3 yet — only the back-assignments which are floating. that feels dangerous. the floating feels worse than the deadline because at least the deadline forces me to do something. floating = limbo = I'll do it never."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-06",
+        "did": "### What happened\n\n**07:00** — Alarm. Across room. Got up to dismiss. Stayed up this time — too much riding on today.\n\n**07:05** — Showered. First time waking up before 8am in 9 days.\n\n**07:30** — Mom calls. Picked. \"ma I'm up early today.\" Mom: \"what's special?\" \"have to submit assignments.\" Truth. \"good luck beta.\" Felt nice.\n\n**07:45** — Mess breakfast (actually got food for once — idli + chutney). Ate properly.\n\n**08:15** — Walked to college. Picked up the printed ent paper from the campus printer.\n\n**08:45** — Ent ma'am's office. Knocked. She let me in. I apologized. She accepted the paper. \"Late penalty as discussed. Don't make this a pattern, Arjun.\" I nodded. Felt the shame of it cleanly. **Submitted at 08:51. 3 days late. -30% penalty.**\n\n**09:10** — Walked to Signals Sir's office. He was busy. Waited outside.\n\n**09:35** — Sir let me in. He looked at the 5 inked graphs. Flipped through them. \"These are actually good work, Arjun. Why late?\" I shrugged. \"Sir, I just... fell behind.\" He sighed. \"ECE needs you to be regular. -25% for the late submission. Don't do this in your records or final viva.\" I thanked him. **Submitted at 09:42. 2 days late. -25% penalty.**\n\n**10:00** — Walked out. Two assignments done. Both with penalties. Both submitted. Felt the weird emptiness of just-finished-a-hard-thing.\n\n**10:15** — Decided to attend rest of the day's classes (rare for me). Walked to Microproc theory.\n\n**11:00** — Microproc theory. Took notes properly. Sir announced **practice problems** assignment but no deadline.\n\n**12:00** — Control Systems. Attended. Sir doing end-sem review revision. Genuinely learned things.\n\n**12:50** — Lunch with the gang. Aman: \"bro you made it through.\" Felt the camaraderie.\n\n**13:00** — Mom calls. Picked. \"submitted?\" \"yeah ma.\" \"good. eat properly.\" Honest call.\n\n**13:15** — **Signals & Systems class.** Sir starts the class talking about end-sem syllabus.\n\n**13:45** — Sir drops the bomb: \"Lab record submissions are coming up. Will let you know the exact date — somewhere in the next 10 days. Make sure you keep it updated.\"\n\n**13:46** — Brain noted: **\"will let you know\" = no deadline = limbo = procrastination paradise.** This is the worst kind of assignment for me and the universe knows it.\n\n**14:00** — Entrepreneurship class. Ma'am didn't make eye contact with me. Awkward but fine.\n\n**14:55** — Last class skipped (EVS, universal).\n\n**15:30** — Back in hostel. Crashed on bed. Adrenaline of submissions wearing off. Felt empty.\n\n**15:35** — Phone. Reels. The reward.\n\n**16:30** — Still on phone. The reward is a trap.\n\n**17:00** — Decided to walk to club. Didn't have club work but wanted the room energy.\n\n**17:30** — Club room. Karthik there. Worked on documentation for the bot. Light deep work, not full lock-in.\n\n**19:00** — Tea + biscuits.\n\n**19:45** — Walked back to hostel.\n\n**20:00** — Mess dinner.\n\n**21:00** — Back in room. Opened lab record. The 60% from yesterday is still there.\n\n**21:15** — Got to 70%.\n\n**21:30** — Phone \"5 min.\"\n\n**22:00** — 30 min phone. Closed.\n\n**22:30** — Mom calls. Picked. \"you sound better.\" \"ma I am. submitted everything.\" Mom: \"next time start earlier okay?\" \"yeah ma.\" Casual lie.\n\n**22:35** — Back to lab record.\n\n**23:00** — Got to 80%. Brain tired.\n\n**23:15** — Phone. Reels.\n\n**00:00** — Closed phone. Tried to sleep.\n\n**00:30** — Phone again. Doomscroll.\n\n**01:15** — Sleep.\n\n### Metrics\n\n- **Sleep:** 01:15 → 07:00 (5h 45m — short but woke on time)\n- **Screen time:** 5h 12m\n  - Instagram: 2h 04m\n  - WhatsApp: 1h 28m\n  - YouTube: 58m\n  - Reddit: 42m\n- **Breakfast:** idli + chutney (a win)\n- **Classes attended:** 4 / 5\n- **Steps:** 7,247 (lots of walking between offices + club)\n- **Mom calls:** 3/3 picked. Mostly truthful.\n- **Submissions:** 2 / 2 (both late, both penalized)\n- **Lab record:** 80% done",
+        "plan": "### Intended (set night before)\n\n- wake 7am\n- print ent paper extra copy\n- submit ent paper to ma'am 9am\n- submit signals to sir 10am\n- attend rest of classes\n- club work evening\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- finish lab record THIS WEEK\n- pick a self-imposed deadline for back-assignments (Friday?)\n- attend EVERY class this week (rebuild attendance)\n- check if any other deadlines are coming up\n- (will probably not check)",
+        "mood": "walked out of both offices with my dignity 70% intact. Sir was nice about it. Ent ma'am wasn't, but fair. and I learned things in 4 classes today. and lab record is at 80%. on paper today was a WIN. and yet the news that the lab record deadline is \"soon, will tell you\" hit me like a brick. because I know what that means. that means I will not do the last 20% this week. or next week. or until I'm explicitly told a date. and then I will do it the night before. and I know this about myself and I cannot make myself care enough to override it. the no-deadline assignment is my kryptonite. give me a deadline and I'll panic-suffer through it. give me \"later\" and I'll never do it. and the back-assignments — the attendance buffer ones — those are also undefined. I need 3 of them to clear my attendance to give end-sems. and I haven't started one. but Sir didn't push today. so brain says \"later.\" and later never comes until it's now and it's too late."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-07",
+        "did": "### What happened\n\n**07:00** — Alarm. Snoozed.\n\n**07:30** — Mom calls. Picked. \"ma up.\" Lied. \"go to college beta.\" \"yeah ma.\"\n\n**07:31** — Slept.\n\n**09:05** — Woke. Missed first 2 classes again. The relief from yesterday's submissions = total motivation collapse.\n\n**09:30** — Phone in bed. Reels. 40 min.\n\n**10:15** — Got up. Showered. No breakfast (mess closing).\n\n**11:00** — Walked to college. Slow. No urgency.\n\n**11:15** — Sat in Microproc theory mid-class. Sir noticed. Made eye contact. Didn't say anything but the look.\n\n**12:00** — Control Systems. Brain coasting.\n\n**12:50** — Lunch. Aman noticed I'm in a fog. \"bro you good?\" \"yeah just tired.\" \"you submitted everything though.\" \"yeah.\" \"so?\" \"I don't know man.\" Shrug.\n\n**13:00** — Mom calls. Picked. \"did you eat?\" \"yeah.\" Honest.\n\n**13:15** — Signals afternoon class. Sir doing review. Half-engaged.\n\n**14:00** — Ent class. Ma'am didn't bring up my late submission. Civil.\n\n**14:55** — Skipped EVS (universal).\n\n**15:30** — Back to hostel. Sat on bed. The post-deadline emptiness is its own kind of fog.\n\n**15:45** — Phone. Reels. 1 hour.\n\n**17:00** — Vikram comes back. Asks about my day. \"I attended 3 classes.\" He: \"okay ish.\" He has nothing else for me. He goes to library.\n\n**17:15** — Tried to open lab record. Couldn't.\n\n**17:30** — Phone again. YouTube. A video about embedded systems internships. Got into a rabbit hole about applying for internships.\n\n**18:30** — Lost in internship research. Looked at company websites. Made a Google Doc titled \"Internships.\" Wrote 2 lines. Closed it.\n\n**19:00** — Mess dinner. Tasted okay.\n\n**20:00** — Back in room. Tried lab record.\n\n**20:05** — Opened the file. Read the last paragraph I wrote yesterday. Felt nothing.\n\n**20:10** — Phone. \"5 min.\"\n\n**20:55** — 45 min later, closed phone.\n\n**21:00** — Wrote 4 lines. Lab record went from 80% to 82%. Bro.\n\n**21:30** — Mom calls. Picked. \"doing well?\" \"yeah ma.\" Half-truth.\n\n**21:45** — Tried to keep going. Brain firmly refused.\n\n**22:00** — Phone. Reels. Wave of dopamine deprivation now reasserting itself.\n\n**23:00** — Considered the back-assignments. Have not opened them. They are PDFs sitting in my Downloads folder. I have not even read what they're about.\n\n**23:30** — Tried to open them. Closed them after reading the first paragraph of assignment 1.\n\n**00:00** — Phone again.\n\n**01:00** — YouTube. A movie clip rabbit hole.\n\n**01:45** — Tried to sleep.\n\n**02:15** — Phone.\n\n**02:48** — Sleep.\n\n### Metrics\n\n- **Sleep:** 02:48 → 09:05 (6h 17m)\n- **Screen time:** 7h 38m (creeping back up post-crisis)\n  - Instagram: 3h 04m\n  - YouTube: 2h 47m\n  - WhatsApp: 1h 12m\n  - Reddit: 35m\n- **Breakfast:** missed\n- **Classes attended:** 3 / 5\n- **Steps:** 4,138\n- **Mom calls:** 3/3 picked",
+        "plan": "### Intended (set night before)\n\n- wake 7am\n- attend all 5 classes\n- finish lab record last 20%\n- start 1 back-assignment\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- self-impose deadline: lab record by friday\n- self-impose deadline: 1 back-assignment by sunday\n- (these will be ignored because no external accountability)\n- maybe ask Vikram to check on me at deadline (will not ask)\n- attend more classes tomorrow",
+        "mood": "bro the post-deadline emptiness is real and it's evil. the panic of last week was awful but at least the panic was MAKING me do things. now there's nothing forcing my hand and so I'm doing nothing. literally. lab record went up 2% today. TWO PERCENT. and the back-assignments are PDFs I haven't even read. the phone is back to 7+ hours today. the cycle is just resetting itself. the relief from monday's submissions = the dopamine the body has been begging for and now it's binging. and there's no deadline forcing reset. lab record is \"soon.\" back-assignments are \"later.\" soon and later are not deadlines. they are vibes. and my brain doesn't respond to vibes."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-08",
+        "did": "### What happened\n\n**07:00** — Alarm. Dismissed.\n\n**07:30** — Mom calls. Picked. \"going to college today ma.\" Truth. \"good.\"\n\n**08:00** — Alarm 2. Got up. Slow.\n\n**08:30** — Mess breakfast (idli rava). Ate. Walked to college.\n\n**08:50** — Signals class. Late by 5 min. Sat in back. Sir doing review. Half-engaged.\n\n**09:45** — Analog Comm. Attended. Took notes.\n\n**10:35** — Tea break. The gang. Bot competition discussion (club).\n\n**11:00** — Microproc theory. Attended. Topic: interrupts. Confused. Will revisit (will not revisit).\n\n**12:00** — Control Systems. Attended. Solid notes.\n\n**12:50** — Lunch.\n\n**13:00** — Mom calls. \"you sound better.\" \"yeah ma I attended classes today.\" Mom: \"see? if you go regularly it's not so bad.\" Truth that hurt.\n\n**13:15** — Signals afternoon. Sir hinted at lab record submission **\"next week or week after.\"** Still no date.\n\n**14:00** — Ent class. Ma'am announced **a group project for the open elective** due end of month. Brain noted: group = others will carry me = I will not do anything.\n\n**14:55** — Skipped EVS.\n\n**15:30** — Back in hostel.\n\n**15:45** — Phone. Reels. 1 hour 10 min.\n\n**17:00** — Sat at desk. Opened back-assignment 1. Read the prompt fully this time. It's a 1500-word write-up on a Control Systems topic. Choose any topic from a list of 8.\n\n**17:10** — Picked a topic. \"Applications of PID controllers in industrial automation.\" Felt mild interest. The topic is genuinely cool.\n\n**17:15** — Started writing.\n\n**17:20** — Phone \"for music.\"\n\n**17:50** — 30 min on Reels. Music never played.\n\n**18:00** — Wrote 1 paragraph. ~120 words. Stopped because brain refused.\n\n**18:15** — Roommate Vikram comes back. He has been working on back-assignments since yesterday. He's almost done with 1. Different species.\n\n**18:30** — Wrote 1 more paragraph. ~150 words. Now at 270 words.\n\n**19:00** — Mess dinner.\n\n**19:45** — Back in room. Felt like working but kept getting pulled to phone.\n\n**20:00** — Microproc lab record. Tried to push last 18% in.\n\n**20:30** — Got it to 88%. 6% in 30 min. Bro.\n\n**20:45** — Phone \"10 min.\"\n\n**21:30** — 45 min on phone. Closed.\n\n**21:35** — Lab record. Got to 92%.\n\n**22:00** — Tried to push to 100% but the last sections are write-ups, not equations, and I can't get my brain to formulate sentences.\n\n**22:30** — Mom calls. Picked. \"ma I attended classes today.\" \"good.\" She didn't ask about studies — felt grateful.\n\n**22:45** — Back-assignment 1: tried for another 200 words. Got 100.\n\n**23:15** — Now at 370 words on assignment 1. Quit.\n\n**23:30** — Phone. YouTube. A 1-hour video about ancient roman engineering. Watched the whole thing. Genuinely fascinated.\n\n**00:45** — Tried to sleep.\n\n**01:15** — Phone again. Reels.\n\n**01:48** — Sleep.\n\n### Metrics\n\n- **Sleep:** 01:48 → 08:00 (6h 12m)\n- **Screen time:** 6h 22m\n  - Instagram: 2h 18m\n  - YouTube: 2h 41m\n  - WhatsApp: 1h 02m\n  - Reddit: 21m\n- **Breakfast:** idli rava (W)\n- **Classes attended:** 4 / 5\n- **Steps:** 6,512\n- **Mom calls:** 3/3 picked. Mostly truthful.",
+        "plan": "### Intended (set night before)\n\n- wake 7am\n- all 5 classes\n- back-assignment 1 — at least 30%\n- lab record finish (last 18%)\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- finish lab record tomorrow morning (last 8%)\n- back-assignment 1: target 800 words tomorrow\n- check Ent group project requirements\n- (will not check until last minute)",
+        "mood": "attended 4 classes today which is statistically a good day. wrote 370 words on back-assignment 1 which is also technically progress. but I'm aware that this rate of progress for the back-assignments + lab record + ent group project + ALSO end-sems coming up = I'm going to be cooked again in 2 weeks. the pattern is just recompressing. shorter cycle but same shape. and the YouTube watching habit is back — like ancient roman engineering for an hour at midnight when I have a paper to write. and the FLOATING deadline for lab record means I'm not going to finish the last 8% even though the last 8% is literally 30 minutes of work. because there's no date. brain says soon. soon = never."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-09",
+        "did": "### What happened\n\n**08:00** — Alarm. Dismissed.\n\n**09:00** — Alarm. Dismissed.\n\n**10:00** — Mom calls. Did not pick. Backslide.\n\n**11:30** — Mom calls. Did not pick.\n\n**13:42** — Woke up. Saw both missed calls. Saw the time.\n\n**13:43** — **PANIC.** Lab is 1pm-3:45pm. Mandatory. I'm late by 43 min.\n\n**13:45** — Showered in 6 minutes. Out the door.\n\n**14:00** — Walked into lab. Sir was at the desk. Asked where I was. \"Sir, I was sick this morning.\" He looked at me. \"Sit. Finish today's exercise.\" Did not write me down as absent — small mercy. **Saved the attendance for the day.**\n\n**14:00–15:45** — Finished today's microproc exercise (8086 binary search). Got it done. Felt sharp during the lab — brain works here.\n\n**15:45** — Lab over. Walked back to hostel. Slow.\n\n**16:00** — In room. Energy gone.\n\n**16:05** — Phone. Reels. 50 min.\n\n**17:00** — Called mom back. \"ma sorry slept badly.\" Mom was annoyed: \"tell me when you wake up. I worry.\" \"yeah ma sorry.\" Got off quickly.\n\n**17:15** — Sat at desk. Opened back-assignment 1. 370 words from yesterday.\n\n**17:30** — Wrote 1 paragraph. ~150 words. Now at 520.\n\n**17:45** — Phone \"5 min.\"\n\n**18:30** — 45 min on phone. The break trap is now structural.\n\n**18:35** — Back to writing. Wrote 200 words.\n\n**19:15** — Now at 720 words. Slow grind.\n\n**19:30** — Mess dinner.\n\n**20:15** — Back in room. Tried to push back-assignment.\n\n**20:30** — Got to 850 words. Brain melting.\n\n**20:45** — Phone. YouTube. A video essay about something. Watched 35 min.\n\n**21:30** — Mom calls. Picked. \"ma I'm sorry about morning.\" Mom didn't push. \"just be regular beta.\"\n\n**21:45** — Lab record. Tried to push to 100%.\n\n**22:00** — Got to 96%. Last 4% is just summary paragraph.\n\n**22:30** — Phone. Reels.\n\n**23:30** — Closed phone. Forced laptop open. Wrote summary paragraph of lab record. **100% done.** Felt the small dopamine.\n\n**23:45** — Saved file. Realized: I still don't have a date for submission. The lab record will sit on my laptop for who knows how long.\n\n**00:00** — Back-assignment 1. Tried to push to 1000 words.\n\n**00:30** — Got to 980. Quit.\n\n**00:45** — Phone in bed.\n\n**01:30** — Reels.\n\n**02:15** — Sleep.\n\n### Metrics\n\n- **Sleep:** 02:15 → 13:42 (11h 27m night sleep — feral)\n- **Screen time:** 7h 02m\n  - Instagram: 2h 47m\n  - YouTube: 2h 18m\n  - WhatsApp: 1h 14m\n  - Reddit: 43m\n- **Breakfast:** missed (woke at 1:42pm)\n- **Classes attended:** 1 / 5 (just microproc lab, late by 1 hour)\n- **Steps:** 3,427\n- **Mom calls:** 2 missed + 1 picked back later. Apologetic.",
+        "plan": "### Intended (set night before)\n\n- wake 8am\n- attend morning classes\n- microproc lab 1pm (mandatory)\n- back-assignment 1 → 800 words\n- finish lab record\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- back-assignment 1: hit 1500 words this weekend\n- back-assignments 2 + 3: open them sometime\n- lab record: SUBMIT THE MOMENT a date is given\n- club event saturday — focus\n- attendance check Monday",
+        "mood": "bro I slept until 1:42pm. like that's not a \"slept in\" that's a \"slept through the entire morning of life.\" and yet I almost lost an attendance because the lab is 1pm and I made it at 2pm. Sir was nice. but I cannot keep relying on Sir being nice. and the lab record is DONE which is a win and yet I'm not going to submit it because there's no deadline and so it just sits in my laptop like Schrodinger's assignment, both done and not done. and back-assignment 1 is at 65%. tomorrow is Friday. Friday I have CLUB EVENT prep. Friday I will not work on the back-assignment. I know this. I'm telling you now. I will be at the club until midnight prepping. and saturday I'll crash. and sunday I'll write some more. and the cycle is the cycle is the cycle."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-10",
+        "did": "### What happened\n\n**08:00** — Alarm. Snoozed.\n\n**09:00** — Alarm. Dismissed.\n\n**10:14** — Woke. Phone. Reels in bed 30 min.\n\n**10:45** — Mom calls. Picked. \"ma good morning.\" \"you've started saying good morning at 11 now.\" \"yeah ma sorry.\" 60 sec call.\n\n**11:00** — Got up. Skipped college. Made the explicit choice. The club bot competition is **two weeks away** and we have a lot to build. Brain says: \"this matters more.\"\n\n**11:30** — Breakfast at canteen (omelette + bread). Ate properly.\n\n**12:00** — Walked to club room. Karthik already there with the new sensor array.\n\n**12:15** — Plugged in laptop. Started writing the obstacle-detection routine.\n\n**12:45** — Karthik testing the chassis on the practice track. We argue about wheel placement. He's right. I redo the chassis assembly.\n\n**13:00** — Mom called. Did not pick (in flow). Texted \"ma I'll call evening.\"\n\n**13:45–17:00** — **Pure deep work block.** Building, testing, debugging. Got the obstacle detection working at 18cm range — that was the target. Felt elated.\n\n**17:00** — Anish (final year, club senior) shows up. He brought coffee. We discuss strategy for the competition.\n\n**17:30** — Quick tea break with the crew. Discussion about future of club + who's running it next year.\n\n**18:00–21:30** — Back to deep work. We started integrating obstacle detection with line following. The hard part. PID + obstacle interrupt logic. Got the first version working but it's twitchy. Refining.\n\n**21:30** — Hungry. Mess closed. Karthik and I get rolls from the stall.\n\n**22:00** — Mom calls. Picked. \"where are you?\" \"club ma.\" \"this late?\" \"yeah event prep.\" Mom didn't approve but didn't fight.\n\n**22:30** — Back at club. The boys decide to keep going till midnight.\n\n**23:00** — Found a subtle bug in the obstacle code. Fixed it. The bot is **smooth** now.\n\n**23:45** — Documented today's progress in the club git repo. Felt accomplished.\n\n**00:15** — Walked back to hostel with Karthik. Cool air, post-flow euphoria.\n\n**00:30** — In room. Vikram already asleep. Quiet.\n\n**00:35** — Sat at desk. Looked at back-assignment 1 (980 words from Thursday). The contrast of energy — I was sharp 30 minutes ago and now my brain is mush at the thought of writing about PID controllers in academic prose.\n\n**00:40** — Wrote 1 sentence. Closed laptop.\n\n**00:45** — Phone. Reels. The reward I \"earned\" for working hard today.\n\n**01:30** — Watched YouTube — robot competition highlights. Inspiration consumption.\n\n**02:30** — Tried to sleep.\n\n**02:45** — Phone again.\n\n**03:15** — Sleep.\n\n### Metrics\n\n- **Sleep:** 03:15 → 10:14 (6h 59m)\n- **Screen time:** 3h 47m (LOWEST in 2 weeks — club ate the day)\n  - Instagram: 1h 18m\n  - YouTube: 58m\n  - WhatsApp: 1h 04m\n  - Reddit: 27m\n- **Breakfast:** omelette + bread (W)\n- **Classes attended:** 0 / 4 (full skip — Friday)\n- **Steps:** 5,847\n- **Mom calls:** 2/3 picked. 1 dodged-then-texted. Honest about being at club.\n- **Club hours:** **11h 45m** (12pm to 11:45pm with one tea break)",
+        "plan": "### Intended (set night before)\n\n- wake 8am\n- attend Friday classes\n- club event prep evening\n- back-assignment 1 last 35%\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- back-assignment 1: finish weekend\n- back-assignment 2: at least open it weekend\n- club bot test on track next weekend\n- check Ent group project pdf\n- (will not check)",
+        "mood": "the contrast is genuinely insane. for 12 hours today I was a person. a SMART person. I solved a hardware integration problem that's been bugging us for 3 weeks. I wrote actual production-quality code. I was articulate and decisive and FAST. and then I came home and the moment I opened the back-assignment my brain went \"no thank you\" and I wrote ONE sentence in 20 minutes. like literally the same brain, the same person, the same desk. but for college work it's molasses. for club it's lightning. and I cannot work out why the difference is so massive. the back-assignment topic is PID controllers — the EXACT thing I was using on the bot today. SAME TOPIC. and I cannot bring myself to write about it academically. brain rejects the format, not the content. I'm scared of what this means for end-sems coming up. but also kinda just numb to it because it's a future-me problem and present-me had a great day."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-11",
+        "did": "### What happened\n\n**11:00** — Mom calls. Did not hear.\n\n**12:30** — Mom calls. Did not hear.\n\n**14:47** — Naturally woke. Past 2pm. Brain in deep fog.\n\n**14:48** — Saw 2 missed mom calls. Same pattern. Felt the shame muted.\n\n**14:50** — Texted mom: \"ma sorry slept late again, will call evening.\" Mom replied: \"okay.\" One word. Felt the disappointment.\n\n**15:00** — Got up. Mess closed. Vikram in room studying.\n\n**15:15** — Walked to canteen. Late lunch — rice + curd. Sat alone.\n\n**16:00** — Back in room. Sat at desk.\n\n**16:10** — Opened back-assignment 1. 980 words.\n\n**16:15** — Phone \"for 5.\"\n\n**17:00** — 45 min on phone. The pattern is now THE STRUCTURE OF MY DAYS.\n\n**17:05** — Wrote 1 paragraph. ~150 words. Now at 1130.\n\n**17:30** — Wrote 1 more paragraph. 180 words. Now at 1310.\n\n**18:00** — Phone \"for 5.\" Reels.\n\n**18:45** — 45 min phone. Back to writing.\n\n**19:00** — Wrote a transition paragraph. 100 words. Now at 1410.\n\n**19:30** — Mess dinner.\n\n**20:15** — Back in room. Vikram now finished 2 of his 3 back-assignments. He looked at me. I looked away.\n\n**20:30** — Pushed back-assignment 1. Got to 1500 words. **Done.** Felt nothing. The dopamine is broken from over-stimulation.\n\n**20:45** — Decided to \"celebrate\" with a phone break.\n\n**21:30** — 45 min phone. Closed.\n\n**21:30** — Mom calls. Picked. \"you sound tired.\" \"ma I'm okay.\" Half-lie. \"did you eat?\" \"yeah ma.\"\n\n**21:45** — Opened back-assignment 2. Read the prompt. 1200 words on Analog Comm topic.\n\n**22:00** — Picked a topic (\"Modulation techniques in radio broadcasting\"). Wrote 2 lines.\n\n**22:15** — Phone.\n\n**23:00** — Closed phone. Tried to write. Wrote 3 more lines.\n\n**23:30** — Now at 100 words on assignment 2. Gave up.\n\n**00:00** — Phone in bed.\n\n**00:30** — YouTube. Random tech content.\n\n**01:30** — Tried to sleep.\n\n**02:00** — Phone again.\n\n**02:38** — Sleep.\n\n### Metrics\n\n- **Sleep:** 02:38 → 14:47 (12h 09m — body collecting debt)\n- **Screen time:** 6h 47m\n  - Instagram: 2h 41m\n  - YouTube: 2h 02m\n  - WhatsApp: 58m\n  - Reddit: 1h 06m\n- **Breakfast:** N/A (woke at 2:47pm)\n- **Classes attended:** N/A (Saturday)\n- **Steps:** 1,847 (canteen run, that's it)\n- **Mom calls:** 2 missed + 1 picked. Disappointed.",
+        "plan": "### Intended (set night before)\n\n- wake 10am\n- finish back-assignment 1 (last 35%)\n- start back-assignment 2\n- gym\n- early sleep prep for monday\n- sleep midnight\n\n### Notes to self (for tomorrow)\n\n- back-assignment 2: hit 600 tomorrow\n- back-assignment 3: open it tomorrow (just open)\n- check Ent group project pdf\n- ASK SIR when lab record + back-assignments are actually due (external accountability)\n- call mom properly tomorrow morning",
+        "mood": "finished back-assignment 1 today. that should feel like something. it feels like nothing. dopamine is a depleted resource and I've been bleeding it out for 3 weeks. and the lab record + assignment 1 both sit on my laptop because there's no deadline to submit to. like Schrodinger's productivity. done but not submitted = simultaneously useful and useless. and assignment 2 is at 100 words. I have ANOTHER assignment AND ANOTHER 3 untouched besides that. and end-sems are looming. and mom is mad at me again (the one-word \"okay\" text is the worst version of mad). and tomorrow is Sunday. tomorrow I should \"rest and prep for the week.\" but really tomorrow I'll wake up at 1pm and scroll until evening and write 200 more words and sleep at 3am. I'm narrating my own future and I can't redirect it."
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "entry_date": "2026-05-12",
+        "did": "### What happened\n\n**10:00** — Alarm. Did not move. Pattern.\n\n**11:00** — Mom calls. **PICKED.** First time picking the morning call in a week. \"ma good morning.\" \"you sound okay.\" \"yeah ma.\" 90 sec call. Felt minor relief.\n\n**11:30** — Got up. Mess open. Got breakfast (poha + tea). Ate properly.\n\n**12:00** — Back in room. Sat at desk with energy for once.\n\n**12:15** — Opened back-assignment 2. 100 words.\n\n**12:30** — Wrote 200 words. Now at 300.\n\n**13:00** — Mom calls. Picked. \"did you eat?\" \"yeah ma poha.\" Honest. \"good. study now okay?\" \"yeah ma.\"\n\n**13:15** — Back to writing. Wrote 250 words. Now at 550.\n\n**13:45** — Phone \"for 5.\"\n\n**14:30** — 45 min phone. The CONSTANT.\n\n**14:35** — Back to writing.\n\n**15:00** — Wrote 200 words. Now at 750.\n\n**15:30** — Phone again. YouTube. A 40 min documentary on Indian space program.\n\n**16:30** — Watched the whole thing. Felt slightly less productive than 30 min ago.\n\n**16:45** — Forced laptop open.\n\n**17:00** — Wrote 200 words. Now at 950.\n\n**17:30** — Mess dinner — actually Vikram knocked on the door to make sure I came. Forced.\n\n**18:30** — Back in room. Tried to push.\n\n**18:45** — Wrote 150 words. Now at 1100. Almost done with assignment 2.\n\n**19:15** — Phone.\n\n**20:00** — 45 min phone. Closed.\n\n**20:05** — Wrote 100 final words. **Back-assignment 2 done at 1200 words.** Saved file.\n\n**20:30** — Considered opening back-assignment 3. Did not.\n\n**20:35** — Phone. Reels.\n\n**21:30** — Mom calls. Picked. **All 3 of today's calls picked.** \"doing well beta?\" \"yeah ma I wrote one full assignment today.\" Half-truth (it's not submitted). Mom: \"you're trying. I see you.\" Felt something complicated.\n\n**21:45** — Sat at desk staring.\n\n**22:00** — Reflected on the 3 weeks. Counted in head: assignments submitted 2 (both late), assignments done unsubmitted 3, assignments untouched 2+ (assignment 3, microproc practice, ent group project, also end-sems incoming). Lab record done but no date. Back-assignment 1 done but no date.\n\n**22:15** — Texted the chat AI thread again. Shorter this time. Just: \"finished week 3 of the spiral. submitted 2 things late. did 2 more but no deadline so they sit. still can't make myself open back-assignment 3 or check the ent group project. end-sems are like 3 weeks out and I'm already cooked. just checking in I guess.\"\n\n**22:30** — AI thread replied. Practical. Asked numbers, gave triage.\n\n**22:45** — Wrote a Notion entry for next week:\n  ```\n  monday plan:\n  - ATTEND all classes (attendance rebuild)\n  - check ent group project pdf\n  - ask Sir when lab record is due\n  - ask Sir if there's any specific date for back-assignments\n  - submit lab record + assignment 1 + assignment 2 (if dates given)\n  ```\n\n**23:00** — Closed Notion.\n\n**23:15** — Phone. Reels.\n\n**00:00** — YouTube.\n\n**01:00** — Tried to sleep.\n\n**01:30** — Phone again.\n\n**02:08** — Sleep.\n\n### Metrics\n\n- **Sleep:** 02:08 → 11:00 (8h 52m)\n- **Screen time:** 6h 21m\n  - Instagram: 2h 18m\n  - YouTube: 2h 32m\n  - WhatsApp: 1h 04m\n  - Reddit: 27m\n- **Breakfast:** poha + tea (W)\n- **Classes attended:** N/A — Sunday\n- **Steps:** 2,143\n- **Mom calls:** **3/3 picked.** Mostly truthful.",
+        "plan": "### Intended (set night before)\n\n- wake 10am\n- finish back-assignment 2\n- start back-assignment 3\n- call mom properly\n- review week\n- sleep 11pm — Monday matters\n\n### Notes to self (for tomorrow)\n\n- Monday: ASK SIR FOR ACTUAL DATES (this is the lever)\n- attendance count needed — find out where you stand\n- check Ent group project (just look)\n- end-sems start ~June 17 → make a study plan FRIDAY\n- consider telling mom the actual situation (deferred again)\n- consider therapy (deferred 3 weeks running)\n- the AI thread said something about needing an external anchor. that's accurate. find one.\n- (you have not found one)\n- (find one)",
+        "mood": "end of week 3. counting: 2 things submitted late. 3 things done but unsubmitted because the deadlines are floating (\"soon,\" \"coming weeks\"). 4 things actively untouched. and end-sems are 3 weeks out and I haven't opened a textbook for revision. I picked all 3 mom calls today which is the closest thing to a personal victory I can name. I told mom I \"wrote one assignment today\" and her response — \"you're trying, I see you\" — that broke me a little. she's wrong but the wrongness is generous and I didn't correct her. I texted the AI thread again. shorter. it asked me practical questions. it gave me a triage list. I made a Notion plan for monday. I will not follow the Notion plan. or maybe I will follow 60% of it which is more than 0%. the pattern is so visible to me now I can describe it in real time as it's happening. observing the dysregulation does not stop the dysregulation. that's the part that scares me. tomorrow is Monday. tomorrow the cycle either resets harder or breaks. probably resets harder. but maybe not. maybe this time I ASK the teacher for the actual date. maybe the external accountability fixes one of the floating ones. maybe."
+      }
+    ],
+    "jobs": [
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Signals problem set",
+        "description": "Last status (2026-05-12): ✅ submitted late (-25%). Tracked across 17 days of logs.",
+        "total_time": 300,
+        "priority": 3,
+        "status": "completed",
+        "deadline": null
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Entrepreneurship paper",
+        "description": "Last status (2026-05-12): ✅ submitted late (-30%). Tracked across 16 days of logs.",
+        "total_time": 240,
+        "priority": 3,
+        "status": "completed",
+        "deadline": null
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Microprocessors lab record",
+        "description": "Last status (2026-05-12): 100% — sitting, no deadline submitted. Tracked across 23 days of logs.",
+        "total_time": 240,
+        "priority": 3,
+        "status": "completed",
+        "deadline": null
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Microprocessors practice problems",
+        "description": "Last status (2026-05-12): not started. Tracked across 7 days of logs.",
+        "total_time": 240,
+        "priority": 2,
+        "status": "active",
+        "deadline": "2026-06-03T23:59:00"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Back-assignment 1",
+        "description": "Last status (2026-05-12): 100% — done, no deadline submitted. Tracked across 6 days of logs.",
+        "total_time": 180,
+        "priority": 4,
+        "status": "completed",
+        "deadline": null
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Back-assignment 2",
+        "description": "Last status (2026-05-12): 100% — done, no deadline submitted. Tracked across 6 days of logs.",
+        "total_time": 180,
+        "priority": 4,
+        "status": "completed",
+        "deadline": null
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Back-assignment 3",
+        "description": "Last status (2026-05-12): not opened. Tracked across 6 days of logs.",
+        "total_time": 180,
+        "priority": 4,
+        "status": "active",
+        "deadline": "2026-05-20T23:59:00"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Entrepreneurship group project",
+        "description": "Last status (2026-05-12): not checked. Tracked across 5 days of logs.",
+        "total_time": 300,
+        "priority": 3,
+        "status": "active",
+        "deadline": "2026-05-27T23:59:00"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "End-semester revision",
+        "description": "Last status (2026-05-12): not even mentally engaged with yet. Tracked across 1 day of logs.",
+        "total_time": 900,
+        "priority": 5,
+        "status": "active",
+        "deadline": "2026-06-17T23:59:00"
+      }
+    ],
+    "events": [
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend ALL 5 classes (8:45am–3:45pm)",
+        "start_time": "2026-04-22T09:00:00",
+        "end_time": "2026-04-22T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "club work 5–7pm",
+        "start_time": "2026-04-22T19:00:00",
+        "end_time": "2026-04-22T20:00:00",
+        "all_day": false,
+        "tag": "ev-tag3"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "gym (lol)",
+        "start_time": "2026-04-22T18:00:00",
+        "end_time": "2026-04-22T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag4"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend all 5 classes",
+        "start_time": "2026-04-23T09:00:00",
+        "end_time": "2026-04-23T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "gym attempt",
+        "start_time": "2026-04-23T18:00:00",
+        "end_time": "2026-04-23T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag4"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "all 5 classes",
+        "start_time": "2026-04-24T09:00:00",
+        "end_time": "2026-04-24T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "club work",
+        "start_time": "2026-04-24T17:00:00",
+        "end_time": "2026-04-24T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag3"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend all classes",
+        "start_time": "2026-04-25T09:00:00",
+        "end_time": "2026-04-25T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "Microproc lab + record start (mandatory, 1pm slot)",
+        "start_time": "2026-04-25T13:00:00",
+        "end_time": "2026-04-25T14:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend Friday classes (Signals, Analog, Microproc theory, Control)",
+        "start_time": "2026-04-26T09:00:00",
+        "end_time": "2026-04-26T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "club 5pm",
+        "start_time": "2026-04-26T17:00:00",
+        "end_time": "2026-04-26T18:00:00",
+        "all_day": false,
+        "tag": "ev-tag3"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "early sleep — important class Saturday morning (lol there's no class Saturday)",
+        "start_time": "2026-04-26T09:00:00",
+        "end_time": "2026-04-26T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "gym",
+        "start_time": "2026-04-27T18:00:00",
+        "end_time": "2026-04-27T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag4"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "ALL 5 classes",
+        "start_time": "2026-04-29T09:00:00",
+        "end_time": "2026-04-29T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "club work evening",
+        "start_time": "2026-04-29T17:00:00",
+        "end_time": "2026-04-29T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag3"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend all classes",
+        "start_time": "2026-04-30T09:00:00",
+        "end_time": "2026-04-30T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend at least afternoon classes",
+        "start_time": "2026-05-01T09:00:00",
+        "end_time": "2026-05-01T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "microproc lab 1pm (MANDATORY — cannot skip)",
+        "start_time": "2026-05-02T13:00:00",
+        "end_time": "2026-05-02T14:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "8am wake",
+        "start_time": "2026-05-03T08:00:00",
+        "end_time": "2026-05-03T09:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "submit ent paper 9am",
+        "start_time": "2026-05-03T09:00:00",
+        "end_time": "2026-05-03T10:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "finish graph 5 by 10am",
+        "start_time": "2026-05-04T10:00:00",
+        "end_time": "2026-05-04T11:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "submit all 5 graphs to Sir by 12pm",
+        "start_time": "2026-05-04T12:00:00",
+        "end_time": "2026-05-04T13:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "gym",
+        "start_time": "2026-05-04T18:00:00",
+        "end_time": "2026-05-04T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag4"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "submit ent paper to ma'am 9am",
+        "start_time": "2026-05-06T09:00:00",
+        "end_time": "2026-05-06T10:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "submit signals to sir 10am",
+        "start_time": "2026-05-06T10:00:00",
+        "end_time": "2026-05-06T11:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend rest of classes",
+        "start_time": "2026-05-06T09:00:00",
+        "end_time": "2026-05-06T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "club work evening",
+        "start_time": "2026-05-06T17:00:00",
+        "end_time": "2026-05-06T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag3"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend all 5 classes",
+        "start_time": "2026-05-07T09:00:00",
+        "end_time": "2026-05-07T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "all 5 classes",
+        "start_time": "2026-05-08T09:00:00",
+        "end_time": "2026-05-08T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend morning classes",
+        "start_time": "2026-05-09T09:00:00",
+        "end_time": "2026-05-09T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "microproc lab 1pm (mandatory)",
+        "start_time": "2026-05-09T13:00:00",
+        "end_time": "2026-05-09T14:00:00",
+        "all_day": false,
+        "tag": "ev-tag1"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "attend Friday classes",
+        "start_time": "2026-05-10T09:00:00",
+        "end_time": "2026-05-10T15:00:00",
+        "all_day": false,
+        "tag": "ev-tag2"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "club event prep evening",
+        "start_time": "2026-05-10T17:00:00",
+        "end_time": "2026-05-10T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag3"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "gym",
+        "start_time": "2026-05-11T18:00:00",
+        "end_time": "2026-05-11T19:00:00",
+        "all_day": false,
+        "tag": "ev-tag4"
+      },
+      {
+        "user_id": "2bae86b3-d685-44f6-be85-7587f9a32ebd",
+        "title": "call mom properly",
+        "start_time": "2026-05-12T21:00:00",
+        "end_time": "2026-05-12T21:15:00",
+        "all_day": false,
+        "tag": "ev-tag5"
+      }
+    ]
+  }
+}

@@ -50,7 +50,7 @@ export default function JobsPage() {
   const completed = jobs.filter(j => j.status === 'completed')
 
   return (
-    <div className="page">
+    <div className="page jobs-page">
       <header className="page-header">
         <div>
           <div className="eyebrow">jobs</div>

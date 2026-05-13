@@ -17,7 +17,15 @@ export function AuthProvider({ children }) {
       setLoading(false)
     })
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+      // Keep the user object reference STABLE across token-refresh events.
+      // Supabase emits TOKEN_REFRESHED periodically (and on tab focus / network
+      // changes) with a brand-new session object; if we naively replace `user`
+      // we cause every downstream effect keyed off `user` to re-run, which in
+      // App.jsx triggers a fresh `applyPrefRow` that wipes any unsaved local
+      // pref changes. Only swap the reference when the actual user identity
+      // changes (sign-in, sign-out, account switch).
+      const next = session?.user ?? null
+      setUser(prev => (prev?.id === next?.id ? prev : next))
     })
     return () => sub.subscription.unsubscribe()
   }, [])

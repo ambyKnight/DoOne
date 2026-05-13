@@ -17,9 +17,10 @@ const JournalPage  = lazy(() => import('./views/JournalPage'))
 const SettingsPage = lazy(() => import('./views/SettingsPage'))
 const JobsPage     = lazy(() => import('./views/JobsPage'))
 const InsightsPage = lazy(() => import('./views/InsightsPage'))
+const AIPage       = lazy(() => import('./views/AIPage'))
 const Onboarding   = lazy(() => import('./views/Onboarding'))
 
-const NAV_ORDER = ['home', 'calendar', 'jobs', 'journal', 'insights', 'settings']
+const NAV_ORDER = ['home', 'calendar', 'jobs', 'journal', 'insights', 'ai', 'settings']
 
 function toFCEvent(row) {
   return {
@@ -46,9 +47,13 @@ export default function App() {
   const prefSaveTimer = useRef(null)
   const prefIdRef = useRef(null)
   // Fingerprint of last payload sent OR last payload applied from DB. Used to
-  // (a) skip redundant auto-saves that would just echo back, and (b) ignore
-  // realtime UPDATEs that are echoes of our own writes.
+  // skip redundant auto-saves that would just echo back.
   const lastPrefFingerprintRef = useRef(null)
+  // Highest updated_at timestamp we've written ourselves. The realtime UPDATE
+  // handler ignores any echo whose updated_at is <= this value (it's our own
+  // write coming back). Bumped both when we send a save AND when we apply a
+  // row from DB on initial load.
+  const lastOwnUpdatedAtRef = useRef('')
   // Columns we've discovered are missing in this DB (schema not yet migrated).
   // We exclude them from BOTH the save payload and the fingerprint computation,
   // so local + remote fingerprints stay equal and we don't loop on echoes.
@@ -109,7 +114,8 @@ export default function App() {
       notify_digest: p.notify_digest, notify_reminders: p.notify_reminders,
       notify_journal: p.notify_journal,
       wallpaper_url: p.wallpaper_url,
-      wallpaper_disabled: p.wallpaper_disabled,
+      wallpaper_disabled_pc: p.wallpaper_disabled_pc,
+      wallpaper_disabled_mobile: p.wallpaper_disabled_mobile,
       last_device_type: p.last_device_type,
     }
     for (const k of missingPrefColsRef.current) delete all[k]
@@ -148,12 +154,21 @@ export default function App() {
     if ('wallpaper_url' in row) {
       setWallpaper(row.wallpaper_url || defaultWallpaper)
     }
-    if ('wallpaper_disabled' in row && row.wallpaper_disabled != null) {
-      setWallpaperOff(!!row.wallpaper_disabled)
+    // Read the column matching the CURRENT device. Other-device column is
+    // intentionally ignored — independent toggles by design.
+    // Only honour the DB value on initial load. After that, the local state is
+    // authoritative for this device (a same-device echo can't tell us anything
+    // we don't already know and risks racing the user's most recent toggle).
+    if (!prefsLoadedRef.current) {
+      const key = isMobile ? 'wallpaper_disabled_mobile' : 'wallpaper_disabled_pc'
+      if (key in row && row[key] != null) setWallpaperOff(!!row[key])
     }
     // Record fingerprint so the auto-save effect knows this state matches DB
     // and skips a redundant write (which would echo back via realtime).
     lastPrefFingerprintRef.current = prefFingerprint(row)
+    // Track the row's updated_at so subsequent self-echoes (which carry the
+    // SAME updated_at) get filtered out by the realtime handler.
+    if (row.updated_at) lastOwnUpdatedAtRef.current = row.updated_at
   }
 
   function setVibeDial(key, val) {
@@ -252,14 +267,32 @@ export default function App() {
         ({ old: r }) => setTasks(p => p.filter(t => t.id !== r.id)))
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'user_preferences', filter: userFilter },
         ({ new: row }) => {
-          // Ignore our own echoes — fingerprint will match.
-          if (prefFingerprint(row) === lastPrefFingerprintRef.current) return
+          // Ignore self-echoes. Every write we make stamps `updated_at` with
+          // a fresh ISO timestamp and records it as the watermark. Any echo
+          // whose updated_at is <= the watermark is our own write coming back
+          // (including the in-flight one we haven't seen ack'd yet). A real
+          // change from another device will have a strictly greater timestamp.
+          const rowAt = row?.updated_at || ''
+          const wm = lastOwnUpdatedAtRef.current
+          if (rowAt && wm && rowAt <= wm) {
+            console.debug('[prefs echo] self-echo skipped', { rowAt, wm })
+            return
+          }
+          // Fallback when timestamps are missing — keep old fingerprint check.
+          if (!rowAt && prefFingerprint(row) === lastPrefFingerprintRef.current) {
+            console.debug('[prefs echo] fingerprint match — skipped')
+            return
+          }
+          console.warn('[prefs echo] applying remote row', { rowAt, wm, surface_alpha: row.surface_alpha, surface_dials: row.surface_dials })
           applyPrefRow(row)
         })
       .subscribe()
 
     return () => { supabase.removeChannel(ch) }
-  }, [user])
+    // Key off user.id specifically. The `user` object reference can change on
+    // token-refresh events even though identity is the same — re-running this
+    // effect on every refresh would re-fetch prefs and stomp local state.
+  }, [user?.id])
 
   // Font → --font. Lazily fetch the chosen font's woff2 from Google Fonts.
   useEffect(() => {
@@ -505,7 +538,11 @@ export default function App() {
         notify_reminders: notifyReminders,
         notify_journal: notifyJournal,
         wallpaper_url: wallpaper === defaultWallpaper ? null : wallpaper,
-        wallpaper_disabled: !!wallpaperOff,
+        // Only write the column for the CURRENT device. Partial-update so the
+        // other device's column stays intact.
+        ...(isMobile
+          ? { wallpaper_disabled_mobile: !!wallpaperOff }
+          : { wallpaper_disabled_pc:     !!wallpaperOff }),
         last_device_type: isMobile ? 'mobile' : 'pc',
       }
       // Strip columns we already know are missing (avoids redundant retries).
@@ -516,7 +553,11 @@ export default function App() {
       // settled to the original value).
       if (fp === lastPrefFingerprintRef.current) return
       lastPrefFingerprintRef.current = fp
-      const dbPayload = { ...payload, updated_at: new Date().toISOString() }
+      const nowIso = new Date().toISOString()
+      // Stamp our own watermark BEFORE the write so that if the realtime echo
+      // races the PATCH response we still recognise it as ours.
+      lastOwnUpdatedAtRef.current = nowIso
+      const dbPayload = { ...payload, updated_at: nowIso }
       // Resilient save — if a column doesn't exist yet (i.e. user hasn't run
       // the latest migration), strip the missing field and retry rather than
       // letting every save fail silently.
@@ -594,6 +635,7 @@ export default function App() {
         {page === 'jobs' && <JobsPage />}
         {page === 'journal' && <JournalPage isMobile={isMobile} />}
         {page === 'insights' && <InsightsPage />}
+        {page === 'ai' && <AIPage />}
         {page === 'settings' && (
           <SettingsPage
             font={font} setFont={setFont}

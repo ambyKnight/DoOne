@@ -121,7 +121,8 @@ button { cursor: pointer; border: 0; background: transparent; }
   align-self: stretch;
 }
 .app-main:has(.journal-page),
-.app-main:has(.settings-page) { overflow-y: auto; }
+.app-main:has(.settings-page),
+.app-main:has(.jobs-page) { overflow-y: auto; }
 .app.is-mobile .app-main { padding: 18px 16px 110px; overflow-y: auto; height: 100vh; display: block; }
 .app-main::-webkit-scrollbar { width: 8px; }
 .app-main::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 4px; }

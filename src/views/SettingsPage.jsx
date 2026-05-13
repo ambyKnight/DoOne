@@ -41,9 +41,6 @@ export default function SettingsPage({
   lastPalette,
   isMobile,
 }) {
-  const { user } = useAuth()
-  const [saving, setSaving] = useState(false)
-
   // When Settings opens, eagerly load every font face so the previews show
   // their actual look. Idempotent — each face is fetched at most once.
   useEffect(() => {
@@ -56,38 +53,13 @@ export default function SettingsPage({
   const vibeModified = isModified(vibeDials, VIBE_PRESETS[vibe] || {})
   const surfaceModified = isModified(surfaceDials, SURFACE_PRESETS[surface] || {})
 
-  async function savePrefs() {
-    if (!user) return
-    setSaving(true)
-    const payload = {
-      font, vibe, surface, density,
-      vibe_dials: vibeDials,
-      surface_dials: surfaceDials,
-      accent_boost: accentBoost,
-      blur_amount: blurAmount,
-      surface_alpha: surfaceAlpha,
-      panel_gap: panelGap,
-      updated_at: new Date().toISOString(),
-    }
-    if (prefId) {
-      await supabase.from('user_preferences').update(payload).eq('id', prefId)
-    } else {
-      await supabase.from('user_preferences').insert({ ...payload, user_id: user.id })
-    }
-    setSaving(false)
-  }
-
   return (
     <div className="page settings-page">
       <header className="page-header">
         <div>
           <div className="eyebrow">preferences</div>
           <h1 className="page-title">Settings</h1>
-        </div>
-        <div className="header-tools">
-          <button className="chip primary" onClick={savePrefs} disabled={saving}>
-            {saving ? 'Saving…' : 'Save preferences'}
-          </button>
+          <div className="page-sub">autosaved · synced across devices</div>
         </div>
       </header>
 

@@ -37,8 +37,13 @@ export const NAV = [
   { id: 'jobs',     icon: JobsIcon,     label: 'Jobs'     },
   { id: 'journal',  icon: JournalIcon,  label: 'Journal'  },
   { id: 'insights', icon: InsightsIcon, label: 'Insights' },
+  { id: 'ai',       icon: AIIcon,       label: 'AI'       },
   { id: 'settings', icon: SettingsIcon, label: 'Settings' },
 ]
+
+function AIIcon(p) {
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/><circle cx="12" cy="12" r="4"/></svg>
+}
 
 function HomeIcon(p) {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
